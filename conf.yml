@@ -1,0 +1,5 @@
+---
+data_paths:
+ - data/dtm/dtm.csv
+ - data/formula1/formula1.csv
+...

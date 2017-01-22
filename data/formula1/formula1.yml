@@ -1,0 +1,177 @@
+---
+- 
+  sport: Formula 1
+  round: 1
+  country: Australia
+  location: Melbourne
+  sessions: 
+    - 
+      name: Free Practice 2
+      date: 2017-03-24
+      time: 0
+    - 
+      name: Free Practice 3
+      date: 2017-03-25
+      time: 0
+    - 
+      name: Qualifying
+      date: 2017-03-25
+      time: 0
+    - 
+      name: Race
+      date: 2017-03-26
+      time: 0
+- 
+  sport: Formula 1
+  round: 2
+  country: China
+  location: Shanghai
+  sessions: 
+    - 
+      name: Free Practice 2
+      date: 2017-04-07
+      time: 0
+    - 
+      name: Free Practice 3
+      date: 2017-04-08
+      time: 0
+    - 
+      name: Qualifying
+      date: 2017-04-08
+      time: 0
+    - 
+      name: Race
+      date: 2017-04-09
+      time: 0
+- 
+  sport: Formula 1
+  round: 3
+  country: Bahrain
+  location: Sakhir
+  sessions: 
+    - 
+      name: Free Practice 2
+      date: 2017-04-14
+      time: 0
+    - 
+      name: Free Practice 3
+      date: 2017-04-15
+      time: 0
+    - 
+      name: Qualifying
+      date: 2017-04-15
+      time: 0
+    - 
+      name: Race
+      date: 2017-04-16
+      time: 0
+- 
+  sport: Formula 1
+  round: 4
+  country: Russia
+  location: Sochi
+  sessions: 
+    - 
+      name: Free Practice 2
+      date: 2017-04-28
+      time: 0
+    - 
+      name: Free Practice 3
+      date: 2017-04-29
+      time: 0
+    - 
+      name: Qualifying
+      date: 2017-04-29
+      time: 0
+    - 
+      name: Race
+      date: 2017-04-30
+      time: 0
+- 
+  sport: Formula 1
+  round: 5
+  country: Spain
+  location: Catalunya
+  sessions: 
+    - 
+      name: Free Practice 2
+      date: 2017-05-14
+      time: 0
+    - 
+      name: Free Practice 3
+      date: 2017-05-15
+      time: 0
+    - 
+      name: Qualifying
+      date: 2017-05-15
+      time: 0
+    - 
+      name: Race
+      date: 2017-05-16
+      time: 0
+- 
+  sport: Formula 1
+  round: 6
+  country: Monaco
+  location: Melbourne
+  sessions: 
+    - 
+      name: Free Practice 2
+      date: 2017-05-25
+      time: 0
+    - 
+      name: Free Practice 3
+      date: 2017-05-27
+      time: 0
+    - 
+      name: Qualifying
+      date: 2017-05-27
+      time: 0
+    - 
+      name: Race
+      date: 2017-05-28
+      time: 0
+- 
+  sport: Formula 1
+  round: 7
+  country: Canada
+  location: Montreal
+  sessions: 
+    - 
+      name: Free Practice 2
+      date: 2017-06-09
+      time: 0
+    - 
+      name: Free Practice 3
+      date: 2017-06-10
+      time: 0
+    - 
+      name: Qualifying
+      date: 2017-06-10
+      time: 0
+    - 
+      name: Race
+      date: 2017-06-11
+      time: 0
+- 
+  sport: Formula 1
+  round: 8
+  country: Azerbaijan
+  location: Baku
+  sessions: 
+    - 
+      name: Free Practice 2
+      date: 2017-06-23
+      time: 0
+    - 
+      name: Free Practice 3
+      date: 2017-06-24
+      time: 0
+    - 
+      name: Qualifying
+      date: 2017-06-24
+      time: 0
+    - 
+      name: Race
+      date: 2017-06-25
+      time: 0

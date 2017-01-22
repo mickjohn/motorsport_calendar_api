@@ -1,0 +1,25 @@
+INFO:motorsport_calander_api: Starting up!
+INFO:motorsport_calander_api: Loaded config file conf.yml
+INFO:motorsport_calander_api: About to load events from these files: ["data/dtm/dtm.csv", "data/formula1/formula1.csv"]
+INFO:motorsport_calander_api: Getting events from csv file data/dtm/dtm.csv
+INFO:motorsport_calander_api: Getting events from csv file data/formula1/formula1.csv
+INFO:motorsport_calander_api: Finished loading events, got 108 events
+INFO:motorsport_calander_api: Finished loading events from csv files, got 108 events
+INFO:motorsport_calander_api: About to initialize hashmaps
+INFO:motorsport_calander_api::data::json_data: Initialising events json string
+INFO:motorsport_calander_api::data::json_data: Initialiasing (event type) -> (json) map
+INFO:motorsport_calander_api::data::json_data: Initialiasing (event type, round) -> (json) map
+INFO:motorsport_calander_api::data::json_data: Initialiasing (event type, round, num) -> (json) map
+INFO:rocket::rocket: 🔧  Configured for development.
+INFO:rocket::rocket: listening: localhost:8000
+INFO:rocket::rocket: logging: Normal
+INFO:rocket::rocket: 🛰  Mounting '/':
+INFO:rocket::rocket: GET /
+INFO:rocket::rocket: GET /<event_type>
+INFO:rocket::rocket: GET /<event_type>/<round>
+INFO:rocket::rocket: GET /<event_type>/<round>/<num>
+INFO:rocket::rocket: 🚀  Rocket has launched from http://localhost:8000...
+INFO:rocket::rocket: GET /Formula%201/1/1:
+INFO:rocket::rocket: Matched: GET /<event_type>/<round>/<num>
+INFO:rocket::rocket: Outcome: Success
+INFO:rocket::rocket: Response succeeded.

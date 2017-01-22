@@ -1,0 +1,17 @@
+[package]
+name = "motorsport_calander_api"
+version = "0.1.0"
+authors = ["Michael Ashe <mickjohnashe@hotmail.com>"]
+
+[dependencies]
+rocket = "0.1.4"
+rocket_codegen = "0.1.4"
+serde = "0.8"
+serde_derive = "0.8"
+serde_yaml = "0.5"
+serde_json = "0.8"
+rustc-serialize = "0.3"
+csv = "0.15.0"
+log = "0.3"
+env_logger = "0.3"
+lazy_static = "0.2.2"

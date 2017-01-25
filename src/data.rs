@@ -1,10 +1,31 @@
 use std::collections::HashMap;
-use event::Event;
+// use event::Event;
+use event::*;
+use std::sync::RwLock;
 
 // Types for holding pre-serialized data.
 type EventsType = HashMap<String, String>;
 type EventTypeRound = HashMap<(String, u64), String>;
 type EventTypeRoundNum = HashMap<(String, u64, u64), String>;
+
+#[derive(Debug)]
+pub struct Data {
+    pub events: String,
+    pub events_type: EventsType,
+    pub events_type_round: EventTypeRound,
+    pub events_type_round_num: EventTypeRoundNum,
+}
+
+impl Data {
+    pub fn new() -> Data {
+        Data {
+            events: String::new(),
+            events_type: HashMap::new(),
+            events_type_round: HashMap::new(),
+            events_type_round_num: HashMap::new(),
+        }
+    }
+}
 
 /*
  * The purpose of this module is to pre-serialize all of the data before it's needed.
@@ -24,92 +45,90 @@ fn get_events_type_events_map(events: &[Event]) -> HashMap<&str, Vec<&Event>> {
     map
 }
 
-fn get_events_round_events_map(events: &[Event]) -> HashMap<(&str, &u64), Vec<&Event>> {
-    let mut map: HashMap<(&str, &u64), Vec<&Event>> = HashMap::new();
+fn get_events_round_events_map(events: &[Event]) -> HashMap<(&str, &u64), &Event> {
+    let mut map: HashMap<(&str, &u64), &Event> = HashMap::new();
     for e in events {
         let key: (&str, &u64) = (&e.sport, &e.round);
-        let mut v = map.entry(key).or_insert_with(Vec::new);
-        v.push(e);
+        map.insert(key, e);
     }
     map
 }
 
-fn get_events_type_round_num_events_map(events: &[Event]) -> HashMap<(&str, &u64, &u64), Vec<&Event>> {
-    let mut map: HashMap<(&str, &u64, &u64), Vec<&Event>> = HashMap::new();
+fn get_events_type_round_num_events_map(events: &[Event]) -> HashMap<(&str, &u64, u64), &Session> {
+    let mut map: HashMap<(&str, &u64, u64), &Session> = HashMap::new();
     for e in events {
-        let key: (&str, &u64, &u64) = (&e.sport, &e.round, &e.number_in_round);
-        let mut v = map.entry(key).or_insert_with(Vec::new);
-        v.push(e);
+        for(i,s) in e.sessions.iter().enumerate() {
+            let key: (&str, &u64, u64) = (&e.sport, &e.round, (i + 1) as u64);
+            map.insert(key, s);
+        }
     }
     map
 }
 
 pub mod json_data {
     use super::*;
-    use std::sync::Mutex;
-    use std::collections::HashMap;
     use event::Event;
     use serde_json;
 
     lazy_static! {
-        pub static ref EVENTS: Mutex<String> = Mutex::new(String::new());
-        pub static ref EVENTS_TYPE: Mutex<EventsType> = Mutex::new(HashMap::new());
-        pub static ref EVENTS_TYPE_ROUND: Mutex<EventTypeRound> = Mutex::new(HashMap::new());
-        pub static ref EVENTS_TYPE_ROUND_NUM: Mutex<EventTypeRoundNum> = Mutex::new(HashMap::new());
+        pub static ref DATA: RwLock<Data> = RwLock::new(Data::new());
     }
 
     pub fn init(events: &[Event]) {
-        init_events(events);
-        init_events_type(events);
-        init_events_type_round(events);
-        init_events_type_round_num(events);
+        let data = Data {
+            events: create_events_json(events),
+            events_type: create_events_type_json_map(events),
+            events_type_round: create_events_type_round_json_map(events),
+            events_type_round_num: create_events_type_round_num_json_map(events),
+        };
+        // DATA.lock().unwrap() = Mutex::new(data);
+        let mut d = DATA.write().unwrap();
+        *d = data;
     }
 
-    fn init_events(events: &[Event]) {
+    fn create_events_json(events: &[Event]) -> String {
         info!("Initialising events json string");
-        let events_json = serde_json::to_string(&events).unwrap();
-        let mut static_events = EVENTS.lock().unwrap();
-        static_events.push_str(&events_json);
+        serde_json::to_string(&events).unwrap()
     }
 
-    fn init_events_type(events: &[Event]) {
+    fn create_events_type_json_map(events: &[Event]) -> EventsType {
         info!("Initialising (event type) -> (json) map");
         let map = get_events_type_events_map(events);
-
+        let mut json_map = EventsType::new();
         // Now serialize and insert the events into a (event type) -> (json events) map.
-        let mut static_map = EVENTS_TYPE.lock().expect("Error aquiring lock");
         for (sport_type, events) in &map {
             let json_events = serde_json::to_string(&events).unwrap();
             debug!("key = {}, value = {}", sport_type, json_events);
-            static_map.insert(sport_type.to_string(), json_events);
+            json_map.insert(sport_type.to_string(), json_events);
         }
+        json_map
     }
 
-    fn init_events_type_round(events: &[Event]) {
+    fn create_events_type_round_json_map(events: &[Event]) -> EventTypeRound {
         info!("Initialising (event type, round) -> (json) map");
         let map = get_events_round_events_map(events);
-
+        let mut json_map = EventTypeRound::new();
         // Now serialize and insert the events into a (event type, round) -> (json events) map.
-        let mut static_map = EVENTS_TYPE_ROUND.lock().expect("Error aquiring lock");
         for ((sport_type, round), events) in map {
             let json_events = serde_json::to_string(&events).unwrap();
             let key = (sport_type.to_string(), *round);
             debug!("key = {:?}, value = {}", key, json_events);
-            static_map.insert(key, json_events);
+            json_map.insert(key, json_events);
         }
+        json_map
     }
 
-    fn init_events_type_round_num(events: &[Event]) {
+    fn create_events_type_round_num_json_map(events: &[Event]) -> EventTypeRoundNum {
         info!("Initialising (event type, round, num) -> (json) map");
         let map = get_events_type_round_num_events_map(events);
-
+        let mut json_map = EventTypeRoundNum::new();
         // Now serialize and insert the events into a (event type, round, num) -> (json events) map.
-        let mut static_map = EVENTS_TYPE_ROUND_NUM.lock().expect("Error aquiring lock");
         for ((sport_type, round, num), events) in map {
             let json_events = serde_json::to_string(&events).unwrap();
-            let key = (sport_type.to_string(), *round, *num);
+            let key = (sport_type.to_string(), *round, num);
             debug!("key = {:?}, value = {}", key, json_events);
-            static_map.insert(key, json_events);
+            json_map.insert(key, json_events);
         }
+        json_map
     }
 }

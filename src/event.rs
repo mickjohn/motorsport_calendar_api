@@ -1,12 +1,18 @@
 
-#[derive(Debug, Clone, PartialEq, RustcDecodable, Serialize)]
+use chrono::{DateTime, UTC};
+
+#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
 pub struct Event {
     pub sport: String,
     pub round: u64,
-    pub number_in_round: u64,
-    pub event_name: String,
     pub country: String,
-    pub track_name: String,
-    pub date: String,
-    pub start_time: u64
+    pub location: String,
+    pub sessions: Vec<Session>,
+}
+
+#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
+pub struct Session {
+   pub name: String,
+   pub date: String,
+   pub time: u64,
 }

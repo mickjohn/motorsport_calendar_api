@@ -4,272 +4,322 @@
   round: 1
   country: Germany
   location: Hockenheim
-  sessions: 
+  start_date: 2017-05-05T00:00:00Z
+  end_date: 2017-05-07T00:00:00Z
+  sessions:
     - 
       name: Free Practice
-      date: 2017-05-05
-      time: 0
+      date: 2017-05-05T00:00:00Z
+      time: ~
     - 
       name: Free Practice
-      date: 2017-05-06
-      time: 0
+      date: 2017-05-06T00:00:00Z
+      time: ~
     - 
       name: Qualifying 
-      date: 2017-05-06
-      time: 0
+      date: 2017-05-06T00:00:00Z
+      time: ~
     - 
       name: Race 
-      date: 2017-05-06
-      time: 0
+      date: 2017-05-06T00:00:00Z
+      time: ~
     - 
       name: Free Practice
-      date: 2017-05-07
-      time: 0
+      date: 2017-05-07T00:00:00Z
+      time: ~
     - 
       name: Qualifying
-      date: 2017-05-07
-      time: 0
+      date: 2017-05-07T00:00:00Z
+      time: ~
     - 
       name: Race
-      date: 2017-05-07
-      time: 0
+      date: 2017-05-07T00:00:00Z
+      time: ~
 - 
   sport: DTM
   round: 2
   country: Germany
   location: Lausitzring
-  sessions: 
+  start_date: 2017-05-19T00:00:00Z
+  end_date: 2017-05-21T00:00:00Z
+  sessions:
     - 
       name: Free Practice
-      date: 2017-05-20
-      time: 0
+      date: 2017-05-19T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice
+      date: 2017-05-20T00:00:00Z
+      time: ~
     - 
       name: Qualifying 
-      date: 2017-05-20
-      time: 0
+      date: 2017-05-20T00:00:00Z
+      time: ~
     - 
       name: Race 
-      date: 2017-05-20
-      time: 0
+      date: 2017-05-20T00:00:00Z
+      time: ~
     - 
       name: Free Practice
-      date: 2017-05-21
-      time: 0
+      date: 2017-05-21T00:00:00Z
+      time: ~
     - 
       name: Qualifying
-      date: 2017-05-21
-      time: 0
+      date: 2017-05-21T00:00:00Z
+      time: ~
     - 
       name: Race
-      date: 2017-05-21
-      time: 0
+      date: 2017-05-21T00:00:00Z
+      time: ~
 - 
   sport: DTM
   round: 3
   country: Hungary
   location: Budapest
-  sessions: 
+  start_date: 2017-06-16T00:00:00Z
+  end_date: 2017-06-18T00:00:00Z
+  sessions:
     - 
       name: Free Practice
-      date: 2017-06-17
-      time: 0
+      date: 2017-06-16T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice
+      date: 2017-06-17T00:00:00Z
+      time: ~
     - 
       name: Qualifying 
-      date: 2017-06-17
-      time: 0
+      date: 2017-06-17T00:00:00Z
+      time: ~
     - 
       name: Race 
-      date: 2017-06-17
-      time: 0
+      date: 2017-06-17T00:00:00Z
+      time: ~
     - 
       name: Free Practice
-      date: 2017-06-18
-      time: 0
+      date: 2017-06-18T00:00:00Z
+      time: ~
     - 
       name: Qualifying
-      date: 2017-06-18
-      time: 0
+      date: 2017-06-18T00:00:00Z
+      time: ~
     - 
       name: Race
-      date: 2017-06-18
-      time: 0
+      date: 2017-06-18T00:00:00Z
+      time: ~
 - 
   sport: DTM
   round: 4
   country: Germany
   location: Norisring
-  sessions: 
+  start_date: 2017-06-30T00:00:00Z
+  end_date: 2017-07-02T00:00:00Z
+  sessions:
     - 
       name: Free Practice
-      date: 2017-07-01
-      time: 0
+      date: 2017-06-30T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice
+      date: 2017-07-01T00:00:00Z
+      time: ~
     - 
       name: Qualifying 
-      date: 2017-07-01
-      time: 0
+      date: 2017-07-01T00:00:00Z
+      time: ~
     - 
       name: Race 
-      date: 2017-07-01
-      time: 0
+      date: 2017-07-01T00:00:00Z
+      time: ~
     - 
       name: Free Practice
-      date: 2017-07-02
-      time: 0
+      date: 2017-07-02T00:00:00Z
+      time: ~
     - 
       name: Qualifying
-      date: 2017-07-02
-      time: 0
+      date: 2017-07-02T00:00:00Z
+      time: ~
     - 
       name: Race
-      date: 2017-07-02
-      time: 0
+      date: 2017-07-02T00:00:00Z
+      time: ~
 - 
   sport: DTM
   round: 5
   country: Russia
   location: Moscow Raceway
-  sessions: 
+  start_date: 2017-07-21T00:00:00Z
+  end_date: 2017-07-23T00:00:00Z
+  sessions:
     - 
       name: Free Practice
-      date: 2017-07-22
-      time: 0
+      date: 2017-07-21T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice
+      date: 2017-07-22T00:00:00Z
+      time: ~
     - 
       name: Qualifying 
-      date: 2017-07-22
-      time: 0
+      date: 2017-07-22T00:00:00Z
+      time: ~
     - 
       name: Race 
-      date: 2017-07-22
-      time: 0
+      date: 2017-07-22T00:00:00Z
+      time: ~
     - 
       name: Free Practice
-      date: 2017-07-23
-      time: 0
+      date: 2017-07-23T00:00:00Z
+      time: ~
     - 
       name: Qualifying
-      date: 2017-07-23
-      time: 0
+      date: 2017-07-23T00:00:00Z
+      time: ~
     - 
       name: Race
-      date: 2017-07-23
-      time: 0
+      date: 2017-07-23T00:00:00Z
+      time: ~
 - 
   sport: DTM
   round: 6
   country: The Netherlands
   location: Zandvoort
-  sessions: 
+  start_date: 2017-08-18T00:00:00Z
+  end_date: 2017-08-20T00:00:00Z
+  sessions:
     - 
       name: Free Practice
-      date: 2017-08-19
-      time: 0
+      date: 2017-08-18T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice
+      date: 2017-08-19T00:00:00Z
+      time: ~
     - 
       name: Qualifying 
-      date: 2017-08-19
-      time: 0
+      date: 2017-08-19T00:00:00Z
+      time: ~
     - 
       name: Race 
-      date: 2017-08-19
-      time: 0
+      date: 2017-08-19T00:00:00Z
+      time: ~
     - 
       name: Free Practice
-      date: 2017-08-20
-      time: 0
+      date: 2017-08-20T00:00:00Z
+      time: ~
     - 
       name: Qualifying
-      date: 2017-08-20
-      time: 0
+      date: 2017-08-20T00:00:00Z
+      time: ~
     - 
       name: Race
-      date: 2017-08-20
-      time: 0
+      date: 2017-08-20T00:00:00Z
+      time: ~
 - 
   sport: DTM
   round: 7
   country: Germany
   location: Nürburgring
-  sessions: 
+  start_date: 2017-09-08T00:00:00Z
+  end_date: 2017-09-10T00:00:00Z
+  sessions:
     - 
       name: Free Practice
-      date: 2017-09-09
-      time: 0
+      date: 2017-09-08T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice
+      date: 2017-09-09T00:00:00Z
+      time: ~
     - 
       name: Qualifying 
-      date: 2017-09-09
-      time: 0
+      date: 2017-09-09T00:00:00Z
+      time: ~
     - 
       name: Race 
-      date: 2017-09-09
-      time: 0
+      date: 2017-09-09T00:00:00Z
+      time: ~
     - 
       name: Free Practice
-      date: 2017-09-10
-      time: 0
+      date: 2017-09-10T00:00:00Z
+      time: ~
     - 
       name: Qualifying
-      date: 2017-09-10
-      time: 0
+      date: 2017-09-10T00:00:00Z
+      time: ~
     - 
       name: Race
-      date: 2017-09-10
-      time: 0
+      date: 2017-09-10T00:00:00Z
+      time: ~
 - 
   sport: DTM
   round: 8
   country: Austria
   location: Speilberg
-  sessions: 
+  start_date: 2017-09-22T00:00:00Z
+  end_date: 2017-09-24T00:00:00Z
+  sessions:
     - 
       name: Free Practice
-      date: 2017-09-23
-      time: 0
+      date: 2017-09-22T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice
+      date: 2017-09-23T00:00:00Z
+      time: ~
     - 
       name: Qualifying 
-      date: 2017-09-23
-      time: 0
+      date: 2017-09-23T00:00:00Z
+      time: ~
     - 
       name: Race 
-      date: 2017-09-23
-      time: 0
+      date: 2017-09-23T00:00:00Z
+      time: ~
     - 
       name: Free Practice
-      date: 2017-09-24
-      time: 0
+      date: 2017-09-24T00:00:00Z
+      time: ~
     - 
       name: Qualifying
-      date: 2017-09-24
-      time: 0
+      date: 2017-09-24T00:00:00Z
+      time: ~
     - 
       name: Race
-      date: 2017-09-24
-      time: 0
+      date: 2017-09-24T00:00:00Z
+      time: ~
 - 
   sport: DTM
   round: 9
   country: Germany
   location: Hockenheim
-  sessions: 
+  start_date: 2017-10-13T00:00:00Z
+  end_date: 2017-10-15T00:00:00Z
+  sessions:
     - 
       name: Free Practice
-      date: 2017-10-14
-      time: 0
+      date: 2017-10-13T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice
+      date: 2017-10-14T00:00:00Z
+      time: ~
     - 
       name: Qualifying 
-      date: 2017-10-14
-      time: 0
+      date: 2017-10-14T00:00:00Z
+      time: ~
     - 
       name: Race 
-      date: 2017-10-14
-      time: 0
+      date: 2017-10-14T00:00:00Z
+      time: ~
     - 
       name: Free Practice
-      date: 2017-10-15
-      time: 0
+      date: 2017-10-15T00:00:00Z
+      time: ~
     - 
       name: Qualifying
-      date: 2017-10-15
-      time: 0
+      date: 2017-10-15T00:00:00Z
+      time: ~
     - 
       name: Race
-      date: 2017-10-15
-      time: 0
+      date: 2017-10-15T00:00:00Z
+      time: ~

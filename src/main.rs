@@ -7,6 +7,7 @@ extern crate serde_yaml;
 extern crate serde_json;
 #[macro_use] extern crate rocket;
 #[macro_use] extern crate lazy_static;
+extern crate chrono;
 
 mod config;
 mod event;

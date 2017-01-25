@@ -1,7 +1,6 @@
 use std::collections::HashMap;
-// use event::Event;
-use event::*;
 use std::sync::RwLock;
+use motorsport_calendar_common::event::*;
 
 // Types for holding pre-serialized data.
 type EventsType = HashMap<String, String>;
@@ -67,7 +66,6 @@ fn get_events_type_round_num_events_map(events: &[Event]) -> HashMap<(&str, &u64
 
 pub mod json_data {
     use super::*;
-    use event::Event;
     use serde_json;
 
     lazy_static! {

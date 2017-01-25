@@ -1,5 +1,5 @@
 [package]
-name = "motorsport_calander_api"
+name = "motorsport_calendar_api"
 version = "0.1.0"
 authors = ["Michael Ashe <mickjohnashe@hotmail.com>"]
 
@@ -14,3 +14,6 @@ log = "0.3"
 env_logger = "0.3"
 lazy_static = "0.2.2"
 chrono = { version = "0.2", features = ["serde"] }
+
+[dependencies.motorsport_calendar_common]
+path = "/home/mick/Programs/rust/motorsport_calendar_common"

@@ -8,18 +8,19 @@ extern crate serde_json;
 #[macro_use] extern crate rocket;
 #[macro_use] extern crate lazy_static;
 extern crate chrono;
+extern crate motorsport_calendar_common;
 
 mod config;
-mod event;
 mod data;
 mod webserver;
 
-use event::Event;
+use motorsport_calendar_common::event::*;
 use config::Config;
 use data::json_data;
 use std::{thread, time};
 use std::io::prelude::*;
 use std::fs::File;
+
 
 fn main() {
     env_logger::init().unwrap();

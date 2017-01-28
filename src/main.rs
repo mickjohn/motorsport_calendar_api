@@ -42,9 +42,12 @@ fn run () -> Result<(),String> {
     json_data::init(&events);
     info!("Data initalisation complete");
 
-    thread::spawn(move || {
-        poll_yml_files(&config);
-    });
+    if config.enable_data_refresh() {
+        info!("polling of data files enabled");
+        thread::spawn(move || {
+            poll_yml_files(&config);
+        });
+    }
 
     info!("About to launch rocket webserver");
     webserver::start();
@@ -56,8 +59,8 @@ fn get_events_and_config(conf_file: &str) -> Result<(Vec<Event>, Config), String
                       .map_err(|e| format!("Could not load config file{}, reason: {}", conf_file, e)));
     info!("Loaded config file {}", conf_file);
 
-    info!("About to load events from these files: {:?}", config.data_paths);
-    let events = try!(load_events_from_yml_files(&config.data_paths)
+    info!("About to load events from these files: {:?}", config.data_paths());
+    let events = try!(load_events_from_yml_files(&config.data_paths())
                       .map_err(|e| format!("Error while loading events, reason: {}", e)));
 
     info!("Finished loading events from yml files, got {} events", events.len());
@@ -75,20 +78,29 @@ fn load_events_from_yml_files(yaml_files: &[String]) -> Result<Vec<Event>, Strin
 
 fn load_events_from_yml_file(yaml_file: &str) -> Result<Vec<Event>, String> {
     info!("Getting events from yaml file {}", yaml_file);
-    let mut f = try!(File::open(yaml_file).map_err(|e| e.to_string()));
+    let mut f = try!(File::open(yaml_file)
+                     .map_err(|e| format!("{}:{}", yaml_file, e.to_string())));
     let mut s = String::new();
-    try!(f.read_to_string(&mut s).map_err(|e| e.to_string()));
-    let rounds = try!(serde_yaml::from_str(&s).map_err(|e| e.to_string()));
+    try!(f.read_to_string(&mut s)
+         .map_err(|e| format!("{}:{}", yaml_file, e.to_string())));
+    let rounds = try!(serde_yaml::from_str(&s)
+                      .map_err(|e| format!("{}:{}", yaml_file, e.to_string())));
     Ok(rounds)
 }
 
 fn poll_yml_files(config: &Config) {
-    let time = time::Duration::from_millis(1000*60*5);
+    let seconds = config.data_refresh_interval_seconds();
+    let time = time::Duration::from_secs(seconds);
+    info!("poll time for data files is {} seconds", seconds);
     loop {
         thread::sleep(time);
-        let events = load_events_from_yml_files(&config.data_paths).unwrap();
-        info!("Refreshing events now...");
-        json_data::init(&events);
-        info!("Finished refreshing!");
+        match load_events_from_yml_files(config.data_paths()) {
+            Ok(events) => {
+                info!("Refreshing events now...");
+                json_data::init(&events);
+                info!("Finished refreshing!");
+            },
+            Err(e) => error!("An error occured while refreshing the events from the config files, reason: {}", e),
+        };
     }
 }

@@ -223,3 +223,227 @@
       name: Race
       date: 2017-06-25T00:00:00Z
       time: ~
+- 
+  sport: Formula 1
+  round: 9
+  country: Austria
+  location: Speilberg
+  start_date: 2017-07-07T00:00:00Z
+  end_date: 2017-07-09T00:00:00Z
+  sessions: 
+    - 
+      name: Free Practice 1
+      date: 2017-07-07T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice 2
+      date: 2017-07-07T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice 3
+      date: 2017-07-08T00:00:00Z
+      time: ~
+    - 
+      name: Qualifying
+      date: 2017-07-08T00:00:00Z
+      time: ~
+    - 
+      name: Race
+      date: 2017-07-09T00:00:00Z
+      time: ~
+- 
+  sport: Formula 1
+  round: 10
+  country: England
+  location: Silverstone
+  start_date: 2017-07-14T00:00:00Z
+  end_date: 2017-07-16T00:00:00Z
+  sessions: 
+    - 
+      name: Free Practice 1
+      date: 2017-07-14T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice 2
+      date: 2017-07-14T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice 3
+      date: 2017-07-15T00:00:00Z
+      time: ~
+    - 
+      name: Qualifying
+      date: 2017-07-15T00:00:00Z
+      time: ~
+    - 
+      name: Race
+      date: 2017-07-16T00:00:00Z
+      time: ~
+- 
+  sport: Formula 1
+  round: 11
+  country: Hungary
+  location: Magyar, Nagydij
+  start_date: 2017-07-28T00:00:00Z
+  end_date: 2017-07-30T00:00:00Z
+  sessions: 
+    - 
+      name: Free Practice 1
+      date: 2017-07-28T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice 2
+      date: 2017-07-28T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice 3
+      date: 2017-07-29T00:00:00Z
+      time: ~
+    - 
+      name: Qualifying
+      date: 2017-07-29T00:00:00Z
+      time: ~
+    - 
+      name: Race
+      date: 2017-07-30T00:00:00Z
+      time: ~
+- 
+  sport: Formula 1
+  round: 12
+  country: Belgium
+  location: Spa-Francorchamps
+  start_date: 2017-08-25T00:00:00Z
+  end_date: 2017-08-27T00:00:00Z
+  sessions: 
+    - 
+      name: Free Practice 1
+      date: 2017-08-25T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice 2
+      date: 2017-08-25T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice 3
+      date: 2017-08-26T00:00:00Z
+      time: ~
+    - 
+      name: Qualifying
+      date: 2017-08-26T00:00:00Z
+      time: ~
+    - 
+      name: Race
+      date: 2017-08-27T00:00:00Z
+      time: ~
+- 
+  sport: Formula 1
+  round: 13
+  country: Italy
+  location: Monza
+  start_date: 2017-09-01T00:00:00Z
+  end_date: 2017-09-03T00:00:00Z
+  sessions: 
+    - 
+      name: Free Practice 1
+      date: 2017-09-01T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice 2
+      date: 2017-09-01T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice 3
+      date: 2017-09-02T00:00:00Z
+      time: ~
+    - 
+      name: Qualifying
+      date: 2017-09-02T00:00:00Z
+      time: ~
+    - 
+      name: Race
+      date: 2017-09-03T00:00:00Z
+      time: ~
+- 
+  sport: Formula 1
+  round: 14
+  country: Singapore
+  location: Singapore
+  start_date: 2017-09-15T00:00:00Z
+  end_date: 2017-09-17T00:00:00Z
+  sessions: 
+    - 
+      name: Free Practice 1
+      date: 2017-09-15T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice 2
+      date: 2017-09-15T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice 3
+      date: 2017-09-16T00:00:00Z
+      time: ~
+    - 
+      name: Qualifying
+      date: 2017-09-16T00:00:00Z
+      time: ~
+    - 
+      name: Race
+      date: 2017-09-17T00:00:00Z
+      time: ~
+- 
+  sport: Formula 1
+  round: 15
+  country: Malaysia
+  location: Kuala Lumpur
+  start_date: 2017-09-29T00:00:00Z
+  end_date: 2017-09-25T00:00:00Z
+  sessions: 
+    - 
+      name: Free Practice 1
+      date: 2017-09-29T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice 2
+      date: 2017-09-29T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice 3
+      date: 2017-09-30T00:00:00Z
+      time: ~
+    - 
+      name: Qualifying
+      date: 2017-09-30T00:00:00Z
+      time: ~
+    - 
+      name: Race
+      date: 2017-10-01T00:00:00Z
+      time: ~
+- 
+  sport: Formula 1
+  round: 16
+  country: Japan
+  location: Suzuka
+  start_date: 2017-10-26T00:00:00Z
+  end_date: 2017-10-08T00:00:00Z
+  sessions: 
+    - 
+      name: Free Practice 1
+      date: 2017-10-26T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice 2
+      date: 2017-10-26T00:00:00Z
+      time: ~
+    - 
+      name: Free Practice 3
+      date: 2017-10-07T00:00:00Z
+      time: ~
+    - 
+      name: Qualifying
+      date: 2017-10-07T00:00:00Z
+      time: ~
+    - 
+      name: Race
+      date: 2017-10-08T00:00:00Z
+      time: ~

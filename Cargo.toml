@@ -4,16 +4,15 @@ version = "0.1.0"
 authors = ["Michael Ashe <mickjohnashe@hotmail.com>"]
 
 [dependencies]
-rocket = "0.1.4"
-rocket_codegen = "0.1.4"
-serde = "0.8"
-serde_derive = "0.8"
-serde_yaml = "0.5"
-serde_json = "0.8"
+rocket = "0.2.0"
+rocket_codegen = "0.2.0"
+serde = "0.9"
+serde_derive = "0.9"
+serde_yaml = "0.6"
+serde_json = "0.9"
 log = "0.3"
 env_logger = "0.3"
 lazy_static = "0.2.2"
-chrono = { version = "0.2", features = ["serde"] }
 
 [dependencies.motorsport_calendar_common]
 path = "/home/mick/Programs/rust/motorsport_calendar_common"

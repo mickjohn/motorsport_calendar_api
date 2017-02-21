@@ -1,41 +1,47 @@
 use rocket;
+use rocket::response::content;
 use data::json_data;
 
 #[get("/", format = "application/json")]
-fn events() -> String {
+fn events() -> content::JSON<String> {
     let data = json_data::DATA.read().unwrap();
-    data.events.clone()
+    let resp = data.events.clone();
+    content::JSON(resp)
 }
 
 #[get("/<event_type>", format = "application/json")]
-fn event_type(event_type: &str) -> String {
+fn event_type(event_type: &str) -> content::JSON<String> {
     info!("Query = '{}'", event_type);
     let data = json_data::DATA.read().unwrap();
-    let k = event_type.replace("%20", " ");
-    match data.events_type.get(&k) {
+    //TODO replace with proper percent decoding.
+    let key = event_type.replace("%20", " ");
+    let resp = match data.events_type.get(&key) {
         Some(e) => e.to_string(),
         None => "{}".to_string(),
-    }
+    };
+    content::JSON(resp)
 }
 
 #[get("/<event_type>/<round>", format = "application/json")]
-fn event_type_round(event_type: String, round: u64) -> String {
+fn event_type_round(event_type: String, round: u64) -> content::JSON<String> {
     info!("Query = '({}, {})'", event_type, round);
     let data = json_data::DATA.read().unwrap();
-    match data.events_type_round.get(&(event_type, round)) {
+    let resp = match data.events_type_round.get(&(event_type, round)) {
         Some(e) => e.to_string(),
         None => "{}".to_string(),
-    }
+    };
+    content::JSON(resp)
 }
 
 #[get("/<event_type>/<round>/<num>", format = "application/json")]
-fn event_type_round_num(event_type: String, round: u64, num: u64) -> String {
+fn event_type_round_num(event_type: String, round: u64, num: u64) -> content::JSON<String> {
     info!("Query = '({}, {}, {})'", event_type, round, num);
     let data = json_data::DATA.read().unwrap();
-    match data.events_type_round_num.get(&(event_type, round, num)) {
+    let resp = match data.events_type_round_num.get(&(event_type, round, num)) {
         Some(e) => e.to_string(),
         None => "{}".to_string(),
-    }
+    };
+    content::JSON(resp)
 }
 
 pub fn start() {

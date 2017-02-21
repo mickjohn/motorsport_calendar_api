@@ -34,7 +34,7 @@ impl Data {
  * running, and a restart is required to pick up changes.
  */
 
-fn get_events_type_events_map(events: &[Event]) -> HashMap<&str, Vec<&Event>> {
+fn create_type_map(events: &[Event]) -> HashMap<&str, Vec<&Event>> {
     let mut map: HashMap<&str, Vec<&Event>> = HashMap::new();
     for e in events {
         let key: &str = &e.sport;
@@ -44,7 +44,7 @@ fn get_events_type_events_map(events: &[Event]) -> HashMap<&str, Vec<&Event>> {
     map
 }
 
-fn get_events_round_events_map(events: &[Event]) -> HashMap<(&str, &u64), &Event> {
+fn create_type_and_round_map(events: &[Event]) -> HashMap<(&str, &u64), &Event> {
     let mut map: HashMap<(&str, &u64), &Event> = HashMap::new();
     for e in events {
         let key: (&str, &u64) = (&e.sport, &e.round);
@@ -53,7 +53,7 @@ fn get_events_round_events_map(events: &[Event]) -> HashMap<(&str, &u64), &Event
     map
 }
 
-fn get_events_type_round_num_events_map(events: &[Event]) -> HashMap<(&str, &u64, u64), &Session> {
+fn create_type_round_and_number_map(events: &[Event]) -> HashMap<(&str, &u64, u64), &Session> {
     let mut map: HashMap<(&str, &u64, u64), &Session> = HashMap::new();
     for e in events {
         for(i,s) in e.sessions.iter().enumerate() {
@@ -73,15 +73,16 @@ pub mod json_data {
     }
 
     pub fn init(events: &[Event]) {
+        info!("Beginning json data initialisation");
         let data = Data {
             events: create_events_json(events),
             events_type: create_events_type_json_map(events),
             events_type_round: create_events_type_round_json_map(events),
             events_type_round_num: create_events_type_round_num_json_map(events),
         };
-        // DATA.lock().unwrap() = Mutex::new(data);
         let mut d = DATA.write().unwrap();
         *d = data;
+        info!("json data initialisation complete");
     }
 
     fn create_events_json(events: &[Event]) -> String {
@@ -91,7 +92,7 @@ pub mod json_data {
 
     fn create_events_type_json_map(events: &[Event]) -> EventsType {
         info!("Initialising (event type) -> (json) map");
-        let map = get_events_type_events_map(events);
+        let map = create_type_map(events);
         let mut json_map = EventsType::new();
         // Now serialize and insert the events into a (event type) -> (json events) map.
         for (sport_type, events) in &map {
@@ -104,7 +105,7 @@ pub mod json_data {
 
     fn create_events_type_round_json_map(events: &[Event]) -> EventTypeRound {
         info!("Initialising (event type, round) -> (json) map");
-        let map = get_events_round_events_map(events);
+        let map = create_type_and_round_map(events);
         let mut json_map = EventTypeRound::new();
         // Now serialize and insert the events into a (event type, round) -> (json events) map.
         for ((sport_type, round), events) in map {
@@ -118,7 +119,7 @@ pub mod json_data {
 
     fn create_events_type_round_num_json_map(events: &[Event]) -> EventTypeRoundNum {
         info!("Initialising (event type, round, num) -> (json) map");
-        let map = get_events_type_round_num_events_map(events);
+        let map = create_type_round_and_number_map(events);
         let mut json_map = EventTypeRoundNum::new();
         // Now serialize and insert the events into a (event type, round, num) -> (json events) map.
         for ((sport_type, round, num), events) in map {

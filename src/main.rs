@@ -5,9 +5,8 @@ extern crate env_logger;
 #[macro_use] extern crate serde_derive;
 extern crate serde_yaml;
 extern crate serde_json;
-#[macro_use] extern crate rocket;
+extern crate rocket;
 #[macro_use] extern crate lazy_static;
-extern crate chrono;
 extern crate motorsport_calendar_common;
 
 mod config;
@@ -20,7 +19,6 @@ use data::json_data;
 use std::{thread, time};
 use std::io::prelude::*;
 use std::fs::File;
-
 
 fn main() {
     env_logger::init().unwrap();
@@ -38,9 +36,7 @@ fn run () -> Result<(),String> {
     let conf_file = "conf.yml";
     let (events, config) = try!(get_events_and_config(conf_file));
 
-    info!("About to initialise hashmaps");
     json_data::init(&events);
-    info!("Data initalisation complete");
 
     if config.enable_data_refresh() {
         info!("polling of data files enabled");

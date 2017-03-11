@@ -3,6 +3,14 @@ name = "motorsport_calendar_api"
 version = "0.1.0"
 authors = ["Michael Ashe <mickjohnashe@hotmail.com>"]
 
+[[bin]]
+name = "data_validator"
+path = "src/data_validator.rs"
+
+[[bin]]
+name = "motorsport_calendar_api"
+path = "src/main.rs"
+
 [dependencies]
 rocket = "0.2.0"
 rocket_codegen = "0.2.0"

@@ -12,13 +12,12 @@ extern crate motorsport_calendar_common;
 mod config;
 mod data;
 mod webserver;
+mod event_loader;
 
 use motorsport_calendar_common::event::*;
 use config::Config;
 use data::json_data;
 use std::{thread, time};
-use std::io::prelude::*;
-use std::fs::File;
 
 fn main() {
     env_logger::init().unwrap();
@@ -56,32 +55,11 @@ fn get_events_and_config(conf_file: &str) -> Result<(Vec<Event>, Config), String
     info!("Loaded config file {}", conf_file);
 
     info!("About to load events from these files: {:?}", config.data_paths());
-    let events = try!(load_events_from_yml_files(&config.data_paths())
+    let events = try!(event_loader::load_events_from_yml_files(&config.data_paths())
                       .map_err(|e| format!("Error while loading events, reason: {}", e)));
 
     info!("Finished loading events from yml files, got {} events", events.len());
     Ok((events, config))
-}
-
-fn load_events_from_yml_files(yaml_files: &[String]) -> Result<Vec<Event>, String> {
-    let mut events = Vec::new();
-    for yaml_file in yaml_files {
-        let mut new_events = try!(load_events_from_yml_file(yaml_file));
-        events.append(&mut new_events);
-    }
-    Ok(events)
-}
-
-fn load_events_from_yml_file(yaml_file: &str) -> Result<Vec<Event>, String> {
-    info!("Getting events from yaml file {}", yaml_file);
-    let mut f = try!(File::open(yaml_file)
-                     .map_err(|e| format!("{}:{}", yaml_file, e.to_string())));
-    let mut s = String::new();
-    try!(f.read_to_string(&mut s)
-         .map_err(|e| format!("{}:{}", yaml_file, e.to_string())));
-    let rounds = try!(serde_yaml::from_str(&s)
-                      .map_err(|e| format!("{}:{}", yaml_file, e.to_string())));
-    Ok(rounds)
 }
 
 fn poll_yml_files(config: &Config) {
@@ -90,7 +68,7 @@ fn poll_yml_files(config: &Config) {
     info!("poll time for data files is {} seconds", seconds);
     loop {
         thread::sleep(time);
-        match load_events_from_yml_files(config.data_paths()) {
+        match event_loader::load_events_from_yml_files(config.data_paths()) {
             Ok(events) => {
                 info!("Refreshing events now...");
                 json_data::init(&events);

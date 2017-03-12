@@ -1,13 +1,13 @@
 #![feature(plugin)]
 #![plugin(rocket_codegen)]
 #[macro_use] extern crate log;
-extern crate env_logger;
 #[macro_use] extern crate serde_derive;
 extern crate serde_yaml;
 extern crate serde_json;
 extern crate rocket;
 #[macro_use] extern crate lazy_static;
 extern crate motorsport_calendar_common;
+#[macro_use] extern crate log4rs;
 
 mod config;
 mod data;
@@ -20,7 +20,7 @@ use data::json_data;
 use std::{thread, time};
 
 fn main() {
-    env_logger::init().unwrap();
+    log4rs::init_file("log4rs.yml", Default::default()).unwrap();
     match run() {
         Ok(()) => std::process::exit(0),
         Err(e) => {
@@ -39,7 +39,7 @@ fn run () -> Result<(),String> {
 
     if config.enable_data_refresh() {
         info!("polling of data files enabled");
-        thread::spawn(move || {
+        thread::Builder::new().name("event_polling".to_string()).spawn(move || {
             poll_yml_files(&config);
         });
     }
@@ -74,7 +74,7 @@ fn poll_yml_files(config: &Config) {
                 json_data::init(&events);
                 info!("Finished refreshing!");
             },
-            Err(e) => error!("An error occured while refreshing the events from the config files, reason: {}", e),
+                Err(e) => error!("An error occured while refreshing the events from the config files, reason: {}", e),
         };
     }
 }

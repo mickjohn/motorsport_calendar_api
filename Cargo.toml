@@ -12,8 +12,8 @@ name = "motorsport_calendar_api"
 path = "src/main.rs"
 
 [dependencies]
-rocket = "0.2.0"
-rocket_codegen = "0.2.0"
+rocket = "0.2.2"
+rocket_codegen = "0.2.2"
 serde = "0.9"
 serde_derive = "0.9"
 serde_yaml = "0.6"

@@ -28,24 +28,24 @@
   round: 2
   country: Spain
   location: Catalunya
-  start_date: 2017-05-14T00:00:00Z
-  end_date: 2017-05-16T00:00:00Z
+  start_date: 2017-05-12T00:00:00Z
+  end_date: 2017-05-14T00:00:00Z
   sessions: 
     - 
       name: Practice
-      date: 2017-05-14T00:00:00Z
+      date: 2017-05-12T00:00:00Z
       time: ~
     - 
       name: Qualifying
-      date: 2017-05-14T00:00:00Z
+      date: 2017-05-12T00:00:00Z
       time: ~
     - 
       name: Race 1
-      date: 2017-05-15T00:00:00Z
+      date: 2017-05-13T00:00:00Z
       time: ~
     - 
       name: Race 2
-      date: 2017-05-16T00:00:00Z
+      date: 2017-05-14T00:00:00Z
       time: ~
 - 
   sport: GP2

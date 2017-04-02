@@ -4,4 +4,5 @@ data_paths:
  - data/formula1/formula1.yml
  - data/gp2/gp2.yml
  - data/gp3/gp3.yml
+ - data/indycar/indycar.yml
 ...

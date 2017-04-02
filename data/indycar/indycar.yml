@@ -1,0 +1,491 @@
+---
+# Round 1 was already done at the time of writing this. Might add it in later
+- 
+  sport: Indycar
+  round: 1
+  country: America
+  location: Long Beach
+  start_date: 2017-03-10T00:00:00Z
+  end_date: 2017-03-12T00:00:00Z
+  sessions: 
+    - 
+      name: Practice 1
+      date: 2017-03-10T00:00:00Z
+      time: 2017-03-10T11:15:00-05:00
+    - 
+      name: Practice 2
+      date: 2017-03-10T00:00:00Z
+      time: 2017-03-10T15:00:00-05:00
+    - 
+      name: Practice 3
+      date: 2017-03-11T00:00:00Z
+      time: 2017-03-11T10:50:00-05:00
+    - 
+      name: Qualifying
+      date: 2017-03-11T00:00:00Z
+      time: 2017-03-11T14:55:00-05:00
+    - 
+      name: Final Warmup
+      date: 2017-03-12T00:00:00Z
+      time: 2017-03-12T09:00:00-04:00
+    - 
+      name: Race
+      date: 2017-03-12T00:00:00Z
+      time: 2017-03-12T12:30:00-04:00
+- 
+  sport: Indycar
+  round: 2
+  country: America
+  location: Long Beach
+  start_date: 2017-04-07T00:00:00Z
+  end_date: 2017-04-09T00:00:00Z
+  sessions: 
+    - 
+      name: Practice 1
+      date: 2017-04-07T00:00:00Z
+      time: 2017-04-07T13:00:00-04:00
+    - 
+      name: Practice 2
+      date: 2017-04-07T00:00:00Z
+      time: 2017-04-07T17:00:00-04:00
+    - 
+      name: Practice 3
+      date: 2017-04-08T00:00:00Z
+      time: 2017-04-08T13:45:00-04:00
+    - 
+      name: Qualifying
+      date: 2017-04-08T00:00:00Z
+      time: 2017-04-08T18:30:00-04:00
+    - 
+      name: Final Warmup
+      date: 2017-04-09T00:00:00Z
+      time: 2017-04-09T12:00:00-04:00
+    - 
+      name: Race
+      date: 2017-04-09T00:00:00Z
+      time: 2017-04-09T16:00:00-04:00
+- 
+  sport: Indycar
+  round: 3
+  country: America
+  location: Barber Motorsports Park
+  start_date: 2017-04-21T00:00:00Z
+  end_date: 2017-04-23T00:00:00Z
+  sessions: 
+    - 
+      name: Practice 1
+      date: 2017-04-21T00:00:00Z
+      time: 2017-04-21T11:45:00-04:00
+    - 
+      name: Practice 2
+      date: 2017-04-21T00:00:00Z
+      time: 2017-04-21T15:25:00-04:00
+    - 
+      name: Practice 3
+      date: 2017-04-22T00:00:00Z
+      time: 2017-04-22T12:00:00-04:00
+    - 
+      name: Qualifying
+      date: 2017-04-22T00:00:00Z
+      time: 2017-04-22T16:15:00-04:00
+    - 
+      name: Final Warmup
+      date: 2017-04-23T00:00:00Z
+      time: 2017-04-23T10:45:00-04:00
+    - 
+      name: Race
+      date: 2017-04-23T00:00:00Z
+      time: 2017-04-23T15:00:00-04:00
+- 
+  sport: Indycar
+  round: 4
+  country: America
+  location: Phoenix International Raceway
+  start_date: 2017-04-27T00:00:00Z
+  end_date: 2017-04-29T00:00:00Z
+  sessions: 
+    - 
+      name: Practice 1
+      date: 2017-04-27T00:00:00Z
+      time: ~
+    - 
+      name: Practice 2
+      date: 2017-04-27T00:00:00Z
+      time: ~
+    - 
+      name: Practice 3
+      date: 2017-04-28T00:00:00Z
+      time: ~
+    - 
+      name: Qualifying
+      date: 2017-04-28T00:00:00Z
+      time: ~
+    - 
+      name: Final Warmup
+      date: 2017-04-29T00:00:00Z
+      time: ~
+    - 
+      name: Race
+      date: 2017-04-29T00:00:00Z
+      time: ~
+- 
+  sport: Indycar
+  round: 5
+  country: America
+  location: Indianapollis Motor Speedway
+  start_date: 2017-05-11T00:00:00Z
+  end_date: 2017-05-13T00:00:00Z
+  sessions: 
+    - 
+      name: Practice 1
+      date: 2017-05-11T00:00:00Z
+      time: ~
+    - 
+      name: Practice 2
+      date: 2017-05-11T00:00:00Z
+      time: ~
+    - 
+      name: Practice 3
+      date: 2017-05-12T00:00:00Z
+      time: ~
+    - 
+      name: Qualifying
+      date: 2017-05-12T00:00:00Z
+      time: ~
+    - 
+      name: Final Warmup
+      date: 2017-05-13T00:00:00Z
+      time: ~
+    - 
+      name: Race
+      date: 2017-05-13T00:00:00Z
+      time: ~
+- 
+  sport: Indycar
+  round: 6
+  country: America
+  location: Indianapollis Motor Speedway
+  start_date: 2017-05-26T00:00:00Z
+  end_date: 2017-05-28T00:00:00Z
+  sessions: 
+    - 
+      name: Practice 1
+      date: 2017-05-26T00:00:00Z
+      time: ~
+    - 
+      name: Practice 2
+      date: 2017-05-26T00:00:00Z
+      time: ~
+    - 
+      name: Practice 3
+      date: 2017-05-27T00:00:00Z
+      time: ~
+    - 
+      name: Qualifying
+      date: 2017-05-27T00:00:00Z
+      time: ~
+    - 
+      name: Final Warmup
+      date: 2017-05-28T00:00:00Z
+      time: ~
+    - 
+      name: Race
+      date: 2017-05-28T00:00:00Z
+      time: ~
+- 
+  sport: Indycar
+  round: 7
+  country: America
+  location: Detroit
+  start_date: 2017-06-02T00:00:00Z
+  end_date: 2017-06-04T00:00:00Z
+  sessions: 
+
+- 
+  sport: Indycar
+  round: 8
+  country: America
+  location: Texas Motor Speedway
+  start_date: 2017-06-08T00:00:00Z
+  end_date: 2017-06-10T00:00:00Z
+  sessions: 
+    - 
+      name: Practice 1
+      date: 2017-06-08T00:00:00Z
+      time: ~
+    - 
+      name: Practice 2
+      date: 2017-06-08T00:00:00Z
+      time: ~
+    - 
+      name: Practice 3
+      date: 2017-06-09T00:00:00Z
+      time: ~
+    - 
+      name: Qualifying
+      date: 2017-06-09T00:00:00Z
+      time: ~
+    - 
+      name: Final Warmup
+      date: 2017-06-10T00:00:00Z
+      time: ~
+    - 
+      name: Race
+      date: 2017-06-10T00:00:00Z
+      time: ~
+- 
+  sport: Indycar
+  round: 9
+  country: America
+  location: Road America
+  start_date: 2017-06-23T00:00:00Z
+  end_date: 2017-06-25T00:00:00Z
+  sessions: 
+    - 
+      name: Practice 1
+      date: 2017-06-23T00:00:00Z
+      time: ~
+    - 
+      name: Practice 2
+      date: 2017-06-23T00:00:00Z
+      time: ~
+    - 
+      name: Practice 3
+      date: 2017-06-24T00:00:00Z
+      time: ~
+    - 
+      name: Qualifying
+      date: 2017-06-24T00:00:00Z
+      time: ~
+    - 
+      name: Final Warmup
+      date: 2017-06-25T00:00:00Z
+      time: ~
+    - 
+      name: Race
+      date: 2017-06-25T00:00:00Z
+      time: ~
+- 
+  sport: Indycar
+  round: 10
+  country: America
+  location: Iowa Speedway
+  start_date: 2017-07-07T00:00:00Z
+  end_date: 2017-07-09T00:00:00Z
+  sessions: 
+    - 
+      name: Practice 1
+      date: 2017-07-07T00:00:00Z
+      time: ~
+    - 
+      name: Practice 2
+      date: 2017-07-07T00:00:00Z
+      time: ~
+    - 
+      name: Practice 3
+      date: 2017-07-08T00:00:00Z
+      time: ~
+    - 
+      name: Qualifying
+      date: 2017-07-08T00:00:00Z
+      time: ~
+    - 
+      name: Final Warmup
+      date: 2017-07-09T00:00:00Z
+      time: ~
+    - 
+      name: Race
+      date: 2017-07-09T00:00:00Z
+      time: ~
+- 
+  sport: Indycar
+  round: 11
+  country: Canada
+  location: Toronto
+  start_date: 2017-07-14T00:00:00Z
+  end_date: 2017-07-16T00:00:00Z
+  sessions: 
+    - 
+      name: Practice 1
+      date: 2017-07-14T00:00:00Z
+      time: ~
+    - 
+      name: Practice 2
+      date: 2017-07-14T00:00:00Z
+      time: ~
+    - 
+      name: Practice 3
+      date: 2017-07-15T00:00:00Z
+      time: ~
+    - 
+      name: Qualifying
+      date: 2017-07-15T00:00:00Z
+      time: ~
+    - 
+      name: Final Warmup
+      date: 2017-07-16T00:00:00Z
+      time: ~
+    - 
+      name: Race
+      date: 2017-07-16T00:00:00Z
+      time: ~
+- 
+  sport: Indycar
+  round: 12
+  country: America
+  location: Mid-Ohio Sports Car Course
+  start_date: 2017-07-28T00:00:00Z
+  end_date: 2017-07-30T00:00:00Z
+  sessions: 
+    - 
+      name: Practice 1
+      date: 2017-07-28T00:00:00Z
+      time: ~
+    - 
+      name: Practice 2
+      date: 2017-07-28T00:00:00Z
+      time: ~
+    - 
+      name: Practice 3
+      date: 2017-07-29T00:00:00Z
+      time: ~
+    - 
+      name: Qualifying
+      date: 2017-07-29T00:00:00Z
+      time: ~
+    - 
+      name: Final Warmup
+      date: 2017-07-30T00:00:00Z
+      time: ~
+    - 
+      name: Race
+      date: 2017-07-30T00:00:00Z
+      time: ~
+- 
+  sport: Indycar
+  round: 13
+  country: America
+  location: Pocono raceway
+  start_date: 2017-08-18T00:00:00Z
+  end_date: 2017-08-20T00:00:00Z
+  sessions: 
+    - 
+      name: Practice 1
+      date: 2017-08-18T00:00:00Z
+      time: ~
+    - 
+      name: Practice 2
+      date: 2017-08-18T00:00:00Z
+      time: ~
+    - 
+      name: Practice 3
+      date: 2017-08-19T00:00:00Z
+      time: ~
+    - 
+      name: Qualifying
+      date: 2017-08-19T00:00:00Z
+      time: ~
+    - 
+      name: Final Warmup
+      date: 2017-08-20T00:00:00Z
+      time: ~
+    - 
+      name: Race
+      date: 2017-08-20T00:00:00Z
+      time: ~
+- 
+  sport: Indycar
+  round: 14
+  country: America
+  location: Gateway motorsports park
+  start_date: 2017-08-24T00:00:00Z
+  end_date: 2017-08-26T00:00:00Z
+  sessions: 
+    - 
+      name: Practice 1
+      date: 2017-08-24T00:00:00Z
+      time: ~
+    - 
+      name: Practice 2
+      date: 2017-08-24T00:00:00Z
+      time: ~
+    - 
+      name: Practice 3
+      date: 2017-08-25T00:00:00Z
+      time: ~
+    - 
+      name: Qualifying
+      date: 2017-08-25T00:00:00Z
+      time: ~
+    - 
+      name: Final Warmup
+      date: 2017-08-26T00:00:00Z
+      time: ~
+    - 
+      name: Race
+      date: 2017-08-26T00:00:00Z
+      time: ~
+- 
+  sport: Indycar
+  round: 15
+  country: America
+  location: Watkins Glen International
+  start_date: 2017-09-01T00:00:00Z
+  end_date: 2017-09-03T00:00:00Z
+  sessions: 
+    - 
+      name: Practice 1
+      date: 2017-09-01T00:00:00Z
+      time: ~
+    - 
+      name: Practice 2
+      date: 2017-09-01T00:00:00Z
+      time: ~
+    - 
+      name: Practice 3
+      date: 2017-09-02T00:00:00Z
+      time: ~
+    - 
+      name: Qualifying
+      date: 2017-09-02T00:00:00Z
+      time: ~
+    - 
+      name: Final Warmup
+      date: 2017-09-03T00:00:00Z
+      time: ~
+    - 
+      name: Race
+      date: 2017-09-03T00:00:00Z
+      time: ~
+- 
+  sport: Indycar
+  round: 16
+  country: America
+  location: Sonoma Raceway
+  start_date: 2017-09-15T00:00:00Z
+  end_date: 2017-09-17T00:00:00Z
+  sessions: 
+    - 
+      name: Practice 1
+      date: 2017-09-15T00:00:00Z
+      time: ~
+    - 
+      name: Practice 2
+      date: 2017-09-15T00:00:00Z
+      time: ~
+    - 
+      name: Practice 3
+      date: 2017-09-16T00:00:00Z
+      time: ~
+    - 
+      name: Qualifying
+      date: 2017-09-16T00:00:00Z
+      time: ~
+    - 
+      name: Final Warmup
+      date: 2017-09-17T00:00:00Z
+      time: ~
+    - 
+      name: Race
+      date: 2017-09-17T00:00:00Z
+      time: ~

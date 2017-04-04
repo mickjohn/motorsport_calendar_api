@@ -25,3 +25,6 @@ lazy_static = "0.2.2"
 
 [dependencies.motorsport_calendar_common]
 path = "/home/mick/Programs/rust/motorsport_calendar_common"
+
+[dev-dependencies]
+rocket = { version = "0.2.2", features = ["testing"] }

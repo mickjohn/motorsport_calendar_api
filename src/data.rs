@@ -30,8 +30,7 @@ impl Data {
  * The purpose of this module is to pre-serialize all of the data before it's needed.
  * The serialized data is then put into a number of hashmaps for easy querying.
  * This is done to stop the vector of events from being searched and serialzed every time 
- * a request comes in. The downside is that the events cannot be updated while the server is
- * running, and a restart is required to pick up changes.
+ * a request comes in.
  */
 
 fn create_type_map(events: &[Event]) -> HashMap<&str, Vec<&Event>> {

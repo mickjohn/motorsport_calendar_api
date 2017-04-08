@@ -22,6 +22,7 @@ log = "0.3"
 env_logger = "0.3"
 log4rs = "0.6.2"
 lazy_static = "0.2.2"
+clap = "2.23.1"
 
 [dependencies.motorsport_calendar_common]
 path = "/home/mick/Programs/rust/motorsport_calendar_common"

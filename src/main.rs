@@ -8,6 +8,7 @@ extern crate rocket;
 #[macro_use] extern crate lazy_static;
 extern crate motorsport_calendar_common;
 #[macro_use] extern crate log4rs;
+extern crate clap;
 
 mod config;
 mod data;
@@ -18,10 +19,31 @@ use motorsport_calendar_common::event::*;
 use config::Config;
 use data::json_data;
 use std::{thread, time};
+use clap::{Arg, App, SubCommand};
 
 fn main() {
-    log4rs::init_file("log4rs.yml", Default::default()).unwrap();
-    match run() {
+    let matches = App::new("Motorsport calendar API")
+        .version("1.0")
+        .author("Michael A. <mickjohnashe@hotmail.com>")
+        .about("A restful api that serves the time and date of motorsport events")
+        .arg(Arg::with_name("config")
+             .short("c")
+             .long("config")
+             .value_name("FILE")
+             .help("Sets a custom config file")
+             .takes_value(true))
+        .arg(Arg::with_name("logconfig")
+             .short("l")
+             .long("logconfig")
+             .value_name("FILE")
+             .help("Sets a custom config file")
+             .takes_value(true))
+        .get_matches();
+    let config = matches.value_of("config").unwrap_or("conf.yml");
+    let log4rs_config = matches.value_of("logconfig").unwrap_or("log4rs.yml");
+
+    log4rs::init_file(&log4rs_config, Default::default()).unwrap();
+    match run(&config) {
         Ok(()) => std::process::exit(0),
         Err(e) => {
             println!("{}", e);
@@ -30,9 +52,8 @@ fn main() {
     };
 }
 
-fn run () -> Result<(),String> {
+fn run (conf_file: &str) -> Result<(),String> {
     info!("Starting up!");
-    let conf_file = "conf.yml";
     let (events, config) = try!(get_events_and_config(conf_file));
 
     json_data::init(&events);

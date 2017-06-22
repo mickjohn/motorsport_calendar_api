@@ -19,7 +19,7 @@ use motorsport_calendar_common::event::*;
 use config::Config;
 use data::json_data;
 use std::{thread, time};
-use clap::{Arg, App, SubCommand};
+use clap::{Arg, App};
 
 fn main() {
     let matches = App::new("Motorsport calendar API")

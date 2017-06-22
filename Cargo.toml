@@ -8,12 +8,16 @@ name = "data_validator"
 path = "src/data_validator.rs"
 
 [[bin]]
+name = "event_manager"
+path = "src/event_manager.rs"
+
+[[bin]]
 name = "motorsport_calendar_api"
 path = "src/main.rs"
 
 [dependencies]
-rocket = "0.2.2"
-rocket_codegen = "0.2.2"
+rocket = "0.2.6"
+rocket_codegen = "0.2.6"
 serde = "0.9"
 serde_derive = "0.9"
 serde_yaml = "0.6"
@@ -28,4 +32,4 @@ clap = "2.23.1"
 path = "/home/mick/Programs/rust/motorsport_calendar_common"
 
 [dev-dependencies]
-rocket = { version = "0.2.2", features = ["testing"] }
+rocket = { version = "0.2.6", features = ["testing"] }

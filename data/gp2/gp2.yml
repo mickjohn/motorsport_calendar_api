@@ -82,19 +82,19 @@
     - 
       name: Practice
       date: 2017-06-23T00:00:00Z
-      time: ~
+      time: 2017-06-23T08:00:00+01:00
     - 
       name: Qualifying
       date: 2017-06-23T00:00:00Z
-      time: ~
+      time: 2017-06-23T12:00:00+01:00
     - 
       name: Race 1
       date: 2017-06-24T00:00:00Z
-      time: ~
+      time: 2017-06-24T09:00:00+01:00
     - 
       name: Race 2
       date: 2017-06-25T00:00:00Z
-      time: ~
+      time: 2017-06-25T11:00:00+01:00
 - 
   sport: GP2
   round: 5

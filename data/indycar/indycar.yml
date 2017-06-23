@@ -220,27 +220,27 @@
     - 
       name: Practice 1
       date: 2017-06-23T00:00:00Z
-      time: ~
+      time: 2017-06-23T11:45:00-04:00
     - 
       name: Practice 2
       date: 2017-06-23T00:00:00Z
-      time: ~
+      time: 2017-06-23T16:15:00-04:00
     - 
       name: Practice 3
       date: 2017-06-24T00:00:00Z
-      time: ~
+      time: 2017-06-24T12:00:00-04:00
     - 
       name: Qualifying
       date: 2017-06-24T00:00:00Z
-      time: ~
+      time: 2017-06-24T15:00:00-04:00
     - 
       name: Final Warmup
       date: 2017-06-25T00:00:00Z
-      time: ~
+      time: 2017-06-25T09:15:00-04:00
     - 
       name: Race
       date: 2017-06-25T00:00:00Z
-      time: ~
+      time: 2017-06-25T13:00:00-04:00
 - 
   sport: Indycar
   round: 10

@@ -168,14 +168,14 @@
       name: Race
       date: 2017-05-28T00:00:00Z
       time: 2017-05-28T11:00:00-04:00
-- 
-  sport: Indycar
-  round: 7
-  country: America
-  location: Detroit
-  start_date: 2017-06-02T00:00:00Z
-  end_date: 2017-06-04T00:00:00Z
-  sessions: 
+# - 
+#   sport: Indycar
+#   round: 7
+#   country: America
+#   location: Detroit
+#   start_date: 2017-06-02T00:00:00Z
+#   end_date: 2017-06-04T00:00:00Z
+#   sessions: 
 
 - 
   sport: Indycar
@@ -347,28 +347,20 @@
   sessions: 
     - 
       name: Practice 1
-      date: 2017-08-18T00:00:00Z
-      time: ~
-    - 
-      name: Practice 2
-      date: 2017-08-18T00:00:00Z
-      time: ~
-    - 
-      name: Practice 3
       date: 2017-08-19T00:00:00Z
-      time: ~
+      time: 2017-08-19T09:00:00-04:00
     - 
       name: Qualifying
       date: 2017-08-19T00:00:00Z
-      time: ~
+      time: 2017-08-19T13:00:00-04:00
     - 
-      name: Final Warmup
-      date: 2017-08-20T00:00:00Z
-      time: ~
+      name: Final Practice
+      date: 2017-08-19T00:00:00Z
+      time: 2017-08-19T17:00:00-04:00
     - 
       name: Race
       date: 2017-08-20T00:00:00Z
-      time: ~
+      time: 2017-08-20T14:00:00-04:00
 - 
   sport: Indycar
   round: 14

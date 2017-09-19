@@ -188,33 +188,33 @@
   end_date: 2017-08-20T00:00:00Z
   sessions:
     - 
-      name: Free Practice
+      name: Free Practice 1
       date: 2017-08-18T00:00:00Z
-      time: ~
+      time: 2017-08-18T16:00:00+01:00
     - 
-      name: Free Practice
+      name: Free Practice 2
       date: 2017-08-19T00:00:00Z
-      time: ~
+      time: 2017-08-19T08:45:00+01:00
     - 
-      name: Qualifying 
+      name: Qualifying 1
       date: 2017-08-19T00:00:00Z
-      time: ~
+      time: 2017-08-19T10:40:00+01:00
     - 
-      name: Race 
+      name: Race 1
       date: 2017-08-19T00:00:00Z
-      time: ~
+      time: 2017-08-19T13:45:00+01:00
     - 
-      name: Free Practice
+      name: Free Practice 3
       date: 2017-08-20T00:00:00Z
-      time: ~
+      time: 2017-08-20T07:50:00+01:00
     - 
-      name: Qualifying
+      name: Qualifying 2
       date: 2017-08-20T00:00:00Z
-      time: ~
+      time: 2017-08-20T11:00:00+01:00
     - 
-      name: Race
+      name: Race 2
       date: 2017-08-20T00:00:00Z
-      time: ~
+      time: 2017-08-20T14:15:00+01:00
 - 
   sport: DTM
   round: 7

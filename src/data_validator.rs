@@ -16,9 +16,12 @@ use motorsport_calendar_common::event::*;
 use config::Config;
 
 fn main() {
-    println!("data validator!");
+    env_logger::init().unwrap();
     match run() {
-        Ok(()) => std::process::exit(0),
+        Ok(()) => {
+            println!("All events ok!");
+            std::process::exit(0);
+        },
         Err(e) => {
             println!("{}", e);
             std::process::exit(1);
@@ -66,6 +69,22 @@ fn verify_round_numbers(events: &[Event]) -> Result<(), String> {
             last_num = Some(e.round)
         }
     }
+    Ok(())
+}
+
+// fn verify_sequential_dates(last: &Event, current: &Event) -> Result<(), String> {
+//     if last.start_date.signed_duration_since(current.start_date) >= 0 {
+//     }
+// }
+
+fn verify_sequential_dates(events: &[Event]) -> Result<(), String> {
+    if events.len() < 2 { return Ok(()) }
+    // events.into_iter().filter(|x| { now.signed_duration_since(x.end_date) <= one_day }).collect::<Vec<Event>>()
+    // for i in 1..events.len() {
+    //     let last = events[i-1];
+    //     let current = events[i];
+
+    // }
     Ok(())
 }
 

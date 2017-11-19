@@ -5,4 +5,6 @@ data_paths:
  - data/gp2/gp2.yml
  - data/gp3/gp3.yml
  - data/indycar/indycar.yml
+
+database_url: "sqlite/ms_api.db"
 ...

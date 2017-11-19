@@ -26,3 +26,5 @@ pub fn load_events_from_yml_file(yaml_file: &str) -> Result<Vec<Event>, String> 
     Ok(rounds)
 }
 
+// pub fn load_events_from_database() -> Result<Vec<Event>, String> {
+// }

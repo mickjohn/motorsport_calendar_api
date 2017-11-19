@@ -1,56 +1,60 @@
 use rocket;
 use rocket::response::content;
 use data::json_data;
+use diesel::prelude::*;
+use super::database;
+use super::model::Event as MEvent;
+use super::model::Session as MSession;
+use super::model;
+use itertools::Itertools;
+use serde_json;
 
-#[get("/", format = "application/json")]
+#[get("/database")]
 fn events() -> content::Json<String> {
-    let data = json_data::DATA.read().unwrap();
-    let resp = data.events.clone();
-    content::Json(resp)
+    use schema::events::dsl::*;
+    use schema::sessions::dsl::*;
+    let connection = database::establish_connection();
+    let my_events: Vec<(MEvent, Option<MSession>)> = events.left_join(sessions).load(&connection).expect("Error loading events");
+
+    let mut cevents = Vec::new();
+    for (key,group) in my_events.iter().group_by(|t| t.0.id).into_iter() {
+        for &(ref ev, ref session) in group {
+            let mut msessions = Vec::new();
+            if session.is_some() {
+                let s = session.as_ref().unwrap().clone();
+                msessions.push(s);
+            }
+            let e = model::from_model(ev.clone(), msessions);
+            cevents.push(e);
+        }
+        println!("EVENT = {:?}", cevents);
+    }
+    let json = serde_json::to_string(&cevents).unwrap();
+    content::Json(json)
 }
 
-#[get("/<event_type>", format = "application/json")]
-fn event_type(event_type: String) -> content::Json<String> {
-    info!("Query = '{}'", event_type);
-    let data = json_data::DATA.read().unwrap();
-    //TODO replace with proper percent decoding.
-    let key = event_type.replace("%20", " ");
-    let resp = match data.events_type.get(&key) {
-        Some(e) => e.to_string(),
-        None => "{}".to_string(),
-    };
-    content::Json(resp)
-}
+#[get("/database/<id>")]
+fn events(id: i32) -> content::Json<String> {
+    use schema::events::dsl::*;
+    use schema::sessions::dsl::*;
+    let connection = database::establish_connection();
+    let model_event = events.find(id).first::<MEvent>(&conn).expect("Can't load event");
+    let model_sessions = sesssions.belonging_to(&e).load(&conn).expected("Can't load sessions");
 
-#[get("/<event_type>/<round>", format = "application/json")]
-fn event_type_round(event_type: String, round: u64) -> content::Json<String> {
-    info!("Query = '({}, {})'", event_type, round);
-    let data = json_data::DATA.read().unwrap();
-    let resp = match data.events_type_round.get(&(event_type, round)) {
-        Some(e) => e.to_string(),
-        None => "{}".to_string(),
-    };
-    content::Json(resp)
-}
-
-#[get("/<event_type>/<round>/<num>", format = "application/json")]
-fn event_type_round_num(event_type: String, round: u64, num: u64) -> content::Json<String> {
-    info!("Query = '({}, {}, {})'", event_type, round, num);
-    let data = json_data::DATA.read().unwrap();
-    let resp = match data.events_type_round_num.get(&(event_type, round, num)) {
-        Some(e) => e.to_string(),
-        None => "{}".to_string(),
-    };
-    content::Json(resp)
+    let e = model::from_model(model_event, model_sessions);
+    let json = serde_json::to_string(&e).unwrap();
+    content::Json(json)
 }
 
 pub fn start() {
     rocket::ignite()
         .mount("/events", routes![
                events,
-               event_type,
-               event_type_round,
-               event_type_round_num,
+               events_id,
+               // events,
+               // event_type,
+               // event_type_round,
+               // event_type_round_num,
                ])
         .launch();
 }

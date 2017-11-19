@@ -3,3 +3,4 @@ package.sh
 run.sh
 logs
 Cargo.lock
+tags

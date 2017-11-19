@@ -1,25 +1,84 @@
 #![feature(plugin)]
+#![feature(custom_attribute)]
 #![plugin(rocket_codegen)]
+#![recursion_limit="128"]
+
+// Base logging crate
 #[macro_use] extern crate log;
+
+// yaml/json (de)serialization
 #[macro_use] extern crate serde_derive;
 extern crate serde_yaml;
 extern crate serde_json;
+
+// webserver
 extern crate rocket;
+
+// lazy instantiation
 #[macro_use] extern crate lazy_static;
+
+//Common data structure
 extern crate motorsport_calendar_common;
+
+// Logging
 #[macro_use] extern crate log4rs;
+
+// arg parsing
 extern crate clap;
+
+// sqlite3 ORM
+#[macro_use] extern crate diesel_codegen;
+#[macro_use] extern crate diesel;
+
+// utility to load env files
+extern crate dotenv;
+
+// Chrono for time and date 
+extern crate chrono;
+
+// For extra iteration functions
+#[macro_use] extern crate itertools;
 
 mod config;
 mod data;
 mod webserver;
 mod event_loader;
+mod schema;
+mod model;
+mod database;
 
 use motorsport_calendar_common::event::*;
 use config::Config;
 use data::json_data;
 use std::{thread, time};
 use clap::{Arg, App};
+use diesel::prelude::*;
+use dotenv::dotenv;
+use std::env;
+use model::{Event as MEvent, Session as MSession};
+use itertools::Itertools;
+
+// fn main() {
+//     use schema::events::dsl::*;
+//     use schema::sessions::dsl::*;
+//     use schema::datetest::dsl::*;
+//     let connection = database::establish_connection();
+//     let my_events: Vec<(MEvent, Option<MSession>)> = events.left_join(sessions).load(&connection).expect("Error loading events");
+
+//     for (key,group) in my_events.iter().group_by(|t| t.0.id).into_iter() {
+//         let mut cevents = Vec::new();
+//         for &(ref ev, ref session) in group {
+//             let mut msessions = Vec::new();
+//             if session.is_some() {
+//                 let s = session.as_ref().unwrap().clone();
+//                 msessions.push(s);
+//             }
+//             let e = model::from_model(ev.clone(), msessions);
+//             cevents.push(e);
+//         }
+//         println!("EVENT = {:?}", cevents);
+//     }
+// }
 
 fn main() {
     let matches = App::new("Motorsport calendar API")
@@ -54,18 +113,18 @@ fn main() {
 
 fn run (conf_file: &str) -> Result<(),String> {
     info!("Starting up!");
-    let (events, config) = try!(get_events_and_config(conf_file));
+    // let (events, config) = try!(get_events_and_config(conf_file));
 
-    json_data::init(&events);
+    // json_data::init(&events);
 
-    if config.enable_data_refresh() {
-        info!("polling of data files enabled");
-        thread::Builder::new().name("event_polling".to_string()).spawn(move || {
-            poll_yml_files(&config);
-        });
-    }
+    // if config.enable_data_refresh() {
+    //     info!("polling of data files enabled");
+    //     thread::Builder::new().name("event_polling".to_string()).spawn(move || {
+    //         poll_yml_files(&config);
+    //     });
+    // }
 
-    info!("About to launch rocket webserver");
+    // info!("About to launch rocket webserver");
     webserver::start();
     Ok(())
 }

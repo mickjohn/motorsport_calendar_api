@@ -4,8 +4,8 @@ use motorsport_calendar_common::event::*;
 
 // Types for holding pre-serialized data.
 type EventsType = HashMap<String, String>;
-type EventTypeRound = HashMap<(String, u64), String>;
-type EventTypeRoundNum = HashMap<(String, u64, u64), String>;
+type EventTypeRound = HashMap<(String, i64), String>;
+type EventTypeRoundNum = HashMap<(String, i64, i64), String>;
 
 #[derive(Debug)]
 pub struct Data {
@@ -43,20 +43,20 @@ fn create_type_map(events: &[Event]) -> HashMap<&str, Vec<&Event>> {
     map
 }
 
-fn create_type_and_round_map(events: &[Event]) -> HashMap<(&str, &u64), &Event> {
-    let mut map: HashMap<(&str, &u64), &Event> = HashMap::new();
+fn create_type_and_round_map(events: &[Event]) -> HashMap<(&str, &i64), &Event> {
+    let mut map: HashMap<(&str, &i64), &Event> = HashMap::new();
     for e in events {
-        let key: (&str, &u64) = (&e.sport, &e.round);
+        let key: (&str, &i64) = (&e.sport, &e.round);
         map.insert(key, e);
     }
     map
 }
 
-fn create_type_round_and_number_map(events: &[Event]) -> HashMap<(&str, &u64, u64), &Session> {
-    let mut map: HashMap<(&str, &u64, u64), &Session> = HashMap::new();
+fn create_type_round_and_number_map(events: &[Event]) -> HashMap<(&str, &i64, i64), &Session> {
+    let mut map: HashMap<(&str, &i64, i64), &Session> = HashMap::new();
     for e in events {
         for(i,s) in e.sessions.iter().enumerate() {
-            let key: (&str, &u64, u64) = (&e.sport, &e.round, (i + 1) as u64);
+            let key: (&str, &i64, i64) = (&e.sport, &e.round, (i + 1) as i64);
             map.insert(key, s);
         }
     }

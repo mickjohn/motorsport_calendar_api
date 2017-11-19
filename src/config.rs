@@ -8,6 +8,7 @@ pub const DEFAULT_DATA_REFRESH_INTERVAL_SECONDS: u64 = 60*5;
 #[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
 pub struct Config {
     data_paths: Vec<String>,
+    database_url: String,
     enable_data_refresh: Option<bool>,
     data_refresh_interval_seconds: Option<u64>,
 }
@@ -19,6 +20,10 @@ impl Config {
         try!(f.read_to_string(&mut s).map_err(|e| e.to_string()));
         let config: Config = try!(serde_yaml::from_str(&s).map_err(|e| e.to_string()));
         Ok(config)
+    }
+
+    pub fn database_url(&self) -> &str {
+        &self.database_url
     }
 
     pub fn data_paths(&self) -> &[String] { 

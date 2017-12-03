@@ -1,23 +1,25 @@
 use rocket;
 use rocket::response::content;
-use data::json_data;
 use diesel::prelude::*;
 use super::database;
+
 use super::model::Event as MEvent;
 use super::model::Session as MSession;
+use schema::events;
+use schema::sessions;
+
 use super::model;
 use itertools::Itertools;
 use serde_json;
 
-#[get("/database")]
-fn events() -> content::Json<String> {
-    use schema::events::dsl::*;
-    use schema::sessions::dsl::*;
+#[get("/")]
+fn all_events() -> content::Json<String> {
     let connection = database::establish_connection();
-    let my_events: Vec<(MEvent, Option<MSession>)> = events.left_join(sessions).load(&connection).expect("Error loading events");
+    let my_events: Vec<(MEvent, Option<MSession>)> = events::table.left_join(sessions::table).load(&connection).expect("Error loading events");
 
     let mut cevents = Vec::new();
-    for (key,group) in my_events.iter().group_by(|t| t.0.id).into_iter() {
+    // for (_ ,group) in my_events.iter().group_by(|t| t.0.id).into_iter() {
+    for (_ ,group) in &my_events.iter().group_by(|t| t.0.id) {
         for &(ref ev, ref session) in group {
             let mut msessions = Vec::new();
             if session.is_some() {
@@ -33,13 +35,19 @@ fn events() -> content::Json<String> {
     content::Json(json)
 }
 
-#[get("/database/<id>")]
-fn events(id: i32) -> content::Json<String> {
-    use schema::events::dsl::*;
-    use schema::sessions::dsl::*;
-    let connection = database::establish_connection();
-    let model_event = events.find(id).first::<MEvent>(&conn).expect("Can't load event");
-    let model_sessions = sesssions.belonging_to(&e).load(&conn).expected("Can't load sessions");
+
+#[get("/<event_id>")]
+fn event(event_id: i32) -> content::Json<String> {
+    let conn = database::establish_connection();
+    let model_event = events::table
+        .filter(events::id.eq(Some(event_id)))
+        .first::<MEvent>(&conn)
+        .expect("Can't load event");
+
+    let model_sessions: Vec<MSession> = sessions::table
+        .filter(sessions::event_id.eq(&event_id))
+        .load(&conn)
+        .expect("Can't load sessions");
 
     let e = model::from_model(model_event, model_sessions);
     let json = serde_json::to_string(&e).unwrap();
@@ -49,12 +57,8 @@ fn events(id: i32) -> content::Json<String> {
 pub fn start() {
     rocket::ignite()
         .mount("/events", routes![
-               events,
-               events_id,
-               // events,
-               // event_type,
-               // event_type_round,
-               // event_type_round_num,
+               all_events,
+               event,
                ])
         .launch();
 }

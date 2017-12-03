@@ -1,23 +1,24 @@
-use chrono::{DateTime, Local, NaiveDateTime, Utc, TimeZone};
+use chrono::{DateTime, NaiveDateTime, Utc};
 use motorsport_calendar_common::event::Event as CEvent; //Common event
 use motorsport_calendar_common::event::Session as CSession; //Common event
+use super::schema::*;
 
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone, Queryable)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, Clone, Queryable, Identifiable, Associations)]
 #[table_name="events"]
-#[has_many(sessions)]
+// #[has_many(sessions)]
 pub struct Event {
-    pub id: Option<i32>, // ID is required, but because the field is missing 'not null' in sqllite option is required
+    pub id: Option<i32>, // ID is required (i.e. can't be null), but because the field is missing 'not null' in sqllite option is required
     pub sport: String,
     pub round: i32,
     pub country: String,
     pub location: String,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone, Queryable)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, Clone, Queryable, Identifiable, Associations)]
 #[table_name="sessions"]
 #[belongs_to(events)]
 pub struct Session {
-    pub id: Option<i32>, // ID is required, but because the field is missing 'not null' in sqllite option is required
+    pub id: Option<i32>, // ID is required (i.e. can't be null), but because the field is missing 'not null' in sqllite option is required
     pub name: String,
     pub date: Option<NaiveDateTime>,
     pub time: Option<NaiveDateTime>,
@@ -30,7 +31,7 @@ pub fn from_model(event_model: Event, session_models: Vec<Session>) -> CEvent {
     CEvent {
         id: event_model.id.unwrap(),
         sport: event_model.sport,
-        round: event_model.round as i64,
+        round: i64::from(event_model.round),
         country: event_model.country,
         location: event_model.location,
         sessions: sessions,

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+</style>
+<link rel="stylesheet" href="/static/stylesheet.css">
+<!-- <script src="static/script.js"></script> -->
+</head>
+<body>
+  <form action="/events/{{ event.id }}" method="post" >
+    Event ID: {{ event.id }} <br>
+    Sport: {{ event.sport }} <br>
+    Round: <input type="text", name="round" value="{{ event.round }}"> <br>
+    Country: <input type="text", name="country" value="{{ event.country}}"> <br>
+    Location: <input type="text", name="location" value="{{ event.location }}"> <br>
+    <input type="submit" value="Update event">
+  </form> 
+
+  <div>
+    <h1> Sessions </h1>
+    <a href="/events/{{ event.id }}/create_session">Add Session</a>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Name</th> 
+        <th>Date</th>
+        <th>Time</th>
+      </tr>
+      {% for session in sessions %}
+      <tr>
+        <td><a href="/sessions/{{ session.id }}">{{ session.id }}</a></td>
+        <td><a href="/sessions/{{ session.id }}">{{ session.name }}</a></td>
+        <td><a href="/sessions/{{ session.id }}">{{ session.date }}</a></td>
+        <td><a href="/sessions/{{ session.id }}">{{ session.time }}</a></td>
+      </tr>
+      {% endfor %}
+    </table>
+    <a href="/events/{{ event.id }}/create_session">Add Session</a>
+  </div>
+</body>
+</html>

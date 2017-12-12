@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="/static/stylesheet.css">
+<!-- <script src="static/script.js"></script> -->
+</head>
+<body>
+  <div>
+    <a href="/events/create_event">Create new event</a><br>
+    {% for sport in sports %}
+    <a href="/{{ sport | urlencode }}">{{ sport }}</a></br>
+    {% endfor %}
+  </div>
+</body>
+</html>

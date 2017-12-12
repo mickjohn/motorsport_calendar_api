@@ -2,15 +2,9 @@ use std::io::prelude::*;
 use std::fs::File;
 use serde_yaml;
 
-pub const DEFAULT_ENABLE_DATA_REFRESH: bool = true;
-pub const DEFAULT_DATA_REFRESH_INTERVAL_SECONDS: u64 = 60*5;
-
 #[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
 pub struct Config {
-    data_paths: Vec<String>,
     database_url: String,
-    enable_data_refresh: Option<bool>,
-    data_refresh_interval_seconds: Option<u64>,
 }
 
 impl Config {
@@ -24,18 +18,5 @@ impl Config {
 
     pub fn database_url(&self) -> &str {
         &self.database_url
-    }
-
-    pub fn data_paths(&self) -> &[String] { 
-        &self.data_paths 
-    }
-
-    pub fn enable_data_refresh(&self) -> bool {
-        self.enable_data_refresh.unwrap_or(DEFAULT_ENABLE_DATA_REFRESH)
-    }
-
-    pub fn data_refresh_interval_seconds(&self) -> u64 {
-        self.data_refresh_interval_seconds
-            .unwrap_or(DEFAULT_DATA_REFRESH_INTERVAL_SECONDS)
     }
 }

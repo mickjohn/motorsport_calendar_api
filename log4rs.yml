@@ -5,13 +5,13 @@ appenders:
   # An appender named "requests" that writes to a file with a custom pattern encoder
   default:
     kind: file
-    path: "logs/default-2.log"
+    path: "logs/logs.log"
     encoder:
       # pattern: "{d} - {m}{n}"
       pattern: "{d(%Y-%m-%d %H:%M:%S)} - {T} - {l}: {m}{n}"
 
 # Set the default logging level to "warn" and attach the "stdout" appender to the root
 root:
-  level: debug
+  level: info
   appenders:
     - default

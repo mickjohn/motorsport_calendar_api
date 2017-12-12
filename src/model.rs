@@ -3,9 +3,8 @@ use motorsport_calendar_common::event::Event as CEvent; //Common event
 use motorsport_calendar_common::event::Session as CSession; //Common event
 use super::schema::*;
 
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone, Queryable, Identifiable, Associations)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, Clone, Queryable, Identifiable, AsChangeset)]
 #[table_name="events"]
-// #[has_many(sessions)]
 pub struct Event {
     pub id: Option<i32>, // ID is required (i.e. can't be null), but because the field is missing 'not null' in sqllite option is required
     pub sport: String,
@@ -14,9 +13,8 @@ pub struct Event {
     pub location: String,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone, Queryable, Identifiable, Associations)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, Clone, Queryable, Identifiable, AsChangeset)]
 #[table_name="sessions"]
-#[belongs_to(events)]
 pub struct Session {
     pub id: Option<i32>, // ID is required (i.e. can't be null), but because the field is missing 'not null' in sqllite option is required
     pub name: String,
@@ -25,7 +23,6 @@ pub struct Session {
     pub event_id: i32,
 }
 
-// pub fn from_model(event_model: Event, session_models: Vec<Session>) -> CEvent {
 pub fn from_model(event_model: Event, session_models: Vec<Session>) -> CEvent {
     let sessions = convert_sessions(session_models);
     CEvent {

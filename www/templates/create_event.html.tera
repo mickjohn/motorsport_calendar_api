@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+</style>
+<link rel="stylesheet" href="/static/stylesheet.css">
+<!-- <script src="static/script.js"></script> -->
+</head>
+<body>
+  {% if sport_type is defined %}
+  <h1>New '{{ sport_type }}' Event</h1>
+  {% else %}
+  <h1>New Event</h1>
+  {% endif %}
+  <form action="/events/create_event" method="post" >
+    Round:
+    <input type="text", name="round"><br>
+
+    {% if sport_type is defined %}
+    Sport (cannot be changed):
+    <input type="text", name="sport" value="{{ sport_type }}" readonly="readonly"><br>
+    {% else %}
+    Sport:
+    <input type="text", name="sport"><br>
+    {% endif %}
+
+    Country:
+    <input type="text", name="country"><br>
+
+    Location:
+    <input type="text", name="location"> <br>
+
+    <input type="submit" value="Create Event">
+  </form> 
+</body>
+</html>

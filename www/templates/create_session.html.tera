@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+</style>
+<link rel="stylesheet" href="/static/stylesheet.css">
+<!-- <script src="static/script.js"></script> -->
+</head>
+<body>
+  <h1> New Session </h1>
+  <form action="/events/{{ event_id }}/create_session" method="post" >
+    Event ID (cannot be changed!):
+    <input type="text", name="event_id" value="{{ event_id }}" readonly="readonly"><br>
+    Name:
+    <input type="text", name="name" value=""> <br>
+    Date:
+    <input type="text", name="date" value="YYYY-MM-DDTHH:MM:SS"> <br>
+    Time:
+    <input type="text", name="time" value="YYYY-MM-DDTHH:MM:SS"> <br>
+    <input type="submit" value="Add session">
+  </form> 
+</body>
+</html>

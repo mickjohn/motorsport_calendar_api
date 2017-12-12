@@ -3,13 +3,13 @@ name = "motorsport_calendar_api"
 version = "0.1.0"
 authors = ["Michael Ashe <mickjohnashe@hotmail.com>"]
 
-# [[bin]]
-# name = "event_manager"
-# path = "src/event_manager.rs"
+[[bin]]
+name = "motorsport_calendar_api"
+path = "src/main.rs"
 
 # [[bin]]
-# name = "motorsport_calendar_api"
-# path = "src/main.rs"
+# name = "admin_page"
+# path = "src/admin_page.rs"
 
 [dependencies]
 rocket = "0.3.2"
@@ -25,13 +25,18 @@ lazy_static = "0.2.2"
 clap = "2.23.1"
 diesel = { version = "0.16.0", features = ["sqlite", "chrono"] }
 diesel_codegen = { version = "0.16.0", features = ["sqlite"] }
-dotenv = "0.9.0"
+dotenv = "0.10.1"
 chrono = "0.4"
 itertools = "0.7.1"
-
+tera = "0.10.10" # Just need this for the context struct
 
 [dependencies.motorsport_calendar_common]
 path = "/home/mick/Programs/rust/motorsport_calendar_common"
 
 # [dev-dependencies]
 # rocket = { version = "0.3.2", features = ["testing"] }
+
+[dependencies.rocket_contrib]
+version = "*"
+default-features = false
+features = ["tera_templates"]

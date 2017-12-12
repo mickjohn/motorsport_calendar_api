@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+</style>
+<link rel="stylesheet" href="/static/stylesheet.css">
+<!-- <script src="static/script.js"></script> -->
+</head>
+<body>
+  <form action="/sessions/{{ session.id }}" method="post" >
+    Session ID: {{ session.id }} <br>
+    Event ID: {{ session.event_id }} <br>
+    Name: <input type="text", name="name" value="{{ session.name }}"> <br>
+    Date: <input type="text", name="date" value="{{ session.date }}"> <br>
+    Time: <input type="text", name="time" value="{{ session.time }}"> <br>
+    <input type="submit" value="Update session">
+  </form> 
+</body>
+</html>

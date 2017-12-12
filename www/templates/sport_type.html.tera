@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+</style>
+<link rel="stylesheet" href="/static/stylesheet.css">
+<!-- <script src="static/script.js"></script> -->
+</head>
+<body>
+  <div>
+    <h1> {{ sport_type }} Events </h1>
+    <a href="/events/{{ sport_type }}/create_event">Create new event</a><br>
+    <table>
+      <tr>
+        <th>Round</th>
+        <th>Location</th> 
+        <th>Country</th>
+      </tr>
+      {% for event in events %}
+      <tr>
+        <td><a href="/events/{{ event.id }}">{{ event.round }}</a></td>
+        <td><a href="/events/{{ event.id }}">{{ event.location }}</a></td>
+        <td><a href="/events/{{ event.id }}">{{ event.country }}</a></td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</body>
+</html>

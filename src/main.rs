@@ -1,5 +1,6 @@
 #![feature(plugin)]
 #![feature(custom_attribute)]
+#![feature(custom_derive)]
 #![plugin(rocket_codegen)]
 #![recursion_limit="128"]
 
@@ -13,6 +14,10 @@ extern crate serde_json;
 
 // webserver
 extern crate rocket;
+extern crate rocket_contrib;
+
+// Templates
+extern crate tera;
 
 // lazy instantiation
 // #[macro_use] extern crate lazy_static;
@@ -21,7 +26,7 @@ extern crate rocket;
 extern crate motorsport_calendar_common;
 
 // Logging
-#[macro_use] extern crate log4rs;
+extern crate log4rs;
 
 // arg parsing
 extern crate clap;
@@ -39,20 +44,52 @@ extern crate chrono;
 // For extra iteration functions
 extern crate itertools;
 
-// mod config;
-// mod data;
 mod webserver;
-// mod event_loader;
 mod schema;
 mod model;
 mod database;
+mod config;
+mod admin;
 
-// use config::Config;
-// use data::json_data;
-use clap::{Arg, App};
+use clap::{Arg, App, ArgMatches};
+use config::Config;
+
+// Main used to quickly test things ;)
+// fn main() {
+//     use schema::*;
+//     use model::Event as MEvent;
+//     use model::Session as MSession;
+//     use diesel::prelude::*;
+//     let connection = database::establish_connection();
+//     // let my_events: Vec<(MEvent, Option<MSession>)> = events::table.left_join(sessions::table).load(&connection).expect("Error loading events");
+//     let sport_types: Vec<String> = events::table.select(events::sport).group_by(events::sport).load(&connection).expect("Error loading events");
+//     for s in sport_types {
+//         println!("~> {}", s);
+//     }
+// }
 
 fn main() {
-    let matches = App::new("Motorsport calendar API")
+    let matches = get_matches();
+    let config = matches.value_of("config").unwrap_or("conf.yml");
+    let log4rs_config = matches.value_of("logconfig").unwrap_or("log4rs.yml");
+
+    if matches.is_present("admin mode") {
+        admin::launch_admin_pages();
+    } else {
+
+        log4rs::init_file(&log4rs_config, Default::default()).unwrap();
+        match run(config) {
+            Ok(()) => std::process::exit(0),
+            Err(e) => {
+                println!("{}", e);
+                std::process::exit(1);
+            },
+        };
+    }
+}
+
+fn get_matches<'a>() -> ArgMatches<'a> {
+    App::new("Motorsport calendar API")
         .version("1.0")
         .author("Michael A. <mickjohnashe@hotmail.com>")
         .about("A restful api that serves the time and date of motorsport events")
@@ -68,64 +105,21 @@ fn main() {
              .value_name("FILE")
              .help("Sets a custom config file")
              .takes_value(true))
-        .get_matches();
-    let config = matches.value_of("config").unwrap_or("conf.yml");
-    let log4rs_config = matches.value_of("logconfig").unwrap_or("log4rs.yml");
-
-    log4rs::init_file(&log4rs_config, Default::default()).unwrap();
-    match run(config) {
-        Ok(()) => std::process::exit(0),
-        Err(e) => {
-            println!("{}", e);
-            std::process::exit(1);
-        },
-    };
+        .arg(Arg::with_name("admin mode")
+             .short("a")
+             .long("admin_mode")
+             .help("Launch in admin mode (use lcoalhost to CRUD events in the DB"))
+        .get_matches()
 }
 
 fn run (conf_file: &str) -> Result<(),String> {
     info!("Starting up!");
-    // let (events, config) = try!(get_events_and_config(conf_file));
-
-    // json_data::init(&events);
-
-    // if config.enable_data_refresh() {
-    //     info!("polling of data files enabled");
-    //     thread::Builder::new().name("event_polling".to_string()).spawn(move || {
-    //         poll_yml_files(&config);
-    //     });
-    // }
-
-    // info!("About to launch rocket webserver");
+    info!("About to launch rocket webserver");
+    let config = load_config(conf_file)?;
     webserver::start();
     Ok(())
 }
 
-// fn get_events_and_config(conf_file: &str) -> Result<(Vec<Event>, Config), String> {
-//     let config = try!(Config::init_config_from_file(conf_file)
-//                       .map_err(|e| format!("Could not load config file{}, reason: {}", conf_file, e)));
-//     info!("Loaded config file {}", conf_file);
-
-//     info!("About to load events from these files: {:?}", config.data_paths());
-//     let events = try!(event_loader::load_events_from_yml_files(&config.data_paths())
-//                       .map_err(|e| format!("Error while loading events, reason: {}", e)));
-
-//     info!("Finished loading events from yml files, got {} events", events.len());
-//     Ok((events, config))
-// }
-
-// fn poll_yml_files(config: &Config) {
-//     let seconds = config.data_refresh_interval_seconds();
-//     let time = time::Duration::from_secs(seconds);
-//     info!("poll time for data files is {} seconds", seconds);
-//     loop {
-//         thread::sleep(time);
-//         match event_loader::load_events_from_yml_files(config.data_paths()) {
-//             Ok(events) => {
-//                 info!("Refreshing events now...");
-//                 json_data::init(&events);
-//                 info!("Finished refreshing!");
-//             },
-//                 Err(e) => error!("An error occured while refreshing the events from the config files, reason: {}", e),
-//         };
-//     }
-// }
+fn load_config(conf_file: &str) -> Result<Config, String> {
+    Config::init_config_from_file(conf_file).map_err(|e| e.to_string())
+}

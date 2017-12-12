@@ -18,18 +18,25 @@ fn all_events() -> content::Json<String> {
     let my_events: Vec<(MEvent, Option<MSession>)> = events::table.left_join(sessions::table).load(&connection).expect("Error loading events");
 
     let mut cevents = Vec::new();
-    // for (_ ,group) in my_events.iter().group_by(|t| t.0.id).into_iter() {
     for (_ ,group) in &my_events.iter().group_by(|t| t.0.id) {
+        let mut mevent = None;
+        let mut msessions = Vec::new();
         for &(ref ev, ref session) in group {
-            let mut msessions = Vec::new();
+
+            if mevent.is_none() {
+                mevent = Some(ev.clone());
+            }
+
             if session.is_some() {
                 let s = session.as_ref().unwrap().clone();
                 msessions.push(s);
             }
+        }
+        if let Some(ev) = mevent {
             let e = model::from_model(ev.clone(), msessions);
             cevents.push(e);
         }
-        println!("EVENT = {:?}", cevents);
+        // println!("EVENT = {:?}", cevents);
     }
     let json = serde_json::to_string(&cevents).unwrap();
     content::Json(json)
@@ -69,12 +76,18 @@ mod test {
     use rocket::http::{Status, Method, ContentType};
     use rocket::{Response, Rocket};
     use serde_json;
-    use motorsport_calendar_common::event::Event;
+    use diesel::prelude::*;
+    use chrono::{NaiveDate, NaiveDateTime};
+    // use motorsport_calendar_common::event::Event;
     use super::*;
+    use super::super::model::Event as MEvent;
+    use super::super::model::Sessions as MSession;
     use super::super::event_loader;
     use super::super::data::json_data;
+    use std::io::prelude::*;
+    use std::fs::File;
 
-    const TEST_DATA_DIR: &'static str = "test/data";
+    // const TEST_DATA_DIR: &'static str = "test/data";
 
     fn init_test_data() -> Vec<Event> {
         let events = event_loader::load_events_from_yml_file(&format!("{}/test_data.yml", TEST_DATA_DIR)).unwrap();
@@ -82,13 +95,33 @@ mod test {
         events
     }
 
+    // fn init_db(events: Vec<Event>) -> SqliteConnection {
+    // }
+    
+
+    fn get_test_data() -> (Vec<MEvent>, Vec<MSession>) {
+        (load_test_events(), load_test_sessions())
+    }
+
+    fn load_test_events() -> Vec<MEvent> {
+        let mut f = File::open("test/data/test_events.json").unwrap();
+        let mut s = String::new();
+        f.read_to_string(&mut s).unwrap();
+        serde_json::from_str(&s).unwrap()
+    }
+
+    fn load_test_sessions() -> Vec<MSession> {
+        let mut f = File::open("test/data/test_sessions.json").unwrap();
+        let mut s = String::new();
+        f.read_to_string(&mut s).unwrap();
+        serde_json::from_str(&s).unwrap()
+    }
+
     fn init_rocket() -> Rocket {
         rocket::ignite()
-            .mount("/events", routes![
+            .mount("/", routes![
                    events,
-                   event_type,
-                   event_type_round,
-                   event_type_round_num,
+                   event,
                    ])
     }
 

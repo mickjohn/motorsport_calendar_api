@@ -4,3 +4,5 @@ run.sh
 logs
 Cargo.lock
 tags
+*.swp
+*.swo

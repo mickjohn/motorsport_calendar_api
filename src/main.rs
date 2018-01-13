@@ -19,9 +19,6 @@ extern crate rocket_contrib;
 // Templates
 extern crate tera;
 
-// lazy instantiation
-// #[macro_use] extern crate lazy_static;
-
 //Common data structure
 extern crate motorsport_calendar_common;
 
@@ -32,7 +29,7 @@ extern crate log4rs;
 extern crate clap;
 
 // sqlite3 ORM
-#[macro_use] extern crate diesel_codegen;
+// #[macro_use] extern crate diesel_codegen;
 #[macro_use] extern crate diesel;
 
 // utility to load env files
@@ -41,15 +38,12 @@ extern crate dotenv;
 // Chrono for time and date 
 extern crate chrono;
 
-// For extra iteration functions
-extern crate itertools;
-
 mod webserver;
 mod schema;
 mod model;
 mod database;
 mod config;
-mod admin;
+// mod admin;
 
 use clap::{Arg, App, ArgMatches};
 use config::Config;
@@ -69,14 +63,20 @@ use config::Config;
 // }
 
 fn main() {
+    info!("Starting up!");
+    debug!("Checking command line arguments...");
     let matches = get_matches();
     let config = matches.value_of("config").unwrap_or("conf.yml");
+    debug!("Using this config file: {}", config);
+
     let log4rs_config = matches.value_of("logconfig").unwrap_or("log4rs.yml");
+    debug!("Using this log4rs_config: {}", log4rs_config);
 
     if matches.is_present("admin mode") {
-        admin::launch_admin_pages();
+        info!("Launching admin pages");
+        // admin::launch_admin_pages();
     } else {
-
+        debug!("Initializing log4rs...");
         log4rs::init_file(&log4rs_config, Default::default()).unwrap();
         match run(config) {
             Ok(()) => std::process::exit(0),
@@ -113,9 +113,9 @@ fn get_matches<'a>() -> ArgMatches<'a> {
 }
 
 fn run (conf_file: &str) -> Result<(),String> {
-    info!("Starting up!");
-    info!("About to launch rocket webserver");
+    info!("Loading config");
     let config = load_config(conf_file)?;
+    info!("About to launch API server");
     webserver::start();
     Ok(())
 }

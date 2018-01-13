@@ -8,21 +8,21 @@ use diesel::prelude::*;
 use chrono::NaiveDateTime;
 
 #[derive(FromForm)]
-struct EventUpdate {
+struct EventUpdateForm {
     pub round: i32,
     pub country: String,
     pub location: String,
 }
 
 #[derive(FromForm)]
-struct SessionUpdate {
+struct SessionUpdateForm {
     pub name: String,
     pub date: String,
     pub time: String,
 }
 
 #[post("/events/<event_id>", data="<event_update_form>")]
-fn update_event(event_id: i32, event_update_form: Form<EventUpdate>) -> String {
+fn update_event(event_id: i32, event_update_form: Form<EventUpdateForm>) -> String {
     let event_update = event_update_form.into_inner();
 
     let connection = database::establish_connection();
@@ -40,7 +40,7 @@ fn update_event(event_id: i32, event_update_form: Form<EventUpdate>) -> String {
 }
 
 #[post("/sessions/<session_id>", data="<session_update_form>")]
-fn update_session(session_id: i32, session_update_form: Form<SessionUpdate>) -> Redirect {
+fn update_session(session_id: i32, session_update_form: Form<SessionUpdateForm>) -> Redirect {
 	let session_update = session_update_form.into_inner();
 	let connection = database::establish_connection();
 	let mut session: MSession = sessions::table

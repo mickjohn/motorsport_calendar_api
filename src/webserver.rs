@@ -3,42 +3,31 @@ use rocket::response::content;
 use diesel::prelude::*;
 use super::database;
 
+// Event and session models
 use super::model::Event as MEvent;
 use super::model::Session as MSession;
 use schema::events;
 use schema::sessions;
-
 use super::model;
-use itertools::Itertools;
 use serde_json;
 
 #[get("/")]
 fn all_events() -> content::Json<String> {
     let connection = database::establish_connection();
-    let my_events: Vec<(MEvent, Option<MSession>)> = events::table.left_join(sessions::table).load(&connection).expect("Error loading events");
+    // 'm' prefix means 'model'
+	let mevents = events::table.load::<MEvent>(&connection).unwrap();
+	let msessions = MSession::belonging_to(&mevents)
+		.load::<MSession>(&connection)
+        .unwrap()
+        .grouped_by(&mevents);
 
-    let mut cevents = Vec::new();
-    for (_ ,group) in &my_events.iter().group_by(|t| t.0.id) {
-        let mut mevent = None;
-        let mut msessions = Vec::new();
-        for &(ref ev, ref session) in group {
+    let events = mevents
+        .into_iter()
+        .zip(msessions)
+        .map(|t| model::from_model(t.0, t.1))
+        .collect::<Vec<_>>();
 
-            if mevent.is_none() {
-                mevent = Some(ev.clone());
-            }
-
-            if session.is_some() {
-                let s = session.as_ref().unwrap().clone();
-                msessions.push(s);
-            }
-        }
-        if let Some(ev) = mevent {
-            let e = model::from_model(ev.clone(), msessions);
-            cevents.push(e);
-        }
-        // println!("EVENT = {:?}", cevents);
-    }
-    let json = serde_json::to_string(&cevents).unwrap();
+    let json = serde_json::to_string(&events).unwrap();
     content::Json(json)
 }
 
@@ -47,7 +36,7 @@ fn all_events() -> content::Json<String> {
 fn event(event_id: i32) -> content::Json<String> {
     let conn = database::establish_connection();
     let model_event = events::table
-        .filter(events::id.eq(Some(event_id)))
+        .filter(events::id.eq(event_id))
         .first::<MEvent>(&conn)
         .expect("Can't load event");
 

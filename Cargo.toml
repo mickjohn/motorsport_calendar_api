@@ -12,8 +12,8 @@ path = "src/main.rs"
 # path = "src/admin_page.rs"
 
 [dependencies]
-rocket = "0.3.5"
-rocket_codegen = "0.3.5"
+rocket = "0.3.6"
+rocket_codegen = "0.3.6"
 serde = "1.0.27"
 serde_derive = "1.0.27"
 serde_yaml = "0.7.3"
@@ -39,3 +39,8 @@ path = "/home/mick/Programs/rust/motorsport_calendar_common"
 version = "*"
 default-features = false
 features = ["tera_templates"]
+
+[dev-dependencies]
+stainless = "*"
+rusqlite = "0.12.0"
+diesel = { version = "1.0", features = ["sqlite", "chrono"] }

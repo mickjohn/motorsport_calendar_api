@@ -3,6 +3,7 @@
 #![feature(custom_derive)]
 #![plugin(rocket_codegen)]
 #![recursion_limit="128"]
+#![cfg_attr(test, plugin(stainless))]
 
 // Base logging crate
 #[macro_use] extern crate log;
@@ -44,6 +45,9 @@ mod model;
 mod database;
 mod config;
 // mod admin;
+
+#[cfg(test)]
+extern crate rusqlite;
 
 use clap::{Arg, App, ArgMatches};
 use config::Config;

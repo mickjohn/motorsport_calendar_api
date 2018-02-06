@@ -11,7 +11,7 @@ pub fn get_sport_types() -> Template {
     let sport_types: Vec<String> = events::table.select(events::sport).group_by(events::sport).load(&connection).expect("Error loading events");
     let mut context = Context::new();
     context.add("sports", &sport_types);
-    Template::render("sport_types", &context)
+    Template::render("sport_types", &context) 
 }
 
 #[get("/<sport_type>")]
@@ -31,8 +31,8 @@ fn get_sport_type_events(sport_type: String) -> Template {
 #[get("/events/<event_id>")]
 fn get_event(event_id: i32) -> Template {
     let connection = database::establish_connection();
-    let event: MEvent = events::table.filter(events::id.eq(Some(event_id))).first(&connection).expect("Error loading event");
-    let sessions: Vec<MSession> = sessions::table.filter(sessions::event_id.eq(event.id.unwrap())).load(&connection).expect("Error lading sessions");
+    let event: MEvent = events::table.filter(events::id.eq(event_id)).first(&connection).expect("Error loading event");
+    let sessions: Vec<MSession> = sessions::table.filter(sessions::event_id.eq(event.id)).load(&connection).expect("Error lading sessions");
 
     let mut context = Context::new();
     context.add("event", &event);
@@ -43,7 +43,7 @@ fn get_event(event_id: i32) -> Template {
 #[get("/sessions/<session_id>")]
 fn get_session(session_id: i32) -> Template {
     let connection = database::establish_connection();
-    let session: MSession = sessions::table.filter(sessions::id.eq(Some(session_id))).first(&connection).expect("Error loading event");
+    let session: MSession = sessions::table.filter(sessions::id.eq(session_id)).first(&connection).expect("Error loading event");
 
     let mut context = Context::new();
     context.add("session", &session);

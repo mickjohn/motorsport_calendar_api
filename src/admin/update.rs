@@ -27,7 +27,7 @@ fn update_event(event_id: i32, event_update_form: Form<EventUpdateForm>) -> Stri
 
     let connection = database::establish_connection();
     let mut event: MEvent = events::table
-        .filter(events::id.eq(Some(event_id)))
+        .filter(events::id.eq(event_id))
         .first(&connection)
         .expect("Error loading event");
 
@@ -44,7 +44,7 @@ fn update_session(session_id: i32, session_update_form: Form<SessionUpdateForm>)
 	let session_update = session_update_form.into_inner();
 	let connection = database::establish_connection();
 	let mut session: MSession = sessions::table
-		.filter(sessions::id.eq(Some(session_id)))
+		.filter(sessions::id.eq(session_id))
 		.first(&connection)
 		.expect("Error loading event");
 

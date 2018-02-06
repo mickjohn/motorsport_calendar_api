@@ -8,20 +8,30 @@ table, th, td {
 }
 </style>
 <link rel="stylesheet" href="/static/stylesheet.css">
-<!-- <script src="static/script.js"></script> -->
+<link rel="stylesheet" href="/static/jquery/jquery-ui.min.css">
+<link rel="stylesheet" href="/static/jquery/jquery-ui.structure.min.css">
+<link rel="stylesheet" href="/static/jquery/jquery-ui.theme.min.css">
+<script src="/static/jquery/external/jquery/jquery.js"></script>
+<script src="/static/jquery/jquery-ui.min.js"></script>
+<script src="/static/script.js"></script>
 </head>
 <body>
   <h1> New Session </h1>
   <form action="/events/{{ event_id }}/create_session" method="post" >
     Event ID (cannot be changed!):
-    <input type="text", name="event_id" value="{{ event_id }}" readonly="readonly"><br>
+    <input type="text" name="event_id" value="{{ event_id }}" readonly="readonly"><br>
     Name:
-    <input type="text", name="name" value=""> <br>
+    <input type="text" name="name" value=""> <br>
     Date:
-    <input type="text", name="date" value="YYYY-MM-DDTHH:MM:SS"> <br>
+    <input type="text" name="date" id="date"> <br>
     Time:
-    <input type="text", name="time" value="YYYY-MM-DDTHH:MM:SS"> <br>
+    <input type="text" name="time" id="time"> <br>
     <input type="submit" value="Add session">
   </form> 
+<script>
+  $("#date").datepicker({
+    dateFormat: "yy-mm-ddT00:00:00"
+  });
+</script>
 </body>
 </html>

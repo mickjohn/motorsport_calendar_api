@@ -3,7 +3,7 @@ use motorsport_calendar_common::event::Event as CEvent; //Common event
 use motorsport_calendar_common::event::Session as CSession; //Common event
 use super::schema::*;
 
-#[derive(Debug, Queryable, Identifiable, AsChangeset, Associations, Clone)]
+#[derive(Debug, Clone, Queryable, Insertable, Identifiable, AsChangeset, Associations, Serialize)]
 #[table_name="events"]
 pub struct Event {
     pub id: i32,
@@ -13,7 +13,7 @@ pub struct Event {
     pub location: String,
 }
 
-#[derive(Debug, Queryable, Associations, Identifiable, Clone)]
+#[derive(Debug, Clone, Queryable, Insertable, AsChangeset, Associations, Identifiable, Serialize)]
 #[belongs_to(Event, foreign_key = "event_id")]
 #[table_name="sessions"]
 pub struct Session {
@@ -29,11 +29,35 @@ pub fn from_model(event_model: Event, session_models: Vec<Session>) -> CEvent {
     CEvent {
         id: event_model.id,
         sport: event_model.sport,
-        round: i64::from(event_model.round),
+        round: event_model.round,
         country: event_model.country,
         location: event_model.location,
         sessions: sessions,
     }
+}
+
+pub fn into_models(e: CEvent) -> (Event, Vec<Session>) {
+    let csessions = e.sessions;
+    let mut sessions = Vec::new();
+    let event = Event {
+        id: e.id,
+        sport: e.sport,
+        round: e.round,
+        country: e.country,
+        location: e.location,
+    };
+
+    for s in csessions {
+        let session = Session {
+            id: s.id,
+            event_id: e.id,
+            name: s.name,
+            date: Some(s.date.naive_utc()),
+            time: Some(s.time.unwrap().naive_utc()),
+        };
+        sessions.push(session);
+    }
+    (event, sessions)
 }
 
 fn convert_sessions(session_models: Vec<Session>) -> Vec<CSession> {

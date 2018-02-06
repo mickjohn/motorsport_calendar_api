@@ -44,10 +44,16 @@ mod schema;
 mod model;
 mod database;
 mod config;
-// mod admin;
+mod admin;
+
+#[cfg(test)]
+mod test_functions;
 
 #[cfg(test)]
 extern crate rusqlite;
+
+#[cfg(test)]
+extern crate rand;
 
 use clap::{Arg, App, ArgMatches};
 use config::Config;
@@ -78,7 +84,7 @@ fn main() {
 
     if matches.is_present("admin mode") {
         info!("Launching admin pages");
-        // admin::launch_admin_pages();
+        admin::launch_admin_pages();
     } else {
         debug!("Initializing log4rs...");
         log4rs::init_file(&log4rs_config, Default::default()).unwrap();

@@ -58,15 +58,6 @@ fn event(conn_pool: State<Mutex<SqliteConnection>>, event_id: i32)
         Err(DbNotFound) => Err(NotFound("Could not find resource".to_string())),
         _ => panic!("Couldn't load events!")
     }
-
-    // let model_sessions: Vec<MSession> = sessions::table
-    //     .filter(sessions::event_id.eq(&event_id))
-    //     .load(&conn)
-    //     .expect("Can't load sessions");
-
-    // let e = model::from_model(model_event, model_sessions);
-    // let json = serde_json::to_string(&e).unwrap();
-    // Ok(content::Json(json))
     }
 
 fn get_db_pool() -> Mutex<SqliteConnection> {
@@ -90,7 +81,9 @@ mod test {
     use super::super::model;
     use super::super::schema::{events, sessions};
     use super::super::model::{Event as MEvent, Session as MSession};
+    use super::super::test_functions::EventGeneratorBuilder;
     use rusqlite::Connection as RusqliteConnection;
+    use diesel;
     use diesel::prelude::*;
     use std::fs;
 
@@ -99,22 +92,70 @@ mod test {
          , include_str!("../migrations/20171019211407_sessions/up.sql").to_string())
     }
 
-    fn create_database(url: &str) {
-        let conn = RusqliteConnection::open(url).unwrap();
-        let (event_sql, session_sql) = get_table_sql();
-        for sql in event_sql.split(";") {
+    fn run_sql_string(conn: &RusqliteConnection, s: &str) {
+        for sql in s.split(";") {
             let trimmed = sql.trim();
             if !trimmed.starts_with("/*") && !trimmed.starts_with("*/") && trimmed != "" {
                 conn.execute(trimmed, &[]).unwrap();
             }
+        }
+    }
+
+    fn mick(url: &str) {
+        let mut event_id = 0;
+        let mut session_id = 0;
+        let mut events = Vec::new();
+        let sports = vec!["Formula 1", "Indycar", "DTM", "Formula 2", "GP3", "Formula 3"];
+        let locations: Vec<(String, String)> = vec![("Australia", "Albert Park"),
+        ("Bahrain", "Bahrain"),
+        ("Shanghai", "Shanghai"),
+        ("Azerbaijan", "Baku"),
+        ("Spain", "Catalunya"),
+        ("Monaco", "Monaco"),
+        ("Canada", "Circuit Gilles Villeneuve"),
+        ("France", "Circuit Paul Ricard"),
+        ("Austria", "Red Bull Ring"),
+        ].iter()
+            .map(|&(l,c)| (l.to_string(), c.to_string()))
+            .collect();
+
+        for sport in sports {
+            let mut generator = EventGeneratorBuilder::with()
+                .number(40)
+                .sport(sport.to_string())
+                .locations(locations.clone())
+                .sessions(vec![5])
+                .starting_id(event_id)
+                .starting_session_id(session_id)
+                .finish();
+            let (new_events, new_e_id, new_s_id) = generator.generate_events();
+            events.extend(new_events);
+            event_id = new_e_id;
+            session_id = new_s_id;
         }
 
-        for sql in session_sql.split(";") {
-            let trimmed = sql.trim();
-            if !trimmed.starts_with("/*") && !trimmed.starts_with("*/") && trimmed != "" {
-                conn.execute(trimmed, &[]).unwrap();
-            }
+        let d_conn = SqliteConnection::establish(url).unwrap();
+        for e in events {
+            let (model_event, model_sessions) = model::into_models(e.clone());
+            diesel::insert_into(events::table)
+                .values(&model_event)
+                .execute(&d_conn)
+                .expect("Error inserting event");
+
+            diesel::insert_into(sessions::table)
+                .values(&model_sessions)
+                .execute(&d_conn)
+                .expect("Error inserting event");
         }
+    }
+
+    fn create_database(url: &str) {
+        delete_database(url); // clear DB from last run
+        let conn = RusqliteConnection::open(url).unwrap();
+        let (event_sql, session_sql) = get_table_sql();
+        run_sql_string(&conn, &event_sql);
+        run_sql_string(&conn, &session_sql);
+        mick(url);
     }
 
     fn delete_database(url: &str) {
@@ -128,162 +169,13 @@ mod test {
             let d_conn = SqliteConnection::establish(&db_url).unwrap();
         }
 
-        it "Database has events" {
+        it "database should have events" {
             let mevents = events::table.load::<MEvent>(&d_conn).unwrap();
             assert!(mevents.len() > 0);
         }
 
-        after_each {
-            delete_database(&db_url);
-        }
+        // after_each {
+        //     delete_database(&db_url);
+        // }
     }
 }
-
-// #[cfg(test)]
-// mod test {
-//     use rocket::testing::MockRequest;
-//     use rocket::http::{Status, Method, ContentType};
-//     use rocket::{Response, Rocket};
-//     use serde_json;
-//     use diesel::prelude::*;
-//     use chrono::{NaiveDate, NaiveDateTime};
-//     // use motorsport_calendar_common::event::Event;
-//     use super::*;
-//     use super::super::model::Event as MEvent;
-//     use super::super::model::Sessions as MSession;
-//     use super::super::event_loader;
-//     use super::super::data::json_data;
-//     use std::io::prelude::*;
-//     use std::fs::File;
-
-//     // const TEST_DATA_DIR: &'static str = "test/data";
-
-//     fn init_test_data() -> Vec<Event> {
-//         let events = event_loader::load_events_from_yml_file(&format!("{}/test_data.yml", TEST_DATA_DIR)).unwrap();
-//         json_data::init(&events);
-//         events
-//     }
-
-//     // fn init_db(events: Vec<Event>) -> SqliteConnection {
-//     // }
-
-
-//     fn get_test_data() -> (Vec<MEvent>, Vec<MSession>) {
-//         (load_test_events(), load_test_sessions())
-//     }
-
-//     fn load_test_events() -> Vec<MEvent> {
-//         let mut f = File::open("test/data/test_events.json").unwrap();
-//         let mut s = String::new();
-//         f.read_to_string(&mut s).unwrap();
-//         serde_json::from_str(&s).unwrap()
-//     }
-
-//     fn load_test_sessions() -> Vec<MSession> {
-//         let mut f = File::open("test/data/test_sessions.json").unwrap();
-//         let mut s = String::new();
-//         f.read_to_string(&mut s).unwrap();
-//         serde_json::from_str(&s).unwrap()
-//     }
-
-//     fn init_rocket() -> Rocket {
-//         rocket::ignite()
-//             .mount("/", routes![
-//                    events,
-//                    event,
-//                    ])
-//     }
-
-//     fn assert_status_and_string(mut response: Response,status: Status, s: String) {
-//         assert_eq!(response.status(), status);
-//         let body_string = response.body().and_then(|b| b.into_string()).unwrap();
-//         assert_eq!(body_string, s);
-//     }
-
-//     #[test]
-//     fn test_get_events() {
-//         let test_events = init_test_data();
-//         let rocket = init_rocket();
-//         let mut req = MockRequest::new(Method::Get, "/events").header(ContentType::Json);
-//         let response = req.dispatch_with(&rocket);
-//         let expected = serde_json::to_string(&test_events).unwrap();
-//         assert_status_and_string(response, Status::Ok, expected);
-//     }
-
-//     #[test]
-//     fn test_get_events_by_type() {
-//         init_test_data();
-//         let rocket = init_rocket();
-//         for sport_type in vec!["DTM", "GP2", "Formula 1", "doesnt_exist"] {
-//             let get = format!("/events/{}", sport_type);
-//             let mut req = MockRequest::new(Method::Get, &get.replace(" ","%20")).header(ContentType::Json);
-//             let response = req.dispatch_with(&rocket);
-//             let expected = match json_data::DATA.read().unwrap().events_type.get(sport_type) {
-//                 None => "{}".to_string(),
-//                 Some(x) => x.to_string()
-//             };
-//             assert_status_and_string(response, Status::Ok, expected);
-//         }
-//     }
-
-
-//     #[test]
-//     fn test_get_events_by_type_and_round() {
-//         init_test_data();
-//         let rocket = init_rocket();
-//         let keys = vec![
-//             ("DTM".to_string(), 0),
-//             ("DTM".to_string(), 1),
-//             ("DTM".to_string(), 2),
-//             ("DTM".to_string(), 3),
-//             ("GP2".to_string(), 999),
-//             ("GP2".to_string(), 1),
-//             ("GP2".to_string(), 2),
-//             ("Formula 1".to_string(), 0),
-//             ("Formula 1".to_string(), 1),
-//             ];
-
-//         for key in keys {
-//             let get = format!("/events/{}/{}", key.0, key.1);
-//             let mut req = MockRequest::new(Method::Get, &get.replace(" ","%20")).header(ContentType::Json);
-//             let response = req.dispatch_with(&rocket);
-//             let expected = match json_data::DATA.read().unwrap().events_type_round.get(&key) {
-//                 None => "{}".to_string(),
-//                 Some(x) => x.to_string()
-//             };
-//             assert_status_and_string(response, Status::Ok, expected);
-//         }
-//     }
-
-//     #[test]
-//     fn test_get_events_by_type_and_round_and_session() {
-//         init_test_data();
-//         let rocket = init_rocket();
-//         let keys = vec![
-//             ("DTM".to_string(), 0, 1),
-//             ("DTM".to_string(), 0, 2),
-//             ("DTM".to_string(), 1, 0),
-//             ("DTM".to_string(), 1, 1),
-//             ("DTM".to_string(), 1, 2),
-//             ("DTM".to_string(), 1, 3),
-//             ("DTM".to_string(), 2, 1),
-//             ("DTM".to_string(), 2, 2),
-//             ("DTM".to_string(), 2, 30),
-//             ("Formula 1".to_string(), 0, 1),
-//             ("Formula 1".to_string(), 1, 2),
-//             ("Formula 1".to_string(), 1, 3),
-//             ("Formula 1".to_string(), 1, 444),
-//             ];
-
-//         for key in keys {
-//             let get = format!("/events/{}/{}/{}", key.0, key.1, key.2);
-//             let mut req = MockRequest::new(Method::Get, &get.replace(" ","%20")).header(ContentType::Json);
-//             let response = req.dispatch_with(&rocket);
-//             let expected = match json_data::DATA.read().unwrap().events_type_round_num.get(&key) {
-//                 None => "{}".to_string(),
-//                 Some(x) => x.to_string()
-//             };
-//             assert_status_and_string(response, Status::Ok, expected);
-//         }
-//     }
-// }

@@ -11,7 +11,7 @@ table, th, td {
 <!-- <script src="static/script.js"></script> -->
 </head>
 <body>
-  <form action="/sessions/{{ session.id }}" method="post" >
+  <form action="/sessions/{{ session.id }}" method="put" >
     Session ID: {{ session.id }} <br>
     Event ID: {{ session.event_id }} <br>
     Name: <input type="text", name="name" value="{{ session.name }}"> <br>

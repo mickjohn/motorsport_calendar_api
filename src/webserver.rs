@@ -1,4 +1,5 @@
 use rocket;
+use rocket::Rocket;
 use rocket::response::content;
 use rocket::response::status::NotFound;
 use rocket::State;
@@ -65,7 +66,7 @@ fn get_db_pool() -> Mutex<SqliteConnection> {
     Mutex::new(conn)
 }
 
-pub fn start() {
+fn init_rocket() -> Rocket {
     let pool = get_db_pool();
     rocket::ignite()
         .mount("/events", routes![
@@ -73,19 +74,27 @@ pub fn start() {
                event,
         ])
         .manage(pool)
-        .launch();
+}
+
+pub fn start() {
+    init_rocket().launch();
 }
 
 #[cfg(test)]
 mod test {
+    use super::init_rocket;
     use super::super::model;
     use super::super::schema::{events, sessions};
     use super::super::model::{Event as MEvent, Session as MSession};
     use super::super::test_functions::EventGeneratorBuilder;
-    use rusqlite::Connection as RusqliteConnection;
+
+    use std::fs;
     use diesel;
     use diesel::prelude::*;
-    use std::fs;
+    // use super::rocket;
+    use rocket::local::Client;
+    use rocket::http::Status;
+    use rusqlite::Connection as RusqliteConnection;
 
     fn get_table_sql() -> (String, String) {
         (include_str!("../migrations/20171019211358_events/up.sql").to_string()
@@ -101,7 +110,7 @@ mod test {
         }
     }
 
-    fn mick(url: &str) {
+    fn generate_test_events(url: &str) {
         let mut event_id = 0;
         let mut session_id = 0;
         let mut events = Vec::new();
@@ -155,11 +164,11 @@ mod test {
         let (event_sql, session_sql) = get_table_sql();
         run_sql_string(&conn, &event_sql);
         run_sql_string(&conn, &session_sql);
-        mick(url);
+        generate_test_events(url);
     }
 
     fn delete_database(url: &str) {
-        fs::remove_file(url).unwrap();
+        fs::remove_file(url);
     }
 
     describe! stainless {
@@ -172,6 +181,12 @@ mod test {
         it "database should have events" {
             let mevents = events::table.load::<MEvent>(&d_conn).unwrap();
             assert!(mevents.len() > 0);
+        }
+
+        it "can return events" {
+            let client = Client::new(init_rocket()).expect("valid rocket instance");
+            let mut response = client.get("/events").dispatch();
+            assert_eq!(response.status(), Status::Ok);
         }
 
         // after_each {

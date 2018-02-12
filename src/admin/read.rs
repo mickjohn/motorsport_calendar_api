@@ -5,27 +5,15 @@ use rocket_contrib::Template;
 use tera::Context;
 use diesel::prelude::*;
 
-#[get("/")]
-pub fn get_sport_types() -> Template {
+#[get("/events")]
+pub fn get_events() -> Template {
     let connection = database::establish_connection();
-    let sport_types: Vec<String> = events::table.select(events::sport).group_by(events::sport).load(&connection).expect("Error loading events");
-    let mut context = Context::new();
-    context.add("sports", &sport_types);
-    Template::render("sport_types", &context) 
-}
-
-#[get("/<sport_type>")]
-fn get_sport_type_events(sport_type: String) -> Template {
-    let s = sport_type.replace("%20", " ");
-    let connection = database::establish_connection();
-    let events: Vec<MEvent> = events::table.filter(events::sport.eq(&s))
-        .load(&connection)
+    let events: Vec<MEvent> = events::table.load(&connection)
         .expect("Error loading events");
 
     let mut context = Context::new();
     context.add("events", &events);
-    context.add("sport_type", &sport_type);
-    Template::render("sport_type", &context)
+    Template::render("events", &context)
 }
 
 #[get("/events/<event_id>")]
@@ -50,8 +38,27 @@ fn get_session(session_id: i32) -> Template {
     Template::render("session", &context)
 }
 
+#[derive(FromForm)]
+struct CreateSessionFromParams {
+    session_name: Option<String>,
+    date_string: Option<String>,
+}
+
+#[get("/events/<event_id>/create_session?<params>")]
+fn create_session_form(event_id: i32, params: CreateSessionFromParams) -> Template {
+    let mut context = Context::new();
+
+    if let (Some(session_name), Some(date_string)) = (params.session_name, params.date_string) {
+        context.add("session_name", &session_name);
+        context.add("date_string", &date_string);
+    }
+
+    context.add("event_id", &event_id);
+    Template::render("create_session", &context)
+}
+
 #[get("/events/<event_id>/create_session")]
-fn create_session_form(event_id: i32) -> Template {
+fn create_session_form_no_params(event_id: i32) -> Template {
     let mut context = Context::new();
     context.add("event_id", &event_id);
     Template::render("create_session", &context)

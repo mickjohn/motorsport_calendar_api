@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+    </style>
+    <link rel="stylesheet" href="/static/stylesheet.css">
+  </head>
+  <body>
+    <a href="/events">Back to events</a></br>
+    <a href="/events/create_event">Create another event</a>
+  </body>
+</html>

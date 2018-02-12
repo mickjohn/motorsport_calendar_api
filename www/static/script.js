@@ -1,15 +1,24 @@
-
-function get_list_of_forms() {
-  var form_div = document.getElementById('forms');
-  var forms = form_div.childNodes;
+function send_delete_request(href, item_type) {
+  if (window.confirm("Are you sure you want to delete this " + item_type + "?")) {
+    $.ajax({
+      async: false,
+      url: href,
+      type: 'DELETE',
+      success: function(result) { location.reload() }
+    });
+  }
 }
 
-// $.datepicker.setDefaults({});
-// $.datepicker.formatDate( "DD, MM d, yy");
+$(function() {
+	$(".delete_session").on("click",function(e) {
+		e.preventDefault(); // cancel the link itself
+    send_delete_request(this.href, "session");
+	});
+});
 
-// $.datepicker.formatDate( "DD, MM d, yy", new Date( 2007, 7 - 1, 14 ), {
-  // dayNamesShort: $.datepicker.regional[ "fr" ].dayNamesShort,
-  // dayNames: $.datepicker.regional[ "fr" ].dayNames,
-  // monthNamesShort: $.datepicker.regional[ "fr" ].monthNamesShort,
-  // monthNames: $.datepicker.regional[ "fr" ].monthNames
-// });
+$(function() {
+	$(".delete_event").on("click",function(e) {
+		e.preventDefault(); // cancel the link itself
+    send_delete_request(this.href, 'event');
+	});
+});

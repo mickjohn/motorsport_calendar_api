@@ -1,0 +1,7 @@
+    <link rel="stylesheet" href="/static/stylesheet.css">
+    <link rel="stylesheet" href="/static/jquery/jquery-ui.min.css">
+    <link rel="stylesheet" href="/static/jquery/jquery-ui.structure.min.css">
+    <link rel="stylesheet" href="/static/jquery/jquery-ui.theme.min.css">
+    <script src="/static/jquery/external/jquery/jquery.js"></script>
+    <script src="/static/jquery/jquery-ui.min.js"></script>
+

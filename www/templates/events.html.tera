@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+</style>
+<link rel="stylesheet" href="/static/stylesheet.css">
+<link rel="stylesheet" href="/static/stylesheet.css">
+<link rel="stylesheet" href="/static/jquery/jquery-ui.min.css">
+<link rel="stylesheet" href="/static/jquery/jquery-ui.structure.min.css">
+<link rel="stylesheet" href="/static/jquery/jquery-ui.theme.min.css">
+<script src="/static/jquery/external/jquery/jquery.js"></script>
+<script src="/static/jquery/jquery-ui.min.js"></script>
+</head>
+<body>
+  <div>
+    <h1> Events </h1>
+    <a href="/events/create_event">Create new event</a><br>
+    <table>
+      <tr>
+        <th>Series</th>
+        <th>Round</th>
+        <th>Location</th> 
+        <th>Country</th>
+        <th>Edit</th>
+        <th>Delete</th>
+      </tr>
+      {% for event in events %}
+      <tr>
+        <td>{{ event.sport }}</td>
+        <td>{{ event.round }}</td>
+        <td>{{ event.location }}</td>
+        <td>{{ event.country }}</td>
+        <td><a href="/events/{{ event.id }}">&#x270E;</a></td>
+        <td><a class="delete_event" href="/events/{{ event.id }}">&#x2716;</a></td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  <script src="/static/script.js"></script>
+</body>
+</html>

@@ -21,7 +21,7 @@ struct SessionUpdateForm {
     pub time: String,
 }
 
-#[post("/events/<event_id>", data="<event_update_form>")]
+#[put("/events/<event_id>", data="<event_update_form>")]
 fn update_event(event_id: i32, event_update_form: Form<EventUpdateForm>) -> String {
     let event_update = event_update_form.into_inner();
 
@@ -39,7 +39,7 @@ fn update_event(event_id: i32, event_update_form: Form<EventUpdateForm>) -> Stri
     "Event updated!!!".to_string()
 }
 
-#[post("/sessions/<session_id>", data="<session_update_form>")]
+#[put("/sessions/<session_id>", data="<session_update_form>")]
 fn update_session(session_id: i32, session_update_form: Form<SessionUpdateForm>) -> Redirect {
 	let session_update = session_update_form.into_inner();
 	let connection = database::establish_connection();

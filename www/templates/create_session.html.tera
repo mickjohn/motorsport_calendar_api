@@ -1,37 +1,44 @@
 <!DOCTYPE html>
 <html>
-<head>
-<style>
+  <head>
+    <style>
 table, th, td {
   border: 1px solid black;
   border-collapse: collapse;
 }
-</style>
-<link rel="stylesheet" href="/static/stylesheet.css">
-<link rel="stylesheet" href="/static/jquery/jquery-ui.min.css">
-<link rel="stylesheet" href="/static/jquery/jquery-ui.structure.min.css">
-<link rel="stylesheet" href="/static/jquery/jquery-ui.theme.min.css">
-<script src="/static/jquery/external/jquery/jquery.js"></script>
-<script src="/static/jquery/jquery-ui.min.js"></script>
-<script src="/static/script.js"></script>
-</head>
-<body>
-  <h1> New Session </h1>
-  <form action="/events/{{ event_id }}/create_session" method="post" >
-    Event ID (cannot be changed!):
-    <input type="text" name="event_id" value="{{ event_id }}" readonly="readonly"><br>
-    Name:
-    <input type="text" name="name" value=""> <br>
-    Date:
-    <input type="text" name="date" id="date"> <br>
-    Time:
-    <input type="text" name="time" id="time"> <br>
-    <input type="submit" value="Add session">
-  </form> 
-<script>
-  $("#date").datepicker({
-    dateFormat: "yy-mm-ddT00:00:00"
-  });
-</script>
-</body>
+    </style>
+    <link rel="stylesheet" href="/static/stylesheet.css">
+    <link rel="stylesheet" href="/static/jquery/jquery-ui.min.css">
+    <link rel="stylesheet" href="/static/jquery/jquery-ui.structure.min.css">
+    <link rel="stylesheet" href="/static/jquery/jquery-ui.theme.min.css">
+    <script src="/static/jquery/external/jquery/jquery.js"></script>
+    <script src="/static/jquery/jquery-ui.min.js"></script>
+    {#{% include "www/templates/subtemplates/jquery_includes.html.tera" %}#}
+    <script src="/static/script.js"></script>
+  </head>
+  <body>
+    <h1> New Session </h1>
+    <form action="/events/{{ event_id }}/create_session" method="post" >
+      Event ID (cannot be changed!):
+      <input type="text" name="event_id" value="{{ event_id }}" readonly="readonly"><br>
+      Name:
+      {% if session_name is defined %}
+      <input type="text" name="name" value="{{ session_name }}"> <br>
+      {% else %}
+      <input type="text" name="name" value=""> <br>
+      {% endif %}
+      Time:
+      {% if date_string is defined %}
+      <input type="text" name="time" id="time" value="{{ date_string }}"> <br>
+      {% else %}
+      <input type="text" name="time" id="time"> <br>
+      {% endif %}
+      <input type="submit" value="Add session">
+    </form> 
+      <script>
+$("#date").datepicker({
+  dateFormat: "yy-mm-ddT00:00:00"
+});
+      </script>
+  </body>
 </html>

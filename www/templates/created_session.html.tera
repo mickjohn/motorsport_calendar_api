@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+    </style>
+    <link rel="stylesheet" href="/static/stylesheet.css">
+  </head>
+  <body>
+    <a href="/events">Back to events</a></br>
+    <a href="/events/{{ event_id }}">Back to event</a></br>
+    {% if session_name is defined %}
+      {% if date_string is defined %}
+      <a href="/events/{{ event_id }}/create_session?session_name={{ session_name }}&date_string={{ date_string }}">Create next session</a>
+      {% endif %}
+    {% endif %}
+  </body>
+</html>

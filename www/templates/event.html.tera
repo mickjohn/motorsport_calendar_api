@@ -8,7 +8,11 @@ table, th, td {
 }
 </style>
 <link rel="stylesheet" href="/static/stylesheet.css">
-<!-- <script src="static/script.js"></script> -->
+<link rel="stylesheet" href="/static/jquery/jquery-ui.min.css">
+<link rel="stylesheet" href="/static/jquery/jquery-ui.structure.min.css">
+<link rel="stylesheet" href="/static/jquery/jquery-ui.theme.min.css">
+<script src="/static/jquery/external/jquery/jquery.js"></script>
+<script src="/static/jquery/jquery-ui.min.js"></script>
 </head>
 <body>
   <form action="/events/{{ event.id }}" method="post" >
@@ -20,26 +24,31 @@ table, th, td {
     <input type="submit" value="Update event">
   </form> 
 
-  <div>
-    <h1> Sessions </h1>
-    <a href="/events/{{ event.id }}/create_session">Add Session</a>
-    <table>
-      <tr>
-        <th>ID</th>
-        <th>Name</th> 
-        <th>Date</th>
-        <th>Time</th>
-      </tr>
-      {% for session in sessions %}
-      <tr>
-        <td><a href="/sessions/{{ session.id }}">{{ session.id }}</a></td>
-        <td><a href="/sessions/{{ session.id }}">{{ session.name }}</a></td>
-        <td><a href="/sessions/{{ session.id }}">{{ session.date }}</a></td>
-        <td><a href="/sessions/{{ session.id }}">{{ session.time }}</a></td>
-      </tr>
-      {% endfor %}
-    </table>
-    <a href="/events/{{ event.id }}/create_session">Add Session</a>
-  </div>
+    <div>
+      <h1> Sessions </h1>
+      <a href="/events/{{ event.id }}/create_session">Add Session</a>
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>Name</th> 
+          <th>Date</th>
+          <th>Time</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+        {% for session in sessions %}
+        <tr>
+          <td>{{ session.id }}</td>
+          <td>{{ session.name }}</td>
+          <td>{{ session.date }}</td>
+          <td>{{ session.time }}</td>
+          <td><a href="/sessions/{{ session.id }}">&#x270E;</a></td>
+          <td><a class="delete_session" href="/sessions/{{ session.id }}">&#x2716;</a></td>
+        </tr>
+        {% endfor %}
+      </table>
+      <a href="/events/{{ event.id }}/create_session">Add Session</a>
+    </div>
+		<script src="/static/script.js"></script>
 </body>
 </html>

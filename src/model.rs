@@ -92,7 +92,7 @@ pub struct NewEvent {
     pub location: String,
 }
 
-#[derive(Insertable)]
+#[derive(Insertable, Debug)]
 #[table_name="sessions"]
 pub struct NewSession {
     pub name: String,

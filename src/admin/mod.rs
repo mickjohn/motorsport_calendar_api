@@ -14,23 +14,26 @@ const DATETIME_FORMAT: &str = "%Y-%m-%dT%H:%M:%S";
 pub fn launch_admin_pages() {
     rocket::ignite()
         .attach(Template::fairing())
-        .mount("/", routes![
-               index,
-               static_file,
-               read::get_events,
-               read::get_event,
-               read::get_session,
-               read::create_session_form,
-               read::create_session_form_no_params,
-               read::create_event_form,
-               read::create_event_form_for_sport_type,
-               update::update_event,
-               update::update_session,
-               create::create_session,
-               create::create_event,
-               delete::delete_event,
-               delete::delete_session,
-               ])
+        .mount(
+            "/",
+            routes![
+                index,
+                static_file,
+                read::get_events,
+                read::get_event,
+                read::get_session,
+                read::create_session_form,
+                read::create_session_form_no_params,
+                read::create_event_form,
+                read::create_event_form_for_sport_type,
+                update::update_event,
+                update::update_session,
+                create::create_session,
+                create::create_event,
+                delete::delete_event,
+                delete::delete_session,
+            ],
+        )
         .launch();
 }
 

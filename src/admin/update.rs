@@ -21,7 +21,7 @@ struct SessionUpdateForm {
     pub time: String,
 }
 
-#[put("/events/<event_id>", data="<event_update_form>")]
+#[put("/events/<event_id>", data = "<event_update_form>")]
 fn update_event(event_id: i32, event_update_form: Form<EventUpdateForm>) -> String {
     let event_update = event_update_form.into_inner();
 
@@ -34,35 +34,39 @@ fn update_event(event_id: i32, event_update_form: Form<EventUpdateForm>) -> Stri
     event.round = event_update.round;
     event.country = event_update.country;
     event.location = event_update.location;
-    event.save_changes::<MEvent>(&connection).expect("Could not update event");
+    event
+        .save_changes::<MEvent>(&connection)
+        .expect("Could not update event");
 
     "Event updated!!!".to_string()
 }
 
-#[put("/sessions/<session_id>", data="<session_update_form>")]
+#[put("/sessions/<session_id>", data = "<session_update_form>")]
 fn update_session(session_id: i32, session_update_form: Form<SessionUpdateForm>) -> Redirect {
-	let session_update = session_update_form.into_inner();
-	let connection = database::establish_connection();
-	let mut session: MSession = sessions::table
-		.filter(sessions::id.eq(session_id))
-		.first(&connection)
-		.expect("Error loading event");
+    let session_update = session_update_form.into_inner();
+    let connection = database::establish_connection();
+    let mut session: MSession = sessions::table
+        .filter(sessions::id.eq(session_id))
+        .first(&connection)
+        .expect("Error loading event");
 
-	let date = if session_update.date == "" {
-		None
-	} else {
-		Some(NaiveDateTime::parse_from_str(&session_update.date, DATETIME_FORMAT).unwrap())
-	};
+    let date = if session_update.date == "" {
+        None
+    } else {
+        Some(NaiveDateTime::parse_from_str(&session_update.date, DATETIME_FORMAT).unwrap())
+    };
 
-	let time = if session_update.time == "" {
-		None
-	} else {
-		Some(NaiveDateTime::parse_from_str(&session_update.time, DATETIME_FORMAT).unwrap())
-	};
+    let time = if session_update.time == "" {
+        None
+    } else {
+        Some(NaiveDateTime::parse_from_str(&session_update.time, DATETIME_FORMAT).unwrap())
+    };
 
-	session.name = session_update.name;
-	session.date = date;
-	session.time = time;
-	session.save_changes::<MSession>(&connection).expect("Could not update session");
+    session.name = session_update.name;
+    session.date = date;
+    session.time = time;
+    session
+        .save_changes::<MSession>(&connection)
+        .expect("Could not update session");
     Redirect::to(&format!("/sessions/{}", session_id))
 }

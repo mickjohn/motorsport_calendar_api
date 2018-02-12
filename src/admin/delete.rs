@@ -1,6 +1,5 @@
 use super::super::database;
 use super::super::schema::*;
-use rocket_contrib::Template;
 use diesel::prelude::*;
 use diesel;
 

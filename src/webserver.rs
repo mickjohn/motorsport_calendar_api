@@ -15,13 +15,12 @@ use super::model;
 use serde_json;
 use std::sync::Mutex;
 
-
 #[get("/")]
 fn all_events(conn_pool: State<Mutex<SqliteConnection>>) -> content::Json<String> {
     let ref conn = *conn_pool.lock().unwrap();
-	let mevents = events::table.load::<MEvent>(conn).unwrap();
-	let msessions = MSession::belonging_to(&mevents)
-		.load::<MSession>(conn)
+    let mevents = events::table.load::<MEvent>(conn).unwrap();
+    let msessions = MSession::belonging_to(&mevents)
+        .load::<MSession>(conn)
         .unwrap()
         .grouped_by(&mevents);
 
@@ -36,48 +35,50 @@ fn all_events(conn_pool: State<Mutex<SqliteConnection>>) -> content::Json<String
 }
 
 #[get("/<event_id>")]
-fn event(conn_pool: State<Mutex<SqliteConnection>>, event_id: i32) 
-    -> Result<content::Json<String>, NotFound<String>> {
+fn event(
+    conn_pool: State<Mutex<SqliteConnection>>,
+    event_id: i32,
+) -> Result<content::Json<String>, NotFound<String>> {
     use diesel::result::Error::NotFound as DbNotFound;
     let ref conn = *conn_pool.lock().unwrap();
-    let conn = database::establish_connection();
+    // let conn = database::establish_connection();
     let model_event_result = events::table
         .filter(events::id.eq(event_id))
-        .first::<MEvent>(&conn);
+        .first::<MEvent>(conn);
 
     match model_event_result {
         Ok(model_event) => {
             let model_sessions: Vec<MSession> = sessions::table
                 .filter(sessions::event_id.eq(&event_id))
-                .load(&conn)
+                .load(conn)
                 .expect("Can't load sessions");
 
             let e = model::from_model(model_event, model_sessions);
             let json = serde_json::to_string(&e).unwrap();
             Ok(content::Json(json))
-        },
+        }
         Err(DbNotFound) => Err(NotFound("Could not find resource".to_string())),
-        _ => panic!("Couldn't load events!")
+        _ => panic!("Couldn't load events!"),
     }
-    }
+}
 
-fn get_db_pool() -> Mutex<SqliteConnection> {
-    let conn = database::establish_connection();
+fn get_db_pool(db_url: Option<String>) -> Mutex<SqliteConnection> {
+    let conn = db_url.map_or_else(
+        || database::establish_connection(),
+        |s| database::establish_connection_with_url(&s),
+    );
     Mutex::new(conn)
 }
 
-fn init_rocket() -> Rocket {
-    let pool = get_db_pool();
+fn init_rocket(option_url: Option<String>) -> Rocket {
+    let pool = get_db_pool(option_url);
     rocket::ignite()
-        .mount("/events", routes![
-               all_events,
-               event,
-        ])
+        .mount("/events", routes![all_events, event,])
         .manage(pool)
 }
 
 pub fn start() {
-    init_rocket().launch();
+    init_rocket(None).launch();
 }
 
 #[cfg(test)]
@@ -91,14 +92,32 @@ mod test {
     use std::fs;
     use diesel;
     use diesel::prelude::*;
-    // use super::rocket;
     use rocket::local::Client;
     use rocket::http::Status;
     use rusqlite::Connection as RusqliteConnection;
+    use motorsport_calendar_common::event::Event as CEvent;
+    use motorsport_calendar_common::event::Session as CSession;
+    use serde_json;
+
+    // const SPORTS: &'static [&'static str] = &["Formula 1", "Indycar", "DTM", "Formula 2", "Formula 3", "GP3"];
+    const SPORTS: &'static [&'static str] = &["Formula 1"];
+    const LOCATIONS: &'static [(&'static str, &'static str)] = &[
+        ("Australia", "Albert Park"),
+        ("Bahrain", "Bahrain"),
+        ("Shanghai", "Shanghai"),
+        ("Azerbaijan", "Baku"),
+        ("Spain", "Catalunya"),
+        ("Monaco", "Monaco"),
+        ("Canada", "Circuit Gilles Villeneuve"),
+        ("France", "Circuit Paul Ricard"),
+        ("Austria", "Red Bull Ring"),
+    ];
 
     fn get_table_sql() -> (String, String) {
-        (include_str!("../migrations/20171019211358_events/up.sql").to_string()
-         , include_str!("../migrations/20171019211407_sessions/up.sql").to_string())
+        (
+            include_str!("../migrations/20171019211358_events/up.sql").to_string(),
+            include_str!("../migrations/20171019211407_sessions/up.sql").to_string(),
+        )
     }
 
     fn run_sql_string(conn: &RusqliteConnection, s: &str) {
@@ -110,25 +129,23 @@ mod test {
         }
     }
 
-    fn generate_test_events(url: &str) {
+    fn generate_db_name() -> String {
+        use rand::{thread_rng, Rng};
+        let s: String = thread_rng().gen_ascii_chars().take(30).collect();
+        format!("sqlite/test/{}.db", s)
+    }
+
+    fn generate_test_events() -> Vec<CEvent> {
         let mut event_id = 0;
         let mut session_id = 0;
         let mut events = Vec::new();
-        let sports = vec!["Formula 1", "Indycar", "DTM", "Formula 2", "GP3", "Formula 3"];
-        let locations: Vec<(String, String)> = vec![("Australia", "Albert Park"),
-        ("Bahrain", "Bahrain"),
-        ("Shanghai", "Shanghai"),
-        ("Azerbaijan", "Baku"),
-        ("Spain", "Catalunya"),
-        ("Monaco", "Monaco"),
-        ("Canada", "Circuit Gilles Villeneuve"),
-        ("France", "Circuit Paul Ricard"),
-        ("Austria", "Red Bull Ring"),
-        ].iter()
-            .map(|&(l,c)| (l.to_string(), c.to_string()))
+
+        let locations: Vec<(String, String)> = LOCATIONS
+            .iter()
+            .map(|&(l, c)| (l.to_string(), c.to_string()))
             .collect();
 
-        for sport in sports {
+        for sport in SPORTS {
             let mut generator = EventGeneratorBuilder::with()
                 .number(40)
                 .sport(sport.to_string())
@@ -142,7 +159,10 @@ mod test {
             event_id = new_e_id;
             session_id = new_s_id;
         }
+        events
+    }
 
+    fn insert_test_data(url: &str, events: Vec<CEvent>) {
         let d_conn = SqliteConnection::establish(url).unwrap();
         for e in events {
             let (model_event, model_sessions) = model::into_models(e.clone());
@@ -159,23 +179,26 @@ mod test {
     }
 
     fn create_database(url: &str) {
-        delete_database(url); // clear DB from last run
+        // delete_database_if_exists(url); // clear DB from last run
         let conn = RusqliteConnection::open(url).unwrap();
         let (event_sql, session_sql) = get_table_sql();
         run_sql_string(&conn, &event_sql);
         run_sql_string(&conn, &session_sql);
-        generate_test_events(url);
     }
 
-    fn delete_database(url: &str) {
+    fn delete_database_if_exists(url: &str) {
         fs::remove_file(url);
     }
 
-    describe! stainless {
+    describe! api {
         before_each {
-            let db_url = "sqlite/tempdatabase.db";
+            let db_url = generate_db_name();
+            let events = generate_test_events();
             create_database(&db_url);
+            insert_test_data(&db_url, events.clone());
             let d_conn = SqliteConnection::establish(&db_url).unwrap();
+            let client =
+                Client::new(init_rocket(Some(db_url.clone()))).expect("valid rocket instance");
         }
 
         it "database should have events" {
@@ -183,14 +206,29 @@ mod test {
             assert!(mevents.len() > 0);
         }
 
-        it "can return events" {
-            let client = Client::new(init_rocket()).expect("valid rocket instance");
+        it "returns all of the events in the database" {
             let mut response = client.get("/events").dispatch();
             assert_eq!(response.status(), Status::Ok);
+            let mut response_events: Vec<CEvent> =
+                serde_json::from_str(&response.body_string().unwrap()).unwrap();
+            assert_eq!(events, response_events );
         }
 
-        // after_each {
-        //     delete_database(&db_url);
-        // }
+        it "can return single event" {
+            let mut response = client.get("/events/1").dispatch();
+            assert_eq!(response.status(), Status::Ok);
+            let mut response_event: CEvent =
+                serde_json::from_str(&response.body_string().unwrap()).unwrap();
+            assert_eq!(events[0], response_event);
+        }
+
+        it "returns 404 when event doesn't exist" {
+            let mut response = client.get("/events/0").dispatch();
+            assert_eq!(response.status(), Status::NotFound);
+        }
+
+        after_each {
+            delete_database_if_exists(&db_url);
+        }
     }
 }

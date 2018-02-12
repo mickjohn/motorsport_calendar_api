@@ -2,16 +2,18 @@
 #![feature(custom_attribute)]
 #![feature(custom_derive)]
 #![plugin(rocket_codegen)]
-#![recursion_limit="128"]
+#![recursion_limit = "128"]
 #![cfg_attr(test, plugin(stainless))]
 
 // Base logging crate
-#[macro_use] extern crate log;
+#[macro_use]
+extern crate log;
 
 // yaml/json (de)serialization
-#[macro_use] extern crate serde_derive;
-extern crate serde_yaml;
+#[macro_use]
+extern crate serde_derive;
 extern crate serde_json;
+extern crate serde_yaml;
 
 // webserver
 extern crate rocket;
@@ -31,12 +33,13 @@ extern crate clap;
 
 // sqlite3 ORM
 // #[macro_use] extern crate diesel_codegen;
-#[macro_use] extern crate diesel;
+#[macro_use]
+extern crate diesel;
 
 // utility to load env files
 extern crate dotenv;
 
-// Chrono for time and date 
+// Chrono for time and date
 extern crate chrono;
 
 mod webserver;
@@ -55,7 +58,7 @@ extern crate rusqlite;
 #[cfg(test)]
 extern crate rand;
 
-use clap::{Arg, App, ArgMatches};
+use clap::{App, Arg, ArgMatches};
 use config::Config;
 
 // Main used to quickly test things ;)
@@ -93,7 +96,7 @@ fn main() {
             Err(e) => {
                 println!("{}", e);
                 std::process::exit(1);
-            },
+            }
         };
     }
 }
@@ -103,26 +106,32 @@ fn get_matches<'a>() -> ArgMatches<'a> {
         .version("1.0")
         .author("Michael A. <mickjohnashe@hotmail.com>")
         .about("A restful api that serves the time and date of motorsport events")
-        .arg(Arg::with_name("config")
-             .short("c")
-             .long("config")
-             .value_name("FILE")
-             .help("Sets a custom config file")
-             .takes_value(true))
-        .arg(Arg::with_name("logconfig")
-             .short("l")
-             .long("logconfig")
-             .value_name("FILE")
-             .help("Sets a custom config file")
-             .takes_value(true))
-        .arg(Arg::with_name("admin mode")
-             .short("a")
-             .long("admin_mode")
-             .help("Launch in admin mode (use lcoalhost to CRUD events in the DB"))
+        .arg(
+            Arg::with_name("config")
+                .short("c")
+                .long("config")
+                .value_name("FILE")
+                .help("Sets a custom config file")
+                .takes_value(true),
+        )
+        .arg(
+            Arg::with_name("logconfig")
+                .short("l")
+                .long("logconfig")
+                .value_name("FILE")
+                .help("Sets a custom config file")
+                .takes_value(true),
+        )
+        .arg(
+            Arg::with_name("admin mode")
+                .short("a")
+                .long("admin_mode")
+                .help("Launch in admin mode (use lcoalhost to CRUD events in the DB"),
+        )
         .get_matches()
 }
 
-fn run (conf_file: &str) -> Result<(),String> {
+fn run(conf_file: &str) -> Result<(), String> {
     info!("Loading config");
     let config = load_config(conf_file)?;
     info!("About to launch API server");

@@ -4,7 +4,7 @@ use motorsport_calendar_common::event::Session as CSession; //Common event
 use super::schema::*;
 
 #[derive(Debug, Clone, Queryable, Insertable, Identifiable, AsChangeset, Associations, Serialize)]
-#[table_name="events"]
+#[table_name = "events"]
 pub struct Event {
     pub id: i32,
     pub sport: String,
@@ -15,7 +15,7 @@ pub struct Event {
 
 #[derive(Debug, Clone, Queryable, Insertable, AsChangeset, Associations, Identifiable, Serialize)]
 #[belongs_to(Event, foreign_key = "event_id")]
-#[table_name="sessions"]
+#[table_name = "sessions"]
 pub struct Session {
     pub id: i32,
     pub name: String,
@@ -70,7 +70,6 @@ fn convert_sessions(session_models: Vec<Session>) -> Vec<CSession> {
             Some(DateTime::<Utc>::from_utc(session.time.unwrap(), Utc))
         };
 
-
         let s = CSession {
             id: session.id,
             event_id: session.event_id,
@@ -84,7 +83,7 @@ fn convert_sessions(session_models: Vec<Session>) -> Vec<CSession> {
 }
 
 #[derive(Insertable, FromForm)]
-#[table_name="events"]
+#[table_name = "events"]
 pub struct NewEvent {
     pub sport: String,
     pub round: i32,
@@ -93,7 +92,7 @@ pub struct NewEvent {
 }
 
 #[derive(Insertable, Debug)]
-#[table_name="sessions"]
+#[table_name = "sessions"]
 pub struct NewSession {
     pub name: String,
     pub date: Option<NaiveDateTime>,

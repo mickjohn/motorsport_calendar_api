@@ -6,11 +6,23 @@ use std::collections::HashMap;
 use chrono::prelude::*;
 use chrono::Duration;
 
-const SESSION_TYPES: [&'static str; 6] = ["Practice 1", "Practice 2", "Qualifying", "Race 1", "Race 2", "Warmup"];
+const SESSION_TYPES: [&'static str; 6] = [
+    "Practice 1",
+    "Practice 2",
+    "Qualifying",
+    "Race 1",
+    "Race 2",
+    "Warmup",
+];
 
-fn get_random_session_type() -> String { rand::thread_rng().choose(&SESSION_TYPES).unwrap().to_string() }
+fn get_random_session_type() -> String {
+    rand::thread_rng()
+        .choose(&SESSION_TYPES)
+        .unwrap()
+        .to_string()
+}
 
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone)]
 pub struct EventGenerator {
     last_round: i32,
     last_id: i32,
@@ -48,7 +60,7 @@ impl EventGenerator {
 
     fn advance_date(&mut self) {
         let mut rng = thread_rng();
-        let time_to_add = Duration::days(rng.gen_range(1,16));
+        let time_to_add = Duration::days(rng.gen_range(1, 16));
         let new_dt = self.start_date.checked_add_signed(time_to_add).unwrap();
         self.start_date = new_dt;
     }
@@ -59,7 +71,7 @@ impl EventGenerator {
         let id = self.last_id;
         let mut rng = rand::thread_rng();
         let sessions = self.generate_sessions(id);
-        let (country, location) = { 
+        let (country, location) = {
             let (c, l) = rng.choose(&self.locations).unwrap().clone();
             (c.clone(), l.clone())
         };
@@ -95,8 +107,8 @@ impl SessionGenerator {
     // Add a random number of hours and minutes to the date.
     fn advance_date(&mut self) {
         let mut rng = thread_rng();
-        let hours: i64 = rng.gen_range(0,23);
-        let minutes: i64 = rng.gen_range(0,60);
+        let hours: i64 = rng.gen_range(0, 23);
+        let minutes: i64 = rng.gen_range(0, 60);
         let time_to_add = Duration::hours(hours) + Duration::minutes(minutes);
         let new_dt = self.dt.checked_add_signed(time_to_add).unwrap();
         self.dt = new_dt;
@@ -105,7 +117,7 @@ impl SessionGenerator {
     fn generate(&mut self) -> CSession {
         self.last_id += 1;
         self.advance_date();
-        let date = self.dt.date().and_hms(0,0,0);
+        let date = self.dt.date().and_hms(0, 0, 0);
         CSession {
             id: self.last_id,
             event_id: self.event_id,
@@ -188,9 +200,11 @@ impl EventGeneratorBuilder {
             last_round: self.starting_id.unwrap_or(0),
             number_of_events: self.number_of_events.unwrap_or(20),
             sport: self.sport.unwrap_or("Formula 1".to_string()),
-            locations: self.locations.unwrap_or(vec![("Italy".to_string(), "Monza".to_string())]),
+            locations: self.locations
+                .unwrap_or(vec![("Italy".to_string(), "Monza".to_string())]),
             sessions: self.sessions.unwrap_or(vec![5]),
-            start_date: self.start_date.unwrap_or(Utc.ymd(2018,3,18).and_hms(0,0,0)),
+            start_date: self.start_date
+                .unwrap_or(Utc.ymd(2018, 3, 18).and_hms(0, 0, 0)),
         }
     }
 }

@@ -8,7 +8,8 @@ use diesel::prelude::*;
 #[get("/events")]
 pub fn get_events() -> Template {
     let connection = database::establish_connection();
-    let events: Vec<MEvent> = events::table.load(&connection)
+    let events: Vec<MEvent> = events::table
+        .load(&connection)
         .expect("Error loading events");
 
     let mut context = Context::new();
@@ -19,8 +20,14 @@ pub fn get_events() -> Template {
 #[get("/events/<event_id>")]
 fn get_event(event_id: i32) -> Template {
     let connection = database::establish_connection();
-    let event: MEvent = events::table.filter(events::id.eq(event_id)).first(&connection).expect("Error loading event");
-    let sessions: Vec<MSession> = sessions::table.filter(sessions::event_id.eq(event.id)).load(&connection).expect("Error lading sessions");
+    let event: MEvent = events::table
+        .filter(events::id.eq(event_id))
+        .first(&connection)
+        .expect("Error loading event");
+    let sessions: Vec<MSession> = sessions::table
+        .filter(sessions::event_id.eq(event.id))
+        .load(&connection)
+        .expect("Error lading sessions");
 
     let mut context = Context::new();
     context.add("event", &event);
@@ -31,7 +38,10 @@ fn get_event(event_id: i32) -> Template {
 #[get("/sessions/<session_id>")]
 fn get_session(session_id: i32) -> Template {
     let connection = database::establish_connection();
-    let session: MSession = sessions::table.filter(sessions::id.eq(session_id)).first(&connection).expect("Error loading event");
+    let session: MSession = sessions::table
+        .filter(sessions::id.eq(session_id))
+        .first(&connection)
+        .expect("Error loading event");
 
     let mut context = Context::new();
     context.add("session", &session);

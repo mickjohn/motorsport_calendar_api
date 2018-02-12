@@ -135,7 +135,7 @@ fn run(conf_file: &str) -> Result<(), String> {
     info!("Loading config");
     let config = load_config(conf_file)?;
     info!("About to launch API server");
-    webserver::start();
+    webserver::start(Some(config.database_url()));
     Ok(())
 }
 

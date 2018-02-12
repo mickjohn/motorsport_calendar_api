@@ -62,23 +62,23 @@ fn event(
     }
 }
 
-fn get_db_pool(db_url: Option<String>) -> Mutex<SqliteConnection> {
+fn get_db_pool(db_url: Option<&str>) -> Mutex<SqliteConnection> {
     let conn = db_url.map_or_else(
         || database::establish_connection(),
-        |s| database::establish_connection_with_url(&s),
+        |s| database::establish_connection_with_url(s),
     );
     Mutex::new(conn)
 }
 
-fn init_rocket(option_url: Option<String>) -> Rocket {
+fn init_rocket(option_url: Option<&str>) -> Rocket {
     let pool = get_db_pool(option_url);
     rocket::ignite()
         .mount("/events", routes![all_events, event,])
         .manage(pool)
 }
 
-pub fn start() {
-    init_rocket(None).launch();
+pub fn start(option_url: Option<&str>) {
+    init_rocket(option_url).launch();
 }
 
 #[cfg(test)]

@@ -40,8 +40,7 @@ fn event(
     event_id: i32,
 ) -> Result<content::Json<String>, NotFound<String>> {
     use diesel::result::Error::NotFound as DbNotFound;
-    let ref conn = *conn_pool.lock().unwrap();
-    // let conn = database::establish_connection();
+    let ref conn: SqliteConnection = *conn_pool.lock().unwrap();
     let model_event_result = events::table
         .filter(events::id.eq(event_id))
         .first::<MEvent>(conn);
@@ -198,7 +197,7 @@ mod test {
             insert_test_data(&db_url, events.clone());
             let d_conn = SqliteConnection::establish(&db_url).unwrap();
             let client =
-                Client::new(init_rocket(Some(db_url.clone()))).expect("valid rocket instance");
+                Client::new(init_rocket(Some(&db_url))).expect("valid rocket instance");
         }
 
         it "database should have events" {

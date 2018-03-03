@@ -2,7 +2,6 @@ target
 package.sh
 run.sh
 logs
-Cargo.lock
 tags
 *.swp
 *.swo

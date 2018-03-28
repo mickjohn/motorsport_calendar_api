@@ -7,21 +7,21 @@ use rocket::response::Redirect;
 use diesel::prelude::*;
 use chrono::NaiveDateTime;
 
-#[derive(FromForm)]
+#[derive(Debug, FromForm)]
 struct EventUpdateForm {
     pub round: i32,
     pub country: String,
     pub location: String,
 }
 
-#[derive(FromForm)]
+#[derive(Debug, FromForm)]
 struct SessionUpdateForm {
     pub name: String,
     pub date: String,
     pub time: String,
 }
 
-#[put("/events/<event_id>", data = "<event_update_form>")]
+#[post("/events/<event_id>", data = "<event_update_form>")]
 fn update_event(event_id: i32, event_update_form: Form<EventUpdateForm>) -> String {
     let event_update = event_update_form.into_inner();
 
@@ -41,7 +41,7 @@ fn update_event(event_id: i32, event_update_form: Form<EventUpdateForm>) -> Stri
     "Event updated!!!".to_string()
 }
 
-#[put("/sessions/<session_id>", data = "<session_update_form>")]
+#[post("/sessions/<session_id>", data = "<session_update_form>")]
 fn update_session(session_id: i32, session_update_form: Form<SessionUpdateForm>) -> Redirect {
     let session_update = session_update_form.into_inner();
     let connection = database::establish_connection();

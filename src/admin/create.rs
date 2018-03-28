@@ -109,6 +109,18 @@ fn derive_next_session_link(
                 .map(|d| (d.date().succ(), "Race".to_string())),
             _ => None,
         },
+        "GP2" => match new_session.name.as_str() {
+            "Practice" => new_session
+                .date
+                .map(|d| (d.date(), "Qualifying".to_string())),
+            "Qualifying" => new_session
+                .date
+                .map(|d| (d.date().succ(), "Race 1".to_string())),
+            "Race 1" => new_session
+                .date
+                .map(|d| (d.date().succ(), "Race 2".to_string())),
+            _ => None,
+        },
         _ => None,
     }
 }

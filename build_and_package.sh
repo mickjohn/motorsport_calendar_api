@@ -63,7 +63,7 @@ echo "Package: ${NAME}
 Version: ${VERSION}
 Section: base
 Priority: optional
-Architecture: i386
+Architecture: amd64
 Depends: sqlite3
 Maintainer: Your Name <you@email.com>
 Description: Hello World

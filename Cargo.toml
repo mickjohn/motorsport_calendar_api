@@ -12,22 +12,24 @@ path = "src/main.rs"
 # path = "src/admin_page.rs"
 
 [dependencies]
-rocket = "0.3.6"
-rocket_codegen = "0.3.6"
-serde = "1.0.27"
-serde_derive = "1.0.27"
+bcrypt = "0.1.5"
+rocket = "0.3.8"
+rocket_codegen = "0.3.8"
+serde = "1.0.37"
+serde_derive = "1.0.37"
 serde_yaml = "0.7.3"
-serde_json = "1.0.9"
+serde_json = "1.0.13"
 log = "0.4"
 env_logger = "0.4"
 log4rs = "0.8"
 lazy_static = "0.2.2"
 clap = "2.29"
-diesel = { version = "1.0", features = ["sqlite", "chrono"] }
-# diesel_codegen = { version = "0.16.0", features = ["sqlite"] }
+diesel = { version = "1.2", features = ["sqlite", "chrono"] }
 dotenv = "0.10.1"
 chrono = "0.4"
 tera = "0.10.10" # Just need this for the context struct
+base64 = "0.9.0"
+failure = "0.1.1"
 
 [dependencies.motorsport_calendar_common]
 path = "/home/mick/Programs/rust/motorsport_calendar_common"
@@ -36,12 +38,12 @@ path = "/home/mick/Programs/rust/motorsport_calendar_common"
 # rocket = { version = "0.3.2", features = ["testing"] }
 
 [dependencies.rocket_contrib]
-version = "*"
+version = "0.3.8"
 default-features = false
-features = ["tera_templates"]
+features = ["tera_templates", "json"]
 
 [dev-dependencies]
-stainless = "*"
-rusqlite = "0.12.0"
-diesel = { version = "1.0", features = ["sqlite", "chrono"] }
+# stainless = "0.1.12"
+rusqlite = "0.13.0"
+diesel = { version = "1.2", features = ["sqlite", "chrono"] }
 rand = "0.4.2"

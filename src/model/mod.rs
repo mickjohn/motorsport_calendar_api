@@ -1,28 +1,14 @@
-use chrono::{DateTime, NaiveDateTime, Utc};
+use chrono::{DateTime, Utc};
 use motorsport_calendar_common::event::Event as CEvent; //Common event
 use motorsport_calendar_common::event::Session as CSession; //Common event
-use super::schema::*;
 
-#[derive(Debug, Clone, Queryable, Insertable, Identifiable, AsChangeset, Associations, Serialize)]
-#[table_name = "events"]
-pub struct Event {
-    pub id: i32,
-    pub sport: String,
-    pub round: i32,
-    pub country: String,
-    pub location: String,
-}
+pub mod events;
+pub mod sessions;
+pub mod users;
 
-#[derive(Debug, Clone, Queryable, Insertable, AsChangeset, Associations, Identifiable, Serialize)]
-#[belongs_to(Event, foreign_key = "event_id")]
-#[table_name = "sessions"]
-pub struct Session {
-    pub id: i32,
-    pub name: String,
-    pub date: Option<NaiveDateTime>,
-    pub time: Option<NaiveDateTime>,
-    pub event_id: i32,
-}
+pub use self::events::*;
+pub use self::sessions::*;
+pub use self::users::*;
 
 pub fn from_model(event_model: Event, session_models: Vec<Session>) -> CEvent {
     let sessions = convert_sessions(session_models);
@@ -80,22 +66,4 @@ fn convert_sessions(session_models: Vec<Session>) -> Vec<CSession> {
         sessions.push(s);
     }
     sessions
-}
-
-#[derive(Insertable, FromForm)]
-#[table_name = "events"]
-pub struct NewEvent {
-    pub sport: String,
-    pub round: i32,
-    pub country: String,
-    pub location: String,
-}
-
-#[derive(Insertable, Debug)]
-#[table_name = "sessions"]
-pub struct NewSession {
-    pub name: String,
-    pub date: Option<NaiveDateTime>,
-    pub time: Option<NaiveDateTime>,
-    pub event_id: i32,
 }

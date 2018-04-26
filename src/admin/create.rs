@@ -1,12 +1,12 @@
+use super::super::database;
 use super::super::model;
 use super::super::model::{Event as MEvent, NewSession};
-use super::super::database;
 use super::super::schema::*;
-use rocket_contrib::Template;
-use rocket::request::Form;
-use diesel::prelude::*;
-use diesel::insert_into;
 use chrono::{NaiveDate, NaiveDateTime};
+use diesel::insert_into;
+use diesel::prelude::*;
+use rocket::request::Form;
+use rocket_contrib::Template;
 use tera::Context;
 
 #[derive(FromForm)]

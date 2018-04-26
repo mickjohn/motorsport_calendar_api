@@ -5,9 +5,9 @@ use std::path::{Path, PathBuf};
 use tera::Context;
 
 mod create;
+mod delete;
 mod read;
 mod update;
-mod delete;
 
 const DATETIME_FORMAT: &str = "%Y-%m-%dT%H:%M:%S";
 

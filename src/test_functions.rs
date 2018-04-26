@@ -1,10 +1,9 @@
+use chrono::prelude::*;
+use chrono::Duration;
 use motorsport_calendar_common::event::Event as CEvent;
 use motorsport_calendar_common::event::Session as CSession;
 use rand;
 use rand::{thread_rng, Rng};
-use std::collections::HashMap;
-use chrono::prelude::*;
-use chrono::Duration;
 
 const SESSION_TYPES: [&'static str; 6] = [
     "Practice 1",
@@ -153,41 +152,49 @@ impl EventGeneratorBuilder {
         }
     }
 
+    #[allow(dead_code)]
     pub fn starting_id(mut self, i: i32) -> EventGeneratorBuilder {
         self.starting_id = Some(i);
         self
     }
 
+    #[allow(dead_code)]
     pub fn starting_session_id(mut self, i: i32) -> EventGeneratorBuilder {
         self.starting_session_id = Some(i);
         self
     }
 
+    #[allow(dead_code)]
     pub fn number(mut self, n: u32) -> EventGeneratorBuilder {
         self.number_of_events = Some(n);
         self
     }
 
+    #[allow(dead_code)]
     pub fn sport(mut self, s: String) -> EventGeneratorBuilder {
         self.sport = Some(s);
         self
     }
 
+    #[allow(dead_code)]
     pub fn locations(mut self, l: Vec<(String, String)>) -> EventGeneratorBuilder {
         self.locations = Some(l);
         self
     }
 
+    #[allow(dead_code)]
     pub fn sessions(mut self, s: Vec<u32>) -> EventGeneratorBuilder {
         self.sessions = Some(s);
         self
     }
 
+    #[allow(dead_code)]
     pub fn start_date(mut self, d: DateTime<Utc>) -> EventGeneratorBuilder {
         self.start_date = Some(d);
         self
     }
 
+    #[allow(dead_code)]
     pub fn starting_round(mut self, r: i32) -> EventGeneratorBuilder {
         self.last_round = Some(r);
         self

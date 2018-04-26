@@ -1,6 +1,6 @@
-use std::io::prelude::*;
-use std::fs::File;
 use serde_yaml;
+use std::fs::File;
+use std::io::prelude::*;
 
 #[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
 pub struct Config {

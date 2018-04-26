@@ -3,10 +3,11 @@
 #![feature(custom_derive)]
 #![plugin(rocket_codegen)]
 #![recursion_limit = "128"]
-#![cfg_attr(test, plugin(stainless))]
+#![feature(use_extern_macros)]
+// #![cfg_attr(test, plugin(stainless))]
 
 // Base logging crate
-#[macro_use]
+#[macro_use(log)]
 extern crate log;
 
 // yaml/json (de)serialization
@@ -42,12 +43,23 @@ extern crate dotenv;
 // Chrono for time and date
 extern crate chrono;
 
-mod webserver;
-mod schema;
-mod model;
-mod database;
-mod config;
+// Bcrypt for password hashing
+extern crate bcrypt;
+
+// Base64 crate needed for encoding/decoding basic auth passwords
+extern crate base64;
+
+// Create for errors
+#[macro_use]
+extern crate failure;
+
 mod admin;
+mod auth;
+mod config;
+mod database;
+mod model;
+mod schema;
+mod webserver;
 
 #[cfg(test)]
 mod test_functions;
@@ -76,20 +88,20 @@ use config::Config;
 // }
 
 fn main() {
-    info!("Starting up!");
-    debug!("Checking command line arguments...");
+    log::info!("Starting up!");
+    log::debug!("Checking command line arguments...");
     let matches = get_matches();
     let config = matches.value_of("config").unwrap_or("conf.yml");
-    debug!("Using this config file: {}", config);
+    log::debug!("Using this config file: {}", config);
 
     let log4rs_config = matches.value_of("logconfig").unwrap_or("log4rs.yml");
-    debug!("Using this log4rs_config: {}", log4rs_config);
+    log::debug!("Using this log4rs_config: {}", log4rs_config);
 
     if matches.is_present("admin mode") {
-        info!("Launching admin pages");
+        log::info!("Launching admin pages");
         admin::launch_admin_pages();
     } else {
-        debug!("Initializing log4rs...");
+        log::debug!("Initializing log4rs...");
         log4rs::init_file(&log4rs_config, Default::default()).unwrap();
         match run(config) {
             Ok(()) => std::process::exit(0),
@@ -132,9 +144,9 @@ fn get_matches<'a>() -> ArgMatches<'a> {
 }
 
 fn run(conf_file: &str) -> Result<(), String> {
-    info!("Loading config");
+    log::info!("Loading config");
     let config = load_config(conf_file)?;
-    info!("About to launch API server");
+    log::info!("About to launch API server");
     webserver::start(Some(config.database_url()));
     Ok(())
 }

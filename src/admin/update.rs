@@ -1,11 +1,11 @@
-use super::super::schema::*;
-use super::super::model::{Event as MEvent, Session as MSession};
 use super::super::database;
+use super::super::model::{Event as MEvent, Session as MSession};
+use super::super::schema::*;
 use super::*;
+use chrono::NaiveDateTime;
+use diesel::prelude::*;
 use rocket::request::Form;
 use rocket::response::Redirect;
-use diesel::prelude::*;
-use chrono::NaiveDateTime;
 
 #[derive(Debug, FromForm)]
 struct EventUpdateForm {

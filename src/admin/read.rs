@@ -1,9 +1,9 @@
-use super::super::schema::*;
-use super::super::model::{Event as MEvent, Session as MSession};
 use super::super::database;
+use super::super::model::{Event as MEvent, Session as MSession};
+use super::super::schema::*;
+use diesel::prelude::*;
 use rocket_contrib::Template;
 use tera::Context;
-use diesel::prelude::*;
 
 #[get("/events")]
 pub fn get_events() -> Template {

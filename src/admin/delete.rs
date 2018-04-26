@@ -1,7 +1,7 @@
 use super::super::database;
 use super::super::schema::*;
-use diesel::prelude::*;
 use diesel;
+use diesel::prelude::*;
 
 #[delete("/events/<e_id>")]
 fn delete_event(e_id: i32) {

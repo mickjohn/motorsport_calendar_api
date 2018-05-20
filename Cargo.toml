@@ -7,6 +7,10 @@ authors = ["Michael Ashe <mickjohnashe@hotmail.com>"]
 name = "motorsport_calendar_api"
 path = "src/main.rs"
 
+[[bin]]
+name = "bcrypt_helper"
+path = "src/bcrypt_helper.rs"
+
 # [[bin]]
 # name = "admin_page"
 # path = "src/admin_page.rs"

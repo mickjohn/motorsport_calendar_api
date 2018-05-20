@@ -10,10 +10,10 @@ use rocket::Request;
 use rocket::Rocket;
 use std::sync::Mutex;
 
+mod delete;
 mod post;
 mod put;
 mod read;
-mod delete;
 
 fn get_db_pool(db_url: Option<&str>) -> Mutex<SqliteConnection> {
     let conn = db_url.map_or_else(

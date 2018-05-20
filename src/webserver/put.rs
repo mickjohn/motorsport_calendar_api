@@ -207,10 +207,7 @@ mod tests {
         // Put the updated event
         println!("{:?}", expected_session);
         println!("{:?}", update_session);
-        let endpoint = format!(
-            "/events/{}/sessions/{}",
-            session.event_id, session.id
-        );
+        let endpoint = format!("/events/{}/sessions/{}", session.event_id, session.id);
         let mut put_response = client
             .put(endpoint)
             .header(ContentType::JSON)
@@ -226,7 +223,10 @@ mod tests {
         );
 
         let mut get_response = client
-            .get(format!("/events/{}/sessions/{}", session.event_id, session.id))
+            .get(format!(
+                "/events/{}/sessions/{}",
+                session.event_id, session.id
+            ))
             .dispatch();
         let response_session: CSession =
             serde_json::from_str(&get_response.body_string().unwrap()).unwrap();

@@ -103,7 +103,6 @@ fn main() {
 
     if matches.is_present("admin mode") {
         log::info!("Launching admin pages");
-    // admin::launch_admin_pages();
     } else {
         log::debug!("Initializing log4rs...");
         log4rs::init_file(&log4rs_config, Default::default()).unwrap();

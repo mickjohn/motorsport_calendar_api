@@ -18,7 +18,7 @@ pub enum DeleteError {
 fn delete_event(
     conn_pool: State<Mutex<SqliteConnection>>,
     event_id: i32,
-    user: auth::UserWithPlaintextPassword
+    user: auth::UserWithPlaintextPassword,
 ) -> status::Custom<String> {
     let ref connection = *conn_pool.lock().unwrap();
     match authenticate_user(&user, &connection) {
@@ -53,10 +53,7 @@ fn delete_session(
     }
 }
 
-fn delete_event_from_db(
-    event_id: &i32,
-    db_conn: &SqliteConnection,
-) -> Result<(), DeleteError> {
+fn delete_event_from_db(event_id: &i32, db_conn: &SqliteConnection) -> Result<(), DeleteError> {
     use super::super::schema::events::dsl::*;
     diesel::delete(events.filter(id.eq(event_id)))
         .execute(db_conn)
@@ -64,10 +61,7 @@ fn delete_event_from_db(
         .map(|_| ())
 }
 
-fn delete_session_from_db(
-    session_id: &i32,
-    db_conn: &SqliteConnection,
-) -> Result<(), DeleteError> {
+fn delete_session_from_db(session_id: &i32, db_conn: &SqliteConnection) -> Result<(), DeleteError> {
     use super::super::schema::sessions::dsl::*;
     diesel::delete(sessions.filter(id.eq(session_id)))
         .execute(db_conn)
@@ -142,7 +136,9 @@ mod tests {
             BASIC_HEADER_WRONG_PASS,
             BASIC_HEADER_WRONG_USER,
             BASIC_HEADER_NO_PASSWORD,
-        ].iter().enumerate() {
+        ].iter()
+            .enumerate()
+        {
             let delete_response = client
                 .delete(format!("/events/{}", i))
                 .header(Header::new("Authorization", *basic_details))
@@ -160,7 +156,9 @@ mod tests {
             BASIC_HEADER_WRONG_PASS,
             BASIC_HEADER_WRONG_USER,
             BASIC_HEADER_NO_PASSWORD,
-        ].iter().enumerate() {
+        ].iter()
+            .enumerate()
+        {
             let delete_response = client
                 .delete(format!("/events/{}/sessions/{}", i, i))
                 .header(Header::new("Authorization", *basic_details))
@@ -170,4 +168,3 @@ mod tests {
         test_utils::delete_database_if_exists(&db_url);
     }
 }
-

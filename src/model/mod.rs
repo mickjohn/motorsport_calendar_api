@@ -11,7 +11,10 @@ pub use self::sessions::*;
 pub use self::users::*;
 
 pub fn from_model(event_model: Event, session_models: Vec<Session>) -> CEvent {
-    let sessions = session_models.into_iter().map(|s| convert_session(s)).collect();
+    let sessions = session_models
+        .into_iter()
+        .map(|s| convert_session(s))
+        .collect();
     CEvent {
         id: event_model.id,
         sport: event_model.sport,

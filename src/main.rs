@@ -4,7 +4,6 @@
 #![plugin(rocket_codegen)]
 #![recursion_limit = "128"]
 #![feature(use_extern_macros)]
-// #![cfg_attr(test, plugin(stainless))]
 
 // Base logging crate
 #[macro_use(log)]
@@ -53,7 +52,7 @@ extern crate base64;
 #[macro_use]
 extern crate failure;
 
-mod admin;
+// mod admin;
 mod auth;
 mod config;
 mod database;
@@ -79,12 +78,17 @@ use config::Config;
 //     use model::Event as MEvent;
 //     use model::Session as MSession;
 //     use diesel::prelude::*;
-//     let connection = database::establish_connection();
+
+//     use bcrypt::{DEFAULT_COST, hash, verify};
+//     let hashed = hash("qwerty", DEFAULT_COST).unwrap();
+//     println!("{}", hashed);
+
+//     // let connection = database::establish_connection();
 //     // let my_events: Vec<(MEvent, Option<MSession>)> = events::table.left_join(sessions::table).load(&connection).expect("Error loading events");
-//     let sport_types: Vec<String> = events::table.select(events::sport).group_by(events::sport).load(&connection).expect("Error loading events");
-//     for s in sport_types {
-//         println!("~> {}", s);
-//     }
+//     // let sport_types: Vec<String> = events::table.select(events::sport).group_by(events::sport).load(&connection).expect("Error loading events");
+//     // for s in sport_types {
+//     //     println!("~> {}", s);
+//     // }
 // }
 
 fn main() {
@@ -99,7 +103,7 @@ fn main() {
 
     if matches.is_present("admin mode") {
         log::info!("Launching admin pages");
-        admin::launch_admin_pages();
+    // admin::launch_admin_pages();
     } else {
         log::debug!("Initializing log4rs...");
         log4rs::init_file(&log4rs_config, Default::default()).unwrap();

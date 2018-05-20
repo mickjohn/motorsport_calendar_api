@@ -11,7 +11,7 @@ pub use self::sessions::*;
 pub use self::users::*;
 
 pub fn from_model(event_model: Event, session_models: Vec<Session>) -> CEvent {
-    let sessions = convert_sessions(session_models);
+    let sessions = session_models.into_iter().map(|s| convert_session(s)).collect();
     CEvent {
         id: event_model.id,
         sport: event_model.sport,
@@ -22,6 +22,7 @@ pub fn from_model(event_model: Event, session_models: Vec<Session>) -> CEvent {
     }
 }
 
+#[cfg(test)] // Only used by test code
 pub fn into_models(e: CEvent) -> (Event, Vec<Session>) {
     let csessions = e.sessions;
     let mut sessions = Vec::new();
@@ -46,24 +47,42 @@ pub fn into_models(e: CEvent) -> (Event, Vec<Session>) {
     (event, sessions)
 }
 
-fn convert_sessions(session_models: Vec<Session>) -> Vec<CSession> {
+#[cfg(test)] // Only used by test code
+pub fn into_new_models(e: CEvent) -> (NewEvent, Vec<NewSession>) {
+    let csessions = e.sessions;
     let mut sessions = Vec::new();
-    for session in session_models {
-        let date = DateTime::<Utc>::from_utc(session.date.unwrap(), Utc);
-        let time = if session.time.is_none() {
-            None
-        } else {
-            Some(DateTime::<Utc>::from_utc(session.time.unwrap(), Utc))
-        };
+    let event = NewEvent {
+        sport: e.sport,
+        round: e.round,
+        country: e.country,
+        location: e.location,
+    };
 
-        let s = CSession {
-            id: session.id,
-            event_id: session.event_id,
-            name: session.name,
-            date: date,
-            time: time,
+    for s in csessions {
+        let session = NewSession {
+            event_id: e.id,
+            name: s.name,
+            date: Some(s.date.naive_utc()),
+            time: Some(s.time.unwrap().naive_utc()),
         };
-        sessions.push(s);
+        sessions.push(session);
     }
-    sessions
+    (event, sessions)
+}
+
+pub fn convert_session(session: Session) -> CSession {
+    let date = DateTime::<Utc>::from_utc(session.date.unwrap(), Utc);
+    let time = if session.time.is_none() {
+        None
+    } else {
+        Some(DateTime::<Utc>::from_utc(session.time.unwrap(), Utc))
+    };
+
+    CSession {
+        id: session.id,
+        event_id: session.event_id,
+        name: session.name,
+        date: date,
+        time: time,
+    }
 }

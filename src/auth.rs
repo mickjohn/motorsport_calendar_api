@@ -29,8 +29,8 @@ pub enum AuthenticationError {
     #[fail(display = "You need to authenticate with Basic auth to access this resource.")]
     NeedBasic,
 
-    #[fail(display = "Invalid Password")]
-    InvalidPassword,
+    #[fail(display = "Incorrect Username or Password")]
+    IncorrectUsernameOrPassword,
 
     #[fail(display = "No Password Provided")]
     NoPassword,
@@ -112,12 +112,16 @@ pub fn validate_user(
 ) -> Result<UserWithoutPassword, AuthenticationError> {
     let u = users::table
         .filter(users::user_name.eq(&user_to_validate.user_name))
-        .first::<User>(conn)
-        .map_err(|e| AuthenticationError::DieselError(e))?;
+        .first::<User>(conn);
+    println!("{:?}", u);
 
-    match verify(&user_to_validate.plaintext_password, &u.hashed_password).unwrap() {
-        true => Ok(UserWithoutPassword::from(u)),
-        false => Err(AuthenticationError::InvalidPassword),
+    match u {
+        Ok(u) => match verify(&user_to_validate.plaintext_password, &u.hashed_password).unwrap() {
+            true => Ok(UserWithoutPassword::from(u)),
+            false => Err(AuthenticationError::IncorrectUsernameOrPassword),
+        },
+        Err(DieselError::NotFound) => Err(AuthenticationError::IncorrectUsernameOrPassword),
+        Err(e) => Err(AuthenticationError::DieselError(e)),
     }
 }
 

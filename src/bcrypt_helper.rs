@@ -3,9 +3,9 @@ extern crate clap;
 // Bcrypt for password hashing
 extern crate bcrypt;
 
+use bcrypt::{hash, DEFAULT_COST};
 use clap::{App, Arg};
 use std::io::{self, Read};
-use bcrypt::{DEFAULT_COST, hash};
 
 fn main() {
     let matches = App::new("Motorsport calendar API - bcrypt helper")

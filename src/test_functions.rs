@@ -207,10 +207,12 @@ impl EventGeneratorBuilder {
             last_round: self.starting_id.unwrap_or(0),
             number_of_events: self.number_of_events.unwrap_or(20),
             sport: self.sport.unwrap_or("Formula 1".to_string()),
-            locations: self.locations
+            locations: self
+                .locations
                 .unwrap_or(vec![("Italy".to_string(), "Monza".to_string())]),
             sessions: self.sessions.unwrap_or(vec![5]),
-            start_date: self.start_date
+            start_date: self
+                .start_date
                 .unwrap_or(Utc.ymd(2018, 3, 18).and_hms(0, 0, 0)),
         }
     }

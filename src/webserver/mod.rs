@@ -8,6 +8,7 @@ use rocket::http::Status;
 use rocket::response::status;
 use rocket::Request;
 use rocket::Rocket;
+use rocket::State;
 use std::sync::Mutex;
 
 mod delete;
@@ -41,12 +42,25 @@ fn init_rocket(option_url: Option<&str>) -> Rocket {
                 delete::delete_session,
             ],
         )
+        .mount("/", routes![authenticate,])
         .catch(errors![bad_request])
         .manage(pool)
 }
 
 pub fn start(option_url: Option<&str>) {
     init_rocket(option_url).launch();
+}
+
+#[post("/authenticate")]
+fn authenticate(
+    conn_pool: State<Mutex<SqliteConnection>>,
+    user: auth::UserWithPlaintextPassword,
+) -> status::Custom<String> {
+    let ref connection = *conn_pool.lock().unwrap();
+    match authenticate_user(&user, &connection) {
+        Ok(()) => status::Custom(Status::Ok, "Successfully authenticated".to_string()),
+        Err(e) => e,
+    }
 }
 
 fn authenticate_user(
@@ -80,6 +94,10 @@ mod test_utils {
     use rocket::local::Client;
     use rusqlite::Connection as RusqliteConnection;
     use std::fs;
+    use rocket::http::ContentType;
+    use rocket::http::Header;
+    use rocket::http::Status;
+    use rocket::local::LocalResponse;
 
     const SPORTS: &'static [&'static str] = &["Formula 1"];
     const LOCATIONS: &'static [(&'static str, &'static str)] = &[
@@ -201,5 +219,40 @@ mod test_utils {
         let d_conn = SqliteConnection::establish(&db_url).unwrap();
         let client = Client::new(init_rocket(Some(&db_url))).expect("valid rocket instance");
         (db_url.to_string(), d_conn, client)
+    }
+
+    fn post_with_auth_header<'a>(
+        basic: Header<'static>,
+        client: &'a Client,
+    ) -> LocalResponse<'a> {
+        client
+            .post("/authenticate")
+            .header(basic)
+            .dispatch()
+    }
+
+    #[test]
+    fn test_authenticate_with_bad_auth() {
+        let (db_url, _, client) = setup_empty_db();
+        for basic_details in vec![
+            BASIC_HEADER_WRONG_PASS,
+            BASIC_HEADER_WRONG_USER,
+            BASIC_HEADER_NO_PASSWORD,
+        ] {
+            let basic = Header::new("Authorization", basic_details);
+            let post_response = post_with_auth_header(basic, &client);
+            assert_eq!(post_response.status(), Status::Forbidden);
+        }
+        delete_database_if_exists(&db_url);
+    }
+
+    #[test]
+    fn test_authenticate() {
+        let (db_url, _, client) = setup_empty_db();
+        let post_response = client
+            .post("/authenticate")
+            .header(Header::new("Authorization", BASIC_HEADER))
+            .dispatch();
+        delete_database_if_exists(&db_url);
     }
 }

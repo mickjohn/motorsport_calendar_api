@@ -113,7 +113,6 @@ pub fn validate_user(
     let u = users::table
         .filter(users::user_name.eq(&user_to_validate.user_name))
         .first::<User>(conn);
-    println!("{:?}", u);
 
     match u {
         Ok(u) => match verify(&user_to_validate.plaintext_password, &u.hashed_password).unwrap() {

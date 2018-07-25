@@ -32,7 +32,6 @@ extern crate log4rs;
 extern crate clap;
 
 // sqlite3 ORM
-// #[macro_use] extern crate diesel_codegen;
 #[macro_use]
 extern crate diesel;
 
@@ -52,7 +51,6 @@ extern crate base64;
 #[macro_use]
 extern crate failure;
 
-// mod admin;
 mod auth;
 mod config;
 mod database;
@@ -86,7 +84,6 @@ use config::Config;
 //     // let connection = database::establish_connection();
 //     // let my_events: Vec<(MEvent, Option<MSession>)> = events::table.left_join(sessions::table).load(&connection).expect("Error loading events");
 //     // let sport_types: Vec<String> = events::table.select(events::sport).group_by(events::sport).load(&connection).expect("Error loading events");
-//     // for s in sport_types {
 //     //     println!("~> {}", s);
 //     // }
 // }
@@ -101,19 +98,15 @@ fn main() {
     let log4rs_config = matches.value_of("logconfig").unwrap_or("log4rs.yml");
     log::debug!("Using this log4rs_config: {}", log4rs_config);
 
-    if matches.is_present("admin mode") {
-        log::info!("Launching admin pages");
-    } else {
-        log::debug!("Initializing log4rs...");
-        log4rs::init_file(&log4rs_config, Default::default()).unwrap();
-        match run(config) {
-            Ok(()) => std::process::exit(0),
-            Err(e) => {
-                println!("{}", e);
-                std::process::exit(1);
-            }
-        };
-    }
+    log::debug!("Initializing log4rs...");
+    log4rs::init_file(&log4rs_config, Default::default()).unwrap();
+    match run(config) {
+        Ok(()) => std::process::exit(0),
+        Err(e) => {
+            println!("{}", e);
+            std::process::exit(1);
+        }
+    };
 }
 
 fn get_matches<'a>() -> ArgMatches<'a> {
@@ -136,12 +129,6 @@ fn get_matches<'a>() -> ArgMatches<'a> {
                 .value_name("FILE")
                 .help("Sets a custom config file")
                 .takes_value(true),
-        )
-        .arg(
-            Arg::with_name("admin mode")
-                .short("a")
-                .long("admin_mode")
-                .help("Launch in admin mode (use lcoalhost to CRUD events in the DB"),
         )
         .get_matches()
 }

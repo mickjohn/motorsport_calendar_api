@@ -17,8 +17,8 @@ path = "src/bcrypt_helper.rs"
 
 [dependencies]
 bcrypt = "0.1.5"
-rocket = "0.3.13"
-rocket_codegen = "0.3.13"
+rocket = "0.3.14"
+rocket_codegen = "0.3.14"
 serde = "1.0.66"
 serde_derive = "1.0.66"
 serde_yaml = "0.7.5"
@@ -42,7 +42,7 @@ path = "/home/mick/Programs/rust/motorsport_calendar_common"
 # rocket = { version = "0.3.2", features = ["testing"] }
 
 [dependencies.rocket_contrib]
-version = "0.3.13"
+version = "0.3.14"
 default-features = false
 features = ["tera_templates", "json"]
 

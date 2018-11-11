@@ -1,0 +1,2 @@
+---
+database_url: "/var/lib/motorsport_calendar_api/database/ms_api.db"

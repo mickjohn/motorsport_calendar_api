@@ -13,7 +13,7 @@ use serde_json;
 use std::sync::Mutex;
 
 #[get("/")]
-fn all_events(conn_pool: State<Mutex<SqliteConnection>>) -> content::Json<String> {
+pub fn all_events(conn_pool: State<Mutex<SqliteConnection>>) -> content::Json<String> {
     let ref conn = *conn_pool.lock().unwrap();
     let mevents = events::table.load::<MEvent>(conn).unwrap();
     let msessions = MSession::belonging_to(&mevents)
@@ -32,7 +32,7 @@ fn all_events(conn_pool: State<Mutex<SqliteConnection>>) -> content::Json<String
 }
 
 #[get("/<event_id>")]
-fn event(
+pub fn event(
     conn_pool: State<Mutex<SqliteConnection>>,
     event_id: i32,
 ) -> Result<content::Json<String>, NotFound<String>> {
@@ -59,7 +59,7 @@ fn event(
 }
 
 #[get("/<event_id>/sessions")]
-fn event_sessions(
+pub fn event_sessions(
     conn_pool: State<Mutex<SqliteConnection>>,
     event_id: i32,
 ) -> Result<content::Json<String>, NotFound<String>> {
@@ -86,7 +86,7 @@ fn event_sessions(
 }
 
 #[get("/<_event_id>/sessions/<session_id>")]
-fn session(
+pub fn session(
     conn_pool: State<Mutex<SqliteConnection>>,
     _event_id: i32,
     session_id: i32,

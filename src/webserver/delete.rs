@@ -15,7 +15,7 @@ pub enum DeleteError {
 }
 
 #[delete("/<event_id>")]
-fn delete_event(
+pub fn delete_event(
     conn_pool: State<Mutex<SqliteConnection>>,
     event_id: i32,
     user: auth::UserWithPlaintextPassword,
@@ -34,7 +34,7 @@ fn delete_event(
 }
 
 #[delete("/<_event_id>/sessions/<session_id>")]
-fn delete_session(
+pub fn delete_session(
     conn_pool: State<Mutex<SqliteConnection>>,
     _event_id: i32,
     session_id: i32,

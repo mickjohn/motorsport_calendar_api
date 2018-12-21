@@ -1,9 +1,8 @@
-#![feature(plugin)]
 #![feature(custom_attribute)]
-#![feature(custom_derive)]
-#![plugin(rocket_codegen)]
+// #![proc_macro_derive]
 #![recursion_limit = "128"]
 #![feature(use_extern_macros)]
+#![feature(proc_macro_hygiene, decl_macro)]
 
 // Base logging crate
 #[macro_use(log)]
@@ -16,7 +15,7 @@ extern crate serde_json;
 extern crate serde_yaml;
 
 // webserver
-extern crate rocket;
+#[macro_use] extern crate rocket;
 extern crate rocket_contrib;
 
 // Templates

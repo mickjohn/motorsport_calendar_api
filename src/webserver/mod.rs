@@ -43,7 +43,7 @@ fn init_rocket(option_url: Option<&str>) -> Rocket {
             ],
         )
         .mount("/", routes![authenticate,])
-        .catch(errors![bad_request])
+        .register(catchers![bad_request])
         .manage(pool)
 }
 
@@ -76,7 +76,7 @@ fn authenticate_user(
     }
 }
 
-#[error(400)]
+#[catch(400)]
 fn bad_request(_req: &Request) -> String {
     "400 - Bad Request. Double check that the syntax of the request is correct.".to_string()
 }

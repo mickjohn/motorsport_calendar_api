@@ -9,7 +9,7 @@ use diesel::result::Error as DieselError;
 use rocket::http::Status;
 use rocket::response::status;
 use rocket::State;
-use rocket_contrib::Json;
+use rocket_contrib::json::Json;
 use std::sync::Mutex;
 
 #[derive(Debug, PartialEq, Fail)]
@@ -23,7 +23,7 @@ pub enum PutError {
 }
 
 #[put("/<event_id>", data = "<event_update_json>")]
-fn update_event(
+pub fn update_event(
     conn_pool: State<Mutex<SqliteConnection>>,
     event_id: i32,
     user: auth::UserWithPlaintextPassword,
@@ -44,7 +44,7 @@ fn update_event(
 }
 
 #[put("/<_event_id>/sessions/<session_id>", data = "<session_update_json>")]
-fn update_session(
+pub fn update_session(
     conn_pool: State<Mutex<SqliteConnection>>,
     _event_id: i32,
     session_id: i32,

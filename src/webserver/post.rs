@@ -8,7 +8,7 @@ use diesel::result::Error as DieselError;
 use rocket::http::Status;
 use rocket::response::status;
 use rocket::State;
-use rocket_contrib::Json;
+use rocket_contrib::json::Json;
 use std::sync::Mutex;
 
 #[derive(Debug, PartialEq, Fail)]
@@ -18,7 +18,7 @@ pub enum PostError {
 }
 
 #[post("/create_event", data = "<new_event_json>")]
-fn create_event(
+pub fn create_event(
     conn_pool: State<Mutex<SqliteConnection>>,
     user: auth::UserWithPlaintextPassword,
     new_event_json: Json<event_models::NewEvent>,
@@ -38,7 +38,7 @@ fn create_event(
 }
 
 #[post("/<event_id>/create_session", data = "<new_session_json>")]
-fn create_session(
+pub fn create_session(
     event_id: i32,
     conn_pool: State<Mutex<SqliteConnection>>,
     user: auth::UserWithPlaintextPassword,

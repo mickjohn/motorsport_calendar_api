@@ -10,7 +10,6 @@ use std::convert::From;
 pub struct Session {
     pub id: i32,
     pub name: String,
-    pub date: Option<NaiveDateTime>,
     pub time: Option<NaiveDateTime>,
     pub event_id: i32,
 }
@@ -19,7 +18,6 @@ pub struct Session {
 #[table_name = "sessions"]
 pub struct NewSession {
     pub name: String,
-    pub date: Option<NaiveDateTime>,
     pub time: Option<NaiveDateTime>,
     pub event_id: i32,
 }
@@ -28,14 +26,12 @@ pub struct NewSession {
 #[derive(Insertable, Clone, Debug, Serialize, Deserialize)]
 pub struct UpdateSession {
     pub name: String,
-    pub date: Option<NaiveDateTime>,
     pub time: Option<NaiveDateTime>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NewSessionPlaceholder {
     pub name: String,
-    pub date: Option<NaiveDateTime>,
     pub time: Option<NaiveDateTime>,
 }
 
@@ -43,7 +39,6 @@ impl From<NewSession> for NewSessionPlaceholder {
     fn from(new_session: NewSession) -> Self {
         NewSessionPlaceholder {
             name: new_session.name,
-            date: new_session.date,
             time: new_session.time,
         }
     }

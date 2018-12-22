@@ -2,9 +2,10 @@ PRAGMA foreign_keys = ON;
 CREATE TABLE IF NOT EXISTS events (
   id INTEGER PRIMARY KEY,
   sport TEXT NOT NULL,
-  round INTEGER NOT NULL,
+  title TEXT NOT NULL,
   country TEXT NOT NULL,
-  location TEXT NOT NULL
+  location TEXT NOT NULL,
+  track TEXT NOT NULL
 );
 
 /* INSERT INTO events (sport, round, location, country) VALUES ('Formula 1', 1, 'Melbourne', 'Australia'); */

@@ -101,15 +101,15 @@ mod test_utils {
 
     const SPORTS: &'static [&'static str] = &["Formula 1"];
     const LOCATIONS: &'static [(&'static str, &'static str)] = &[
-        ("Australia", "Albert Park"),
-        ("Bahrain", "Bahrain"),
-        ("Shanghai", "Shanghai"),
-        ("Azerbaijan", "Baku"),
-        ("Spain", "Catalunya"),
-        ("Monaco", "Monaco"),
-        ("Canada", "Circuit Gilles Villeneuve"),
-        ("France", "Circuit Paul Ricard"),
-        ("Austria", "Red Bull Ring"),
+        ("Australia", "Albert Park", "Albert Park", "Grand Prix 1"),
+        ("Bahrain", "Bahrain", "track 1", "Grand Prix 2"),
+        ("Shanghai", "Shanghai", "track 2", "Grand Prix 3"),
+        ("Azerbaijan", "Baku", "track 3", "Grand Prix 4"),
+        ("Spain", "Catalunya", "track 4", "Grand Prix 5"),
+        ("Monaco", "Monaco", "Monte Carlo", "Grand Prix 6"),
+        ("Canada", "Circuit Gilles Villeneuve", "track 5", "Grand Prix 7"),
+        ("France", "Circuit Paul Ricard", "track 6", "Grand Prix 8"),
+        ("Austria", "Red Bull Ring", "Red Bull Ring", "Grand Prix 9"),
     ];
 
     pub const BASIC_HEADER: &'static str = "Basic dGVzdHVzZXI6cXdlcnR5";

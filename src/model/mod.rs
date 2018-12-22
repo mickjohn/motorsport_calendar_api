@@ -18,9 +18,10 @@ pub fn from_model(event_model: Event, session_models: Vec<Session>) -> CEvent {
     CEvent {
         id: event_model.id,
         sport: event_model.sport,
-        round: event_model.round,
+        title: event_model.title,
         country: event_model.country,
         location: event_model.location,
+        track: event_model.track,
         sessions: sessions,
     }
 }
@@ -32,7 +33,7 @@ pub fn into_models(e: CEvent) -> (Event, Vec<Session>) {
     let event = Event {
         id: e.id,
         sport: e.sport,
-        round: e.round,
+        title: e.title,
         country: e.country,
         location: e.location,
     };
@@ -42,7 +43,6 @@ pub fn into_models(e: CEvent) -> (Event, Vec<Session>) {
             id: s.id,
             event_id: e.id,
             name: s.name,
-            date: Some(s.date.naive_utc()),
             time: Some(s.time.unwrap().naive_utc()),
         };
         sessions.push(session);
@@ -56,7 +56,7 @@ pub fn into_new_models(e: CEvent) -> (NewEvent, Vec<NewSession>) {
     let mut sessions = Vec::new();
     let event = NewEvent {
         sport: e.sport,
-        round: e.round,
+        title: e.title,
         country: e.country,
         location: e.location,
     };
@@ -65,7 +65,6 @@ pub fn into_new_models(e: CEvent) -> (NewEvent, Vec<NewSession>) {
         let session = NewSession {
             event_id: e.id,
             name: s.name,
-            date: Some(s.date.naive_utc()),
             time: Some(s.time.unwrap().naive_utc()),
         };
         sessions.push(session);
@@ -74,7 +73,6 @@ pub fn into_new_models(e: CEvent) -> (NewEvent, Vec<NewSession>) {
 }
 
 pub fn convert_session(session: Session) -> CSession {
-    let date = DateTime::<Utc>::from_utc(session.date.unwrap(), Utc);
     let time = if session.time.is_none() {
         None
     } else {
@@ -85,7 +83,6 @@ pub fn convert_session(session: Session) -> CSession {
         id: session.id,
         event_id: session.event_id,
         name: session.name,
-        date: date,
         time: time,
     }
 }

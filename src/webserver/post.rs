@@ -48,7 +48,6 @@ pub fn create_session(
     let new_session = session_models::NewSession {
         event_id: event_id,
         name: new_session_placeholder.name,
-        date: new_session_placeholder.date,
         time: new_session_placeholder.time,
     };
     let ref connection = *conn_pool.lock().unwrap();
@@ -107,17 +106,19 @@ mod tests {
     fn test_event() -> (NewEvent, MEvent) {
         (
             NewEvent {
+                title: "Grand Prix one".to_string(),
                 sport: "F1".to_string(),
-                round: 1,
                 country: "a".to_string(),
                 location: "b".to_string(),
+                track: "c".to_string(),
             },
             MEvent {
                 id: 1,
+                title: "Grand Prix one".to_string(),
                 sport: "F1".to_string(),
-                round: 1,
                 country: "a".to_string(),
                 location: "b".to_string(),
+                track: "c".to_string(),
             },
         )
     }
@@ -265,7 +266,6 @@ mod tests {
         let new_session_model = new_session_models[0].clone();
         let new_session_placeholder = model::NewSessionPlaceholder {
             name: new_session_model.name,
-            date: new_session_model.date,
             time: new_session_model.time,
         };
         use self::test_utils::*;

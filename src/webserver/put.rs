@@ -76,9 +76,9 @@ fn update_event_in_db(
     match event_result {
         Ok(mut event) => {
             event.sport = update_event.sport;
-            event.round = update_event.round;
             event.country = update_event.country;
             event.location = update_event.location;
+            event.track = update_event.track;
             let update_result = event.save_changes::<MEvent>(db_conn);
             match update_result {
                 Ok(_) => Ok(()),
@@ -102,7 +102,6 @@ fn update_session_in_db(
     match session_result {
         Ok(mut session) => {
             session.name = update_session.name;
-            session.date = update_session.date;
             session.time = update_session.time;
             let update_result = session.save_changes::<MSession>(db_conn);
             match update_result {
@@ -139,23 +138,23 @@ mod tests {
         // Generate new values
         let mut rng = thread_rng();
         let new_sport: String = rng.gen_ascii_chars().take(30).collect();
-        let new_round: i32 = rng.gen();
         let new_country: String = rng.gen_ascii_chars().take(30).collect();
         let new_location: String = rng.gen_ascii_chars().take(30).collect();
+        let new_track: String = rng.gen_ascii_chars().take(30).collect();
 
         // Create update to post
         let update_event = model::UpdateEvent {
             sport: new_sport.clone(),
-            round: new_round.clone(),
             country: new_country.clone(),
             location: new_location.clone(),
+            track: new_track.clone(),
         };
 
         // Set the values to the new ones
         expected_event.sport = new_sport;
-        expected_event.round = new_round;
         expected_event.country = new_country;
         expected_event.location = new_location;
+        expected_event.track = new_track;
 
         // Put the updated event
         let endpoint = format!("/events/{}", event.id);
@@ -201,7 +200,6 @@ mod tests {
 
         // Set the values to the new ones
         expected_session.name = new_name;
-        expected_session.date = new_date_utc;
         expected_session.time = None;
 
         // Put the updated event
@@ -240,9 +238,9 @@ mod tests {
         let (db_url, _, client, _) = test_utils::setup();
         let update_event = model::UpdateEvent {
             sport: "".to_string(),
-            round: 1,
             country: "".to_string(),
             location: "".to_string(),
+            track: "".to_string(),
         };
         for basic_details in vec![
             BASIC_HEADER_WRONG_PASS,

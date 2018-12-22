@@ -23,12 +23,11 @@ fn get_random_session_type() -> String {
 
 #[derive(Debug, Clone)]
 pub struct EventGenerator {
-    last_round: i32,
     last_id: i32,
     starting_session_id: i32,
     number_of_events: u32,
     sport: String,
-    locations: Vec<(String, String)>,
+    locations: Vec<(String, String, String)>,
     sessions: Vec<u32>,
     start_date: DateTime<Utc>,
 }
@@ -66,22 +65,22 @@ impl EventGenerator {
 
     fn generate_event(&mut self) -> CEvent {
         self.last_id += 1;
-        self.last_round += 1;
         let id = self.last_id;
         let mut rng = rand::thread_rng();
         let sessions = self.generate_sessions(id);
-        let (country, location) = {
-            let (c, l) = rng.choose(&self.locations).unwrap().clone();
-            (c.clone(), l.clone())
+        let (country, location, track, title) = {
+            let (c, l, tr, ti) = rng.choose(&self.locations).unwrap().clone();
+            (c.clone(), l.clone(), tr.clone(), ti.clone())
         };
         self.advance_date();
 
         CEvent {
             id: id,
-            round: self.last_round,
             sport: self.sport.clone(),
+            title: self.title.clone(),
             country: country.clone(),
             location: location.clone(),
+            track: track.clone(),
             sessions: sessions,
         }
     }
@@ -128,7 +127,6 @@ impl SessionGenerator {
 }
 
 pub struct EventGeneratorBuilder {
-    last_round: Option<i32>,
     starting_id: Option<i32>,
     starting_session_id: Option<i32>,
     number_of_events: Option<u32>,
@@ -141,7 +139,6 @@ pub struct EventGeneratorBuilder {
 impl EventGeneratorBuilder {
     pub fn with() -> EventGeneratorBuilder {
         EventGeneratorBuilder {
-            last_round: None,
             starting_id: None,
             starting_session_id: None,
             number_of_events: None,
@@ -194,17 +191,10 @@ impl EventGeneratorBuilder {
         self
     }
 
-    #[allow(dead_code)]
-    pub fn starting_round(mut self, r: i32) -> EventGeneratorBuilder {
-        self.last_round = Some(r);
-        self
-    }
-
     pub fn finish(self) -> EventGenerator {
         EventGenerator {
             last_id: self.starting_id.unwrap_or(0),
             starting_session_id: self.starting_session_id.unwrap_or(0),
-            last_round: self.starting_id.unwrap_or(0),
             number_of_events: self.number_of_events.unwrap_or(20),
             sport: self.sport.unwrap_or("Formula 1".to_string()),
             locations: self

@@ -1,17 +1,11 @@
-// table! {
-//     datetest (id) {
-//         id -> BigInt,
-//         time -> Nullable<Timestamp>,
-//     }
-// }
-
 table! {
     events (id) {
         id -> Integer,
         sport -> Text,
-        round -> Integer,
+        title -> Text,
         country -> Text,
         location -> Text,
+        track -> Text,
     }
 }
 
@@ -19,7 +13,6 @@ table! {
     sessions (id) {
         id -> Integer,
         name -> Text,
-        date -> Nullable<Timestamp>,
         time -> Nullable<Timestamp>,
         event_id -> Integer,
     }
@@ -36,6 +29,5 @@ table! {
 joinable!(sessions -> events (event_id));
 
 allow_tables_to_appear_in_same_query!(
-    // datetest,
     events, sessions,
 );

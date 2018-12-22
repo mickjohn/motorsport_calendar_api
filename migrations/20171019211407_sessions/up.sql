@@ -2,7 +2,6 @@ PRAGMA foreign_keys = ON;
 CREATE TABLE IF NOT EXISTS sessions (
   id INTEGER PRIMARY KEY,
   name TEXT NOT NULL,
-  date DATETIME,
   time DATETIME,
   event_id INTEGER NOT NULL,
   FOREIGN KEY(event_id) REFERENCES events(id)

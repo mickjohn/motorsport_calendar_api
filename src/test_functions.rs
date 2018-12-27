@@ -4,6 +4,7 @@ use motorsport_calendar_common::event::Event as CEvent;
 use motorsport_calendar_common::event::Session as CSession;
 use rand;
 use rand::{thread_rng, Rng};
+use rand::seq::SliceRandom;
 
 const SESSION_TYPES: [&'static str; 6] = [
     "Practice 1",
@@ -15,8 +16,7 @@ const SESSION_TYPES: [&'static str; 6] = [
 ];
 
 fn get_random_session_type() -> String {
-    rand::thread_rng()
-        .choose(&SESSION_TYPES)
+    SESSION_TYPES.choose(&mut thread_rng())
         .unwrap()
         .to_string()
 }
@@ -27,9 +27,9 @@ pub struct EventGenerator {
     starting_session_id: i32,
     number_of_events: u32,
     sport: String,
-    locations: Vec<(String, String, String)>,
+    locations: Vec<(String, String, String, String)>,
     sessions: Vec<u32>,
-    start_date: DateTime<Utc>,
+    start_date: NaiveDateTime,
 }
 
 impl EventGenerator {
@@ -69,7 +69,7 @@ impl EventGenerator {
         let mut rng = rand::thread_rng();
         let sessions = self.generate_sessions(id);
         let (country, location, track, title) = {
-            let (c, l, tr, ti) = rng.choose(&self.locations).unwrap().clone();
+            let (c, l, tr, ti) = (&self.locations).choose(&mut rng).unwrap().clone();
             (c.clone(), l.clone(), tr.clone(), ti.clone())
         };
         self.advance_date();
@@ -77,7 +77,7 @@ impl EventGenerator {
         CEvent {
             id: id,
             sport: self.sport.clone(),
-            title: self.title.clone(),
+            title: title.clone(),
             country: country.clone(),
             location: location.clone(),
             track: track.clone(),
@@ -90,7 +90,7 @@ struct SessionGenerator {
     pub last_id: i32,
     pub event_id: i32,
     pub number_of_sessions: i32,
-    pub dt: DateTime<Utc>,
+    pub dt: NaiveDateTime,
 }
 
 impl SessionGenerator {
@@ -120,7 +120,6 @@ impl SessionGenerator {
             id: self.last_id,
             event_id: self.event_id,
             name: get_random_session_type(),
-            date: date,
             time: Some(self.dt.clone()),
         }
     }
@@ -131,9 +130,9 @@ pub struct EventGeneratorBuilder {
     starting_session_id: Option<i32>,
     number_of_events: Option<u32>,
     sport: Option<String>,
-    locations: Option<Vec<(String, String)>>,
+    locations: Option<Vec<(String, String, String, String)>>,
     sessions: Option<Vec<u32>>,
-    start_date: Option<DateTime<Utc>>,
+    start_date: Option<NaiveDateTime>,
 }
 
 impl EventGeneratorBuilder {
@@ -174,7 +173,7 @@ impl EventGeneratorBuilder {
     }
 
     #[allow(dead_code)]
-    pub fn locations(mut self, l: Vec<(String, String)>) -> EventGeneratorBuilder {
+    pub fn locations(mut self, l: Vec<(String, String, String, String)>) -> EventGeneratorBuilder {
         self.locations = Some(l);
         self
     }
@@ -186,7 +185,7 @@ impl EventGeneratorBuilder {
     }
 
     #[allow(dead_code)]
-    pub fn start_date(mut self, d: DateTime<Utc>) -> EventGeneratorBuilder {
+    pub fn start_date(mut self, d: NaiveDateTime) -> EventGeneratorBuilder {
         self.start_date = Some(d);
         self
     }
@@ -199,11 +198,11 @@ impl EventGeneratorBuilder {
             sport: self.sport.unwrap_or("Formula 1".to_string()),
             locations: self
                 .locations
-                .unwrap_or(vec![("Italy".to_string(), "Monza".to_string())]),
+                .unwrap_or(vec![("Italy".to_string(), "Monza".to_string(), "Monza".to_string(), "Italian Grand Prix".to_string())]),
             sessions: self.sessions.unwrap_or(vec![5]),
             start_date: self
                 .start_date
-                .unwrap_or(Utc.ymd(2018, 3, 18).and_hms(0, 0, 0)),
+                .unwrap_or(NaiveDate::from_ymd(2018, 3, 18).and_hms(0, 0, 0)),
         }
     }
 }

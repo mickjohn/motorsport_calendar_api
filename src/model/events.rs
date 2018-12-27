@@ -41,7 +41,6 @@ impl From<Event> for UpdateEvent {
         UpdateEvent {
             sport: new_event.sport,
             title: new_event.title,
-            round: new_event.round,
             country: new_event.country,
             location: new_event.location,
             track: new_event.track,

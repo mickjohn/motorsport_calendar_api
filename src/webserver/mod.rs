@@ -100,7 +100,7 @@ mod test_utils {
     use rocket::local::LocalResponse;
 
     const SPORTS: &'static [&'static str] = &["Formula 1"];
-    const LOCATIONS: &'static [(&'static str, &'static str)] = &[
+    const LOCATIONS: &'static [(&'static str, &'static str, &'static str, &'static str)] = &[
         ("Australia", "Albert Park", "Albert Park", "Grand Prix 1"),
         ("Bahrain", "Bahrain", "track 1", "Grand Prix 2"),
         ("Shanghai", "Shanghai", "track 2", "Grand Prix 3"),
@@ -136,7 +136,8 @@ mod test_utils {
 
     fn generate_db_name() -> String {
         use rand::{thread_rng, Rng};
-        let s: String = thread_rng().gen_ascii_chars().take(30).collect();
+        use rand::distributions::Alphanumeric;
+        let s: String = thread_rng().sample_iter(&Alphanumeric).take(30).collect();
         format!("sqlite/test/{}.db", s)
     }
 
@@ -145,9 +146,9 @@ mod test_utils {
         let mut session_id = 0;
         let mut events = Vec::new();
 
-        let locations: Vec<(String, String)> = LOCATIONS
+        let locations: Vec<(String, String, String, String)> = LOCATIONS
             .iter()
-            .map(|&(l, c)| (l.to_string(), c.to_string()))
+            .map(|&(l, c, tr, ti)| (l.to_string(), c.to_string(), tr.to_string(), ti.to_string()))
             .collect();
 
         for sport in SPORTS {

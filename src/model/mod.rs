@@ -36,6 +36,7 @@ pub fn into_models(e: CEvent) -> (Event, Vec<Session>) {
         title: e.title,
         country: e.country,
         location: e.location,
+        track: e.track,
     };
 
     for s in csessions {
@@ -43,7 +44,7 @@ pub fn into_models(e: CEvent) -> (Event, Vec<Session>) {
             id: s.id,
             event_id: e.id,
             name: s.name,
-            time: Some(s.time.unwrap().naive_utc()),
+            time: s.time,
         };
         sessions.push(session);
     }
@@ -59,13 +60,14 @@ pub fn into_new_models(e: CEvent) -> (NewEvent, Vec<NewSession>) {
         title: e.title,
         country: e.country,
         location: e.location,
+        track: e.track,
     };
 
     for s in csessions {
         let session = NewSession {
             event_id: e.id,
             name: s.name,
-            time: Some(s.time.unwrap().naive_utc()),
+            time: s.time,
         };
         sessions.push(session);
     }
@@ -73,16 +75,16 @@ pub fn into_new_models(e: CEvent) -> (NewEvent, Vec<NewSession>) {
 }
 
 pub fn convert_session(session: Session) -> CSession {
-    let time = if session.time.is_none() {
-        None
-    } else {
-        Some(DateTime::<Utc>::from_utc(session.time.unwrap(), Utc))
-    };
+    // let time = if session.time.is_none() {
+    //     None
+    // } else {
+    //     Some(DateTime::<Utc>::from_utc(session.time.unwrap(), Utc))
+    // };
 
     CSession {
         id: session.id,
         event_id: session.event_id,
         name: session.name,
-        time: time,
+        time: session.time,
     }
 }

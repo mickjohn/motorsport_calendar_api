@@ -123,6 +123,7 @@ mod tests {
     use motorsport_calendar_common::event::Event as CEvent;
     use motorsport_calendar_common::event::Session as CSession;
     use rand::{thread_rng, Rng};
+    use rand::distributions::Alphanumeric;
     use rocket::http::ContentType;
     use rocket::http::Header;
     use rocket::http::Status;
@@ -137,14 +138,16 @@ mod tests {
 
         // Generate new values
         let mut rng = thread_rng();
-        let new_sport: String = rng.gen_ascii_chars().take(30).collect();
-        let new_country: String = rng.gen_ascii_chars().take(30).collect();
-        let new_location: String = rng.gen_ascii_chars().take(30).collect();
-        let new_track: String = rng.gen_ascii_chars().take(30).collect();
+        let new_sport: String = rng.sample_iter(&Alphanumeric).take(30).collect();
+        let new_title: String = rng.sample_iter(&Alphanumeric).take(30).collect();
+        let new_country: String = rng.sample_iter(&Alphanumeric).take(30).collect();
+        let new_location: String = rng.sample_iter(&Alphanumeric).take(30).collect();
+        let new_track: String = rng.sample_iter(&Alphanumeric).take(30).collect();
 
         // Create update to post
         let update_event = model::UpdateEvent {
             sport: new_sport.clone(),
+            title: new_title.clone(),
             country: new_country.clone(),
             location: new_location.clone(),
             track: new_track.clone(),
@@ -187,20 +190,19 @@ mod tests {
         let mut expected_session = session.clone();
 
         // Generate new values
-        let new_name: String = thread_rng().gen_ascii_chars().take(30).collect();
+        let new_name: String = thread_rng().sample_iter(&Alphanumeric).take(30).collect();
         let new_date_utc = Utc.ymd(1916, 1, 1).and_hms(9, 10, 11);
         let new_date_naive = NaiveDate::from_ymd(1916, 1, 1).and_hms(9, 10, 11);
 
         // Create update to post
         let update_session = model::UpdateSession {
             name: new_name.clone(),
-            date: Some(new_date_naive.clone()),
-            time: None,
+            time: Some(new_date_naive.clone()),
         };
 
         // Set the values to the new ones
         expected_session.name = new_name;
-        expected_session.time = None;
+        expected_session.time = Some(new_date_naive);
 
         // Put the updated event
         println!("{:?}", expected_session);
@@ -237,6 +239,7 @@ mod tests {
         use self::test_utils::*;
         let (db_url, _, client, _) = test_utils::setup();
         let update_event = model::UpdateEvent {
+            title: "".to_string(),
             sport: "".to_string(),
             country: "".to_string(),
             location: "".to_string(),
@@ -264,7 +267,6 @@ mod tests {
         let (db_url, _, client, _) = test_utils::setup();
         let update_session = model::UpdateSession {
             name: "".to_string(),
-            date: None,
             time: None,
         };
         for basic_details in vec![

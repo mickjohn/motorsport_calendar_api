@@ -1,4 +1,3 @@
-use chrono::{DateTime, Utc};
 use motorsport_calendar_common::event::Event as CEvent; //Common event
 use motorsport_calendar_common::event::Session as CSession; //Common event
 

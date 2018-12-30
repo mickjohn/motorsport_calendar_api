@@ -1,11 +1,10 @@
+#![allow(proc_macro_derive_resolution_fallback)]
 #![feature(custom_attribute)]
 // #![proc_macro_derive]
 #![recursion_limit = "128"]
-#![feature(use_extern_macros)]
 #![feature(proc_macro_hygiene, decl_macro)]
 
 // Base logging crate
-#[macro_use(log)]
 extern crate log;
 
 // yaml/json (de)serialization

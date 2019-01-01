@@ -53,9 +53,17 @@ pub fn delete_session(
     }
 }
 
-fn delete_event_from_db(event_id: &i32, db_conn: &SqliteConnection) -> Result<(), DeleteError> {
-    use super::super::schema::events::dsl::*;
-    diesel::delete(events.filter(id.eq(event_id)))
+fn delete_event_from_db(e_id: &i32, db_conn: &SqliteConnection) -> Result<(), DeleteError> {
+    use super::super::schema::sessions::dsl::{sessions, event_id};
+    // Delete the sessions
+    diesel::delete(sessions.filter(event_id.eq(e_id)))
+                   .execute(db_conn)
+                   .map_err(|e| DeleteError::DieselError(e))
+                   .map(|_| ())?;
+
+    use super::super::schema::events::dsl::{events, id as events_id};
+    // Delete the event
+    diesel::delete(events.filter(events_id.eq(e_id)))
         .execute(db_conn)
         .map_err(|e| DeleteError::DieselError(e))
         .map(|_| ())
@@ -81,6 +89,14 @@ mod tests {
         let (db_url, _, client, events) = test_utils::setup();
         let event = &events[0];
         let endpoint = format!("/events/{}", event.id);
+        let session_endpoint = format!("/events/{}/sessions/{}", event.id, event.sessions[0].id);
+
+        let get_session_before_delete_response = client
+            .get(session_endpoint.as_str())
+            .header(Header::new("Content-Type", "application/json"))
+            .dispatch();
+        assert_eq!(get_session_before_delete_response.status(), Status::Ok);
+
         let mut delete_response = client
             .delete(endpoint.as_str())
             .header(Header::new("Authorization", test_utils::BASIC_HEADER))
@@ -93,8 +109,12 @@ mod tests {
             "Successfully deleted event".to_string()
         );
 
-        // Check that the event was deleted
-        assert_eq!(delete_response.status(), Status::Ok);
+        let get_session_after_delete_response = client
+            .get(session_endpoint.as_str())
+            .header(Header::new("Content-Type", "application/json"))
+            .dispatch();
+        assert_eq!(get_session_after_delete_response.status(), Status::NotFound);
+
 
         let get_response = client.get(endpoint.as_str()).dispatch();
         assert_eq!(get_response.status(), Status::NotFound);

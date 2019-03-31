@@ -5,5 +5,5 @@ logs
 tags
 *.swp
 *.swo
-mscapi*.deb
+msc_api.tar.zip
 sqlite/*

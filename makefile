@@ -6,7 +6,7 @@ update :
 	git pull
 
 build-database :
-	bash ./build_databash.sh
+	bash ./build_database.sh
 
 build-app : 
 	cargo build --release

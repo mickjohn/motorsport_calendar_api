@@ -1,14 +1,17 @@
 IMAGE_NAME = msc_api
 
-build: update build-app image
+build: update image
 
 update :
 	git pull
 
+build-database :
+	bash ./build_databash.sh
+
 build-app : 
 	cargo build --release
 
-build-image : 
+build-image : build-app build-database
 	sudo docker image rm $(IMAGE_NAME) || true && \
 		sudo docker build -t $(IMAGE_NAME) .
 

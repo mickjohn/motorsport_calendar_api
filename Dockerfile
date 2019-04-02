@@ -10,7 +10,10 @@ COPY prod_conf.yml .
 COPY log4rs.yml .
 
 WORKDIR /var/lib/motorsport_calendar_api/database
-COPY sqlite/ms_api.db .
+
+# This is just the test DB to get the app up and running.The production DB is
+# in a docker volume, and is mounted over the  above database path.
+COPY sqlite/test.db ./ms_api.db
 
 WORKDIR /usr/bin
 COPY target/release/motorsport_calendar_api .

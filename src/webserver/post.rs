@@ -11,6 +11,12 @@ use rocket::State;
 use rocket_contrib::json::Json;
 use std::sync::Mutex;
 
+#[derive(Deserialize, Serialize, PartialEq, Debug)]
+pub struct ReturnMessage {
+    message: String,
+    id: i32,
+}
+
 #[derive(Debug, PartialEq, Fail)]
 pub enum PostError {
     #[fail(display = "Database Error")]
@@ -22,18 +28,25 @@ pub fn create_event(
     conn_pool: State<Mutex<SqliteConnection>>,
     user: auth::UserWithPlaintextPassword,
     new_event_json: Json<event_models::NewEvent>,
-) -> status::Custom<String> {
+) -> Result<status::Custom<Json<ReturnMessage>>, status::Custom<String>> {
     let new_event = new_event_json.into_inner();
     let ref connection = *conn_pool.lock().unwrap();
     match authenticate_user(&user, &connection) {
         Ok(()) => match insert_new_event(&connection, &new_event) {
-            Ok(_) => status::Custom(Status::Ok, "Successfully created new event".to_string()),
-            Err(_) => status::Custom(
+            Ok(id) => {
+                println!("MICK ---> ID = {}", id);
+                let return_data = ReturnMessage {
+                    message: "Created new event".to_string(),
+                    id: id,
+                };
+                Ok(status::Custom(Status::Ok, Json(return_data)))
+            }
+            Err(_) => Err(status::Custom(
                 Status::InternalServerError,
                 "Encountered database error inserting new event".to_string(),
-            ),
+            )),
         },
-        Err(e) => e,
+        Err(e) => Err(e),
     }
 }
 
@@ -66,13 +79,22 @@ pub fn create_session(
 fn insert_new_event(
     db_conn: &SqliteConnection,
     new_event: &event_models::NewEvent,
-) -> Result<usize, PostError> {
+) -> Result<i32, PostError> {
     use super::super::schema::events::dsl::*;
-    insert_into(events)
-        .values(new_event)
-        .execute(db_conn)
-        .map_err(|e| PostError::DieselError(e))
-        .map(|u| Ok(u))?
+    // insert_into(events)
+    //     .values(new_event)
+    //     .execute(db_conn)
+    //     .map_err(|e| PostError::DieselError(e))
+    //     .map(|u| Ok(u))?;
+    // events.order(id.desc()).first(db_conn);
+    // Ok(1000)
+    let event = db_conn.transaction::<event_models::Event, DieselError , _>(|| {
+        insert_into(events)
+            .values(new_event)
+            .execute(db_conn)?;
+        events.order(id.desc()).first(db_conn)
+    }).map_err(|e| PostError::DieselError(e))?;
+    Ok(event.id)
 }
 
 fn insert_new_session(
@@ -179,9 +201,13 @@ mod tests {
 
         // Check that the post request was successful
         assert_eq!(post_response.status(), Status::Ok);
+        let returned_message: super::ReturnMessage = serde_json::from_str(&post_response.body_string().unwrap()).unwrap();
         assert_eq!(
-            post_response.body_string().unwrap(),
-            "Successfully created new event".to_string()
+            returned_message,
+            super::ReturnMessage {
+                message: "Created new event".to_string(),
+                id: 2,
+            }
         );
 
         // Check that we can query the new event
@@ -210,9 +236,13 @@ mod tests {
 
             // Check that the post request was successful
             assert_eq!(event_post_response.status(), Status::Ok);
+            let returned_message: super::ReturnMessage = serde_json::from_str(&event_post_response.body_string().unwrap()).unwrap();
             assert_eq!(
-                event_post_response.body_string().unwrap(),
-                "Successfully created new event".to_string()
+                returned_message,
+                super::ReturnMessage {
+                    message: "Created new event".to_string(),
+                    id: event_id,
+                }
             );
 
             // Insert each session

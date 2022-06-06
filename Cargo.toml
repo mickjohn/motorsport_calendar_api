@@ -13,7 +13,7 @@ path = "src/bcrypt_helper.rs"
 
 [dependencies]
 bcrypt = "0.2.1"
-rocket = "0.4.0"
+rocket = "0.4.7"
 serde = "1.0.82"
 serde_derive = "1.0.82"
 serde_yaml = "0.8.8"
